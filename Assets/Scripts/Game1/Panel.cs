@@ -4070,7 +4070,17 @@ namespace Game1
 
 		private void setTabBox()
 		{
-			currentListLength = checkCurrentListLength(Char.myCharz().arrItemBox.Length);
+			int boxLength = Char.myCharz().arrItemBox.Length;
+			if (ModFunc.isInventory)
+			{
+				int columns = 6;
+				int rows = boxLength / columns + ((boxLength % columns > 0) ? 1 : 0);
+				currentListLength = rows;
+			}
+			else
+			{
+				currentListLength = checkCurrentListLength(boxLength);
+			}
 			ITEM_HEIGHT = 29;
 			cmyLim = currentListLength * ITEM_HEIGHT - hScroll;
 			if (cmyLim < 0)
@@ -5725,9 +5735,10 @@ namespace Game1
 			try
 			{
 				Item[] arrItemBox = Char.myCharz().arrItemBox;
-				currentListLength = checkCurrentListLength(arrItemBox.Length / 6);
-				TAB_W_NEW = 1;
 				int columns = 6;
+				int rows = arrItemBox.Length / columns + ((arrItemBox.Length % columns > 0) ? 1 : 0);
+				currentListLength = rows;
+				TAB_W_NEW = 1;
 				int itemWidth = 28;
 				int itemHeight = ITEM_HEIGHT;
 				for (int i = 0; i < arrItemBox.Length; i++)
@@ -5749,8 +5760,7 @@ namespace Game1
 						g.setColor(16711680);
 						g.drawRect(num2 - 1, num3 - 1, itemWidth + 1, itemHeight);
 					}
-					int inventorySelect_body = GetInventorySelect_body(i, newSelected);
-					Item item = arrItemBox[inventorySelect_body];
+					Item item = arrItemBox[i];
 					if (item != null)
 					{
 						for (int k = 0; k < item.itemOption.Length; k++)
@@ -9998,6 +10008,10 @@ namespace Game1
 				cp = null;
 			}
 			cmyLim = currentListLength * ITEM_HEIGHT - hScroll;
+			if (cmyLim < 0)
+			{
+				cmyLim = 9;
+			}
 		}
 
 		public void itemRequest(sbyte itemAction, string info, sbyte where, sbyte index)
