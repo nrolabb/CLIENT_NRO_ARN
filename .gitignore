@@ -1,0 +1,7 @@
+/dist
+/build
+*.class
+*.exe
+*.meta
+/Assets/Scripts/Game2
+/Assets/Scripts/Game3
