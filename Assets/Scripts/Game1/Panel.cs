@@ -10201,11 +10201,20 @@ namespace Game1
 			}
 			if (idAction == 1000)
 			{
-				Service.gI().getItem(BOX_BAG, (sbyte)GetInventorySelect_body(selected, newSelected));
+				sbyte id = (sbyte)GetInventorySelect_body(selected, newSelected);
+				if (isnewInventory)
+				{
+					id = (sbyte)currItem.indexUI;
+				}
+				Service.gI().getItem(BOX_BAG, id);
 			}
 			if (idAction == 1001)
 			{
 				sbyte id = (sbyte)GetInventorySelect_bag(selected, newSelected, Char.myCharz().arrItemBody);
+				if (isnewInventory)
+				{
+					id = (sbyte)currItem.indexUI;
+				}
 				Service.gI().getItem(BAG_BOX, id);
 			}
 			if (idAction == 1003)
@@ -10214,15 +10223,30 @@ namespace Game1
 			}
 			if (idAction == 1002)
 			{
-				Service.gI().getItem(BODY_BOX, (sbyte)GetInventorySelect_body(selected, newSelected));
+				sbyte id = (sbyte)GetInventorySelect_body(selected, newSelected);
+				if (isnewInventory)
+				{
+					id = (sbyte)currItem.indexUI;
+				}
+				Service.gI().getItem(BODY_BOX, id);
 			}
 			if (idAction == 2011)
 			{
-				Service.gI().useItem(1, 2, (sbyte)GetInventorySelect_body(selected, newSelected), -1);
+				sbyte id = (sbyte)GetInventorySelect_body(selected, newSelected);
+				if (isnewInventory)
+				{
+					id = (sbyte)currItem.indexUI;
+				}
+				Service.gI().useItem(1, 2, id, -1);
 			}
 			if (idAction == 2010)
 			{
-				Service.gI().useItem(0, 2, (sbyte)GetInventorySelect_body(selected, newSelected), -1);
+				sbyte id = (sbyte)GetInventorySelect_body(selected, newSelected);
+				if (isnewInventory)
+				{
+					id = (sbyte)currItem.indexUI;
+				}
+				Service.gI().useItem(0, 2, id, -1);
 				Item item8 = (Item)p;
 				if (item8 != null && (item8.template.id == 193 || item8.template.id == 194))
 				{
