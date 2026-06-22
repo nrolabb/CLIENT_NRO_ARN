@@ -557,7 +557,13 @@ namespace Game1
 			listSkillsAuto.Clear();
 			listItemAuto.Clear();
 			isHighFps = Rms.loadRMSInt("isHighFps") != 0;
-			isInventory = Rms.loadRMSInt("inventory") == 1;
+			int savedInventory = Rms.loadRMSInt("inventory");
+			if (savedInventory == -1) {
+				Rms.saveRMSInt("inventory", 1);
+				isInventory = true;
+			} else {
+				isInventory = (savedInventory == 1);
+			}
 			isEffectInven = Rms.loadRMSInt("effectinven") == 1;
 			GiamDungLuong = Rms.loadRMSInt("background") == 1;
 			AnPlayer = Rms.loadRMSInt("anplayer") == 1;
@@ -2430,18 +2436,9 @@ namespace Game1
 
 		public static void chanegStatusInventory()
 		{
-			if (isInventory)
-			{
-				isInventory = false;
-				Rms.saveRMSInt("inventory", isInventory ? 1 : 0);
-				GameCanvas.startOK(mResources.plsRestartGame, 8885, null);
-			}
-			else
-			{
-				isInventory = true;
-				Rms.saveRMSInt("inventory", isInventory ? 1 : 0);
-				GameCanvas.startOK(mResources.plsRestartGame, 8885, null);
-			}
+			isInventory = !isInventory;
+			Rms.saveRMSInt("inventory", isInventory ? 1 : 0);
+			GameCanvas.startOK(mResources.plsRestartGame, 8885, null);
 		}
 
 		public static void changeStatusLogo()

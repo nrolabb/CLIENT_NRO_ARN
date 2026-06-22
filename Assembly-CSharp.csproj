@@ -10,7 +10,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{9AFACFC0-4175-C908-430E-3C9655AFF8D6}</ProjectGuid>
+    <ProjectGuid>{E9A0C5DC-9510-4523-2BEF-86955C3832E7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -118,9 +118,9 @@
     <Compile Include="Assets\Scripts\Game1\Controller.cs" />
     <Compile Include="Assets\Scripts\Game1\EffectCharPaint.cs" />
     <Compile Include="Assets\Scripts\Game1\SkillPaint.cs" />
-    <Compile Include="Assets\TabMn.cs" />
     <Compile Include="Assets\Scripts\Game1\QuayTamBao.cs" />
     <Compile Include="Assets\Scripts\Game2\NewBagUI.cs" />
+    <Compile Include="Assets\TabMn.cs" />
     <Compile Include="Assets\Scripts\Game2\ImgByName.cs" />
     <Compile Include="Assets\Scripts\Game3\SplashScr.cs" />
     <Compile Include="Assets\Scripts\Game1\TabClanIcon.cs" />
@@ -136,7 +136,6 @@
     <Compile Include="Assets\Scripts\Game2\AutoLogin.cs" />
     <Compile Include="Assets\Scripts\Game1\MobCapcha.cs" />
     <Compile Include="Assets\Scripts\Game2\ItemOptionTemplate.cs" />
-    <Compile Include="Assets\Scripts\Game1\ItemTime.cs" />
     <Compile Include="Assets\Scripts\Game1\NClass.cs" />
     <Compile Include="Assets\Scripts\Game1\Paint.cs" />
     <Compile Include="Assets\Scripts\Game3\TextInfo.cs" />
@@ -145,20 +144,21 @@
     <Compile Include="Assets\Scripts\Game3\FrameImage.cs" />
     <Compile Include="Assets\Scripts\Game2\IChatable.cs" />
     <Compile Include="Assets\Scripts\Game3\BgItemMn.cs" />
-    <Compile Include="Assets\Scripts\Game3\Line.cs" />
     <Compile Include="Assets\Scripts\Game3\TileMap.cs" />
     <Compile Include="Assets\Scripts\Game3\ScaleGUI.cs" />
-    <Compile Include="Assets\Scripts\Game3\EffectPaint.cs" />
     <Compile Include="Assets\Scripts\Game1\ipKeyboard.cs" />
+    <Compile Include="Assets\Scripts\Game3\EffectPaint.cs" />
     <Compile Include="Assets\Scripts\Game3\ItemOptionTemplate.cs" />
     <Compile Include="Assets\Scripts\Game1\ItemAuto.cs" />
     <Compile Include="Assets\Scripts\Game3\iPhoneSettings.cs" />
+    <Compile Include="Assets\Scripts\Game3\Line.cs" />
     <Compile Include="Assets\Scripts\Game3\DartInfo.cs" />
     <Compile Include="Assets\Scripts\Game2\QuayTamBao.cs" />
     <Compile Include="Assets\Scripts\Game1\Effect.cs" />
     <Compile Include="Assets\Scripts\Game1\SplashScr.cs" />
     <Compile Include="Assets\Scripts\Game1\SoundMn.cs" />
     <Compile Include="Assets\Scripts\Game2\Dialog.cs" />
+    <Compile Include="Assets\Scripts\Game1\ItemTime.cs" />
     <Compile Include="Assets\Scripts\Game2\EffecMn.cs" />
     <Compile Include="Assets\Scripts\Game2\MonsterDart.cs" />
     <Compile Include="Assets\Scripts\Game2\Assets.src.e\Small.cs" />
@@ -166,9 +166,9 @@
     <Compile Include="Assets\Scripts\Game2\FrameImage.cs" />
     <Compile Include="Assets\Scripts\Game3\Mod.XMAP\XmapController.cs" />
     <Compile Include="Assets\Scripts\Game3\Archivement.cs" />
-    <Compile Include="Assets\Scripts\Game3\Assets.src.g\PetFollow.cs" />
     <Compile Include="Assets\Scripts\Game2\MotherCanvas.cs" />
     <Compile Include="Assets\Scripts\Game2\PlayerData.cs" />
+    <Compile Include="Assets\Scripts\Game3\Assets.src.g\PetFollow.cs" />
     <Compile Include="Assets\Scripts\Game3\ItemOption.cs" />
     <Compile Include="Assets\Scripts\Game2\EffectInfoPaint.cs" />
     <Compile Include="Assets\Scripts\Game3\Teleport.cs" />
@@ -193,8 +193,8 @@
     <Compile Include="Assets\Scripts\Game3\BypassCertificateHandler.cs" />
     <Compile Include="Assets\Scripts\Game2\MapTemplate.cs" />
     <Compile Include="Assets\Scripts\Game2\Rms.cs" />
-    <Compile Include="Assets\Scripts\Game1\Task.cs" />
     <Compile Include="Assets\Scripts\Game3\mFont.cs" />
+    <Compile Include="Assets\Scripts\Game1\Task.cs" />
     <Compile Include="Assets\Scripts\Game1\InfoPhuBan.cs" />
     <Compile Include="Assets\Scripts\Game1\EffectData.cs" />
     <Compile Include="Assets\Scripts\Game1\ItemObject.cs" />
@@ -210,8 +210,8 @@
     <Compile Include="Assets\Scripts\Game3\StaticObj.cs" />
     <Compile Include="Assets\Scripts\Game3\SkillInfoPaint.cs" />
     <Compile Include="Assets\Scripts\Game1\MovePoint.cs" />
-    <Compile Include="Assets\Scripts\Game1\Message.cs" />
     <Compile Include="Assets\Scripts\Game3\Scroll.cs" />
+    <Compile Include="Assets\Scripts\Game1\Message.cs" />
     <Compile Include="Assets\Scripts\Game1\GamePad.cs" />
     <Compile Include="Assets\Scripts\Game3\FireWorkMn.cs" />
     <Compile Include="Assets\Scripts\Game3\Arrow.cs" />
@@ -222,9 +222,9 @@
     <Compile Include="Assets\Scripts\Game3\MovePoint.cs" />
     <Compile Include="Assets\Scripts\Game3\MsgDlg.cs" />
     <Compile Include="Assets\Scripts\Game3\ServerListScreen.cs" />
-    <Compile Include="Assets\Scripts\Game3\Assets.src.g\Mabu.cs" />
     <Compile Include="Assets\Scripts\Game1\EffectPaint.cs" />
     <Compile Include="Assets\Scripts\Game2\ipKeyboard.cs" />
+    <Compile Include="Assets\Scripts\Game3\Assets.src.g\Mabu.cs" />
     <Compile Include="Assets\Scripts\Game2\SkillInfoPaint.cs" />
     <Compile Include="Assets\Scripts\Game3\myWriter.cs" />
     <Compile Include="Assets\Scripts\Game1\AddressScr.cs" />
@@ -244,15 +244,15 @@
     <Compile Include="Assets\Scripts\Game3\AddressScr.cs" />
     <Compile Include="Assets\Scripts\Game2\MainImage.cs" />
     <Compile Include="Assets\Scripts\Game2\ChatPopup.cs" />
-    <Compile Include="Assets\Scripts\Game3\MyVector.cs" />
     <Compile Include="Assets\Scripts\Game1\ImgByName.cs" />
     <Compile Include="Assets\Scripts\Game2\Mod.XMAP\PickMobController.cs" />
+    <Compile Include="Assets\Scripts\Game3\MyVector.cs" />
     <Compile Include="Assets\Scripts\Game2\EffectCharPaint.cs" />
     <Compile Include="Assets\Scripts\Game1\Clan.cs" />
     <Compile Include="Assets\Scripts\Game2\Mod.XMAP\GroupMapData.cs" />
     <Compile Include="Assets\Scripts\Game2\Timer.cs" />
-    <Compile Include="Assets\Scripts\Game3\Assets.Assets.Scripts.Assembly_CSharp\Random.cs" />
     <Compile Include="Assets\Scripts\Game1\LoginScr.cs" />
+    <Compile Include="Assets\Scripts\Game3\Assets.Assets.Scripts.Assembly_CSharp\Random.cs" />
     <Compile Include="Assets\Scripts\Game1\FireWorkEff.cs" />
     <Compile Include="Assets\Scripts\Game3\ChatPopup.cs" />
     <Compile Include="Assets\Scripts\Game3\Point.cs" />
@@ -268,8 +268,8 @@
     <Compile Include="Assets\Scripts\Game2\InfoItem.cs" />
     <Compile Include="Assets\Scripts\Game1\ClientVerifier.cs" />
     <Compile Include="Assets\Scripts\Game3\Part.cs" />
-    <Compile Include="Assets\Scripts\Game3\BachTuoc.cs" />
     <Compile Include="Assets\Scripts\Game2\Controller.cs" />
+    <Compile Include="Assets\Scripts\Game3\BachTuoc.cs" />
     <Compile Include="Assets\Scripts\Game2\Teleport.cs" />
     <Compile Include="Assets\Scripts\Game2\Hint.cs" />
     <Compile Include="Assets\Scripts\Game3\ipKeyboard.cs" />
@@ -368,8 +368,8 @@
     <Compile Include="Assets\Scripts\Game1\Service.cs" />
     <Compile Include="Assets\Scripts\Game2\TextInfo.cs" />
     <Compile Include="Assets\Scripts\Game2\Scroll.cs" />
-    <Compile Include="Assets\Scripts\Game3\Effect.cs" />
     <Compile Include="Assets\Scripts\Game2\mFont.cs" />
+    <Compile Include="Assets\Scripts\Game3\Effect.cs" />
     <Compile Include="Assets\Scripts\Game2\Util.cs" />
     <Compile Include="Assets\Scripts\Game3\CoroutineRunner.cs" />
     <Compile Include="Assets\Scripts\Game2\NewBoss.cs" />
@@ -380,9 +380,9 @@
     <Compile Include="Assets\Scripts\Game2\ItemTemplate.cs" />
     <Compile Include="Assets\Scripts\Game3\IChatable.cs" />
     <Compile Include="Assets\Scripts\Game1\PartImage.cs" />
-    <Compile Include="Assets\Scripts\Game2\myWriter.cs" />
     <Compile Include="Assets\Scripts\Game2\Npc.cs" />
     <Compile Include="Assets\Scripts\Game1\Effect2.cs" />
+    <Compile Include="Assets\Scripts\Game2\myWriter.cs" />
     <Compile Include="Assets\Scripts\Game1\Mod.XMAP\GroupMap.cs" />
     <Compile Include="Assets\Scripts\Game2\Mob.cs" />
     <Compile Include="Assets\Scripts\Game1\IMessageHandler.cs" />
@@ -416,9 +416,9 @@
     <Compile Include="Assets\Scripts\Game3\Session_ME.cs" />
     <Compile Include="Assets\Scripts\Game3\EffecMn.cs" />
     <Compile Include="Assets\Scripts\Game2\SmallImage.cs" />
-    <Compile Include="Assets\VideoScript.cs" />
     <Compile Include="Assets\Scripts\Game1\Firework.cs" />
     <Compile Include="Assets\Scripts\Game1\ItemOption.cs" />
+    <Compile Include="Assets\VideoScript.cs" />
     <Compile Include="Assets\Scripts\Game1\Session_ME2.cs" />
     <Compile Include="Assets\Scripts\Game3\TabCommand.cs" />
     <Compile Include="Assets\Scripts\Game3\Member.cs" />
@@ -439,9 +439,9 @@
     <Compile Include="Assets\Scripts\Game2\Mod.XMAP\GroupMap.cs" />
     <Compile Include="Assets\Scripts\Game1\Mod.XMAP\XmapData.cs" />
     <Compile Include="Assets\Scripts\Game2\Mod.XMAP\XmapController.cs" />
-    <Compile Include="Assets\Scripts\Game1\Menu.cs" />
     <Compile Include="Assets\Scripts\Game3\Mod.XMAP\GroupMap.cs" />
     <Compile Include="Assets\Scripts\Game1\Assets.src.e\Small.cs" />
+    <Compile Include="Assets\Scripts\Game1\Menu.cs" />
     <Compile Include="Assets\Scripts\Game3\ItemTime.cs" />
     <Compile Include="Assets\Scripts\Game2\InfoDlg.cs" />
     <Compile Include="Assets\Scripts\Game1\Info.cs" />
@@ -453,20 +453,20 @@
     <Compile Include="Assets\Scripts\Game2\Session_ME2.cs" />
     <Compile Include="Assets\Scripts\Game3\Math.cs" />
     <Compile Include="Assets\TabE.cs" />
-    <Compile Include="Assets\Scripts\Game3\Assets.src.g\RegisterScreen.cs" />
-    <Compile Include="Assets\Scripts\Game2\Assets.src.g\Mabu.cs" />
     <Compile Include="Assets\Scripts\Game1\Mod.XMAP\XmapController.cs" />
-    <Compile Include="Assets\Scripts\Game1\TextInfo.cs" />
+    <Compile Include="Assets\Scripts\Game2\Assets.src.g\Mabu.cs" />
+    <Compile Include="Assets\Scripts\Game3\Assets.src.g\RegisterScreen.cs" />
     <Compile Include="Assets\Scripts\Game3\Sound.cs" />
+    <Compile Include="Assets\Scripts\Game1\TextInfo.cs" />
     <Compile Include="Assets\Scripts\Game2\ClanObject.cs" />
     <Compile Include="Assets\Scripts\Game1\MsgDlg.cs" />
     <Compile Include="Assets\Scripts\Game3\MagicTree.cs" />
     <Compile Include="Assets\Scripts\Game1\Math.cs" />
     <Compile Include="Assets\Scripts\Game3\GameCanvas.cs" />
     <Compile Include="Assets\Scripts\Game2\GameScr.cs" />
-    <Compile Include="Assets\Scripts\Game1\Key.cs" />
     <Compile Include="Assets\Scripts\Game1\InfoDlg.cs" />
     <Compile Include="Assets\Scripts\Game2\Assets.src.g\GameInfo.cs" />
+    <Compile Include="Assets\Scripts\Game1\Key.cs" />
     <Compile Include="Assets\Scripts\Game2\NpcTemplate.cs" />
     <Compile Include="Assets\Scripts\Game1\Dialog.cs" />
     <Compile Include="Assets\Scripts\Game1\Mod.XMAP\ManualXmap.cs" />
@@ -484,19 +484,19 @@
     <Compile Include="Assets\Scripts\Game3\ImageInfo.cs" />
     <Compile Include="Assets\Scripts\Game3\DataOutputStream.cs" />
     <Compile Include="Assets\Scripts\Game3\MapTemplate.cs" />
-    <Compile Include="Assets\Scripts\Game2\Session_ME.cs" />
     <Compile Include="Assets\Scripts\Game2\Panel.cs" />
     <Compile Include="Assets\Scripts\Game1\ISession.cs" />
+    <Compile Include="Assets\Scripts\Game2\Session_ME.cs" />
     <Compile Include="Assets\Scripts\Game3\MainImage.cs" />
     <Compile Include="Assets\Scripts\Game3\TopInfo.cs" />
     <Compile Include="Assets\Scripts\Game2\Cout.cs" />
     <Compile Include="Assets\Scripts\Game2\EffectChar.cs" />
     <Compile Include="Assets\Scripts\Game2\ChatTextField.cs" />
     <Compile Include="Assets\Scripts\Game2\EffectManager.cs" />
-    <Compile Include="Assets\Scripts\Game1\Effect_End.cs" />
     <Compile Include="Assets\Scripts\Game2\ItemAuto.cs" />
     <Compile Include="Assets\Scripts\Game3\MotherCanvas.cs" />
     <Compile Include="Assets\Scripts\Game3\PlayerData.cs" />
+    <Compile Include="Assets\Scripts\Game1\Effect_End.cs" />
     <Compile Include="Assets\Scripts\Game2\ItemNapTuan.cs" />
     <Compile Include="Assets\Scripts\Game2\mSystem.cs" />
     <Compile Include="Assets\Scripts\Game1\iPhoneGeneration.cs" />
@@ -532,8 +532,8 @@
     <Compile Include="Assets\Scripts\Game2\MoneyCharge.cs" />
     <Compile Include="Assets\Scripts\Game3\InfoMe.cs" />
     <Compile Include="Assets\Scripts\Game2\Firework.cs" />
-    <Compile Include="Assets\Scripts\Game3\MyStream.cs" />
     <Compile Include="Assets\Scripts\Game2\MyStream.cs" />
+    <Compile Include="Assets\Scripts\Game3\MyStream.cs" />
     <Compile Include="Assets\Scripts\Game2\RadarScr.cs" />
     <Compile Include="Assets\Scripts\Game3\IActionListener.cs" />
     <Compile Include="Assets\Scripts\Game2\Effect.cs" />
@@ -593,32 +593,32 @@
     <Compile Include="Assets\Scripts\Game1\T1.cs" />
     <Compile Include="Assets\Scripts\Game1\ItemTamBao.cs" />
     <Compile Include="Assets\Scripts\Game2\ISession.cs" />
-    <Compile Include="Assets\Scripts\Game2\NinjaUtil.cs" />
     <Compile Include="Assets\Scripts\Game3\Assets.src.g\BigBoss.cs" />
-    <Compile Include="Assets\Scripts\Game3\Task.cs" />
-    <Compile Include="Assets\Scripts\Game2\PopUp.cs" />
+    <Compile Include="Assets\Scripts\Game2\NinjaUtil.cs" />
     <Compile Include="Assets\Scripts\Game1\AdminPopup.cs" />
     <Compile Include="Assets\Scripts\Game1\IMapObject.cs" />
     <Compile Include="Assets\Scripts\Game3\EffectInfoPaint.cs" />
-    <Compile Include="Assets\Scripts\Game2\Layer.cs" />
     <Compile Include="Assets\Scripts\Game3\ServerScr.cs" />
+    <Compile Include="Assets\Scripts\Game2\Layer.cs" />
     <Compile Include="Assets\Scripts\Game1\TileMap.cs" />
     <Compile Include="Assets\Scripts\Game2\FireWorkEff.cs" />
     <Compile Include="Assets\Scripts\Game3\InfoDlg.cs" />
     <Compile Include="Assets\Scripts\Game3\EffectCharPaint.cs" />
+    <Compile Include="Assets\Scripts\Game3\Task.cs" />
     <Compile Include="Assets\Scripts\Game1\TaskOrder.cs" />
     <Compile Include="Assets\Scripts\Game1\Panel.cs" />
+    <Compile Include="Assets\Scripts\Game2\PopUp.cs" />
     <Compile Include="Assets\Scripts\Game2\FireWorkMn.cs" />
     <Compile Include="Assets\Scripts\Game3\Effect_End.cs" />
     <Compile Include="Assets\Scripts\Game3\Waypoint.cs" />
     <Compile Include="Assets\Scripts\Game1\SkillOption.cs" />
     <Compile Include="Assets\Scripts\Game3\NewBagUI.cs" />
     <Compile Include="Assets\Scripts\Game2\IActionListener.cs" />
-    <Compile Include="Assets\Scripts\Game3\Npc.cs" />
     <Compile Include="Assets\Scripts\Game1\ItemAutoFilter.cs" />
     <Compile Include="Assets\Scripts\Game3\PKFlag.cs" />
     <Compile Include="Assets\Scripts\Game2\BypassCertificateHandler.cs" />
     <Compile Include="Assets\Scripts\Game1\Info_RadaScr.cs" />
+    <Compile Include="Assets\Scripts\Game3\Npc.cs" />
     <Compile Include="Assets\Scripts\Game3\QuaNapTuan.cs" />
     <Compile Include="Assets\Scripts\Game2\BallInfo.cs" />
     <Compile Include="Assets\Scripts\Game2\Command.cs" />
@@ -632,10 +632,10 @@
     <Compile Include="Assets\Scripts\Game3\EffectPanel.cs" />
     <Compile Include="Assets\Scripts\Game2\ChooseCharScr.cs" />
     <Compile Include="Assets\Scripts\Game3\BackgroudEffect.cs" />
-    <Compile Include="Assets\Scripts\Game1\MyStream.cs" />
     <Compile Include="Assets\Scripts\Game1\Main.cs" />
     <Compile Include="Assets\Scripts\Game3\ServerEffect.cs" />
     <Compile Include="Assets\Scripts\Game2\Mod.XMAP\PickMob.cs" />
+    <Compile Include="Assets\Scripts\Game1\MyStream.cs" />
     <Compile Include="Assets\Scripts\Game3\Mod.XMAP\PickMobController.cs" />
     <Compile Include="Assets\Scripts\Game3\Info.cs" />
     <Compile Include="Assets\Scripts\Game3\MyKeyMap.cs" />
@@ -654,8 +654,8 @@
     <Compile Include="Assets\Scripts\Game2\Sound.cs" />
     <Compile Include="Assets\Scripts\Game1\MonsterDart.cs" />
     <Compile Include="Assets\Scripts\Game3\Cout.cs" />
-    <Compile Include="Assets\Scripts\Game2\Paint.cs" />
     <Compile Include="Assets\Scripts\Game2\Task.cs" />
+    <Compile Include="Assets\Scripts\Game2\Paint.cs" />
     <Compile Include="Assets\Scripts\Game1\myReader.cs" />
     <Compile Include="Assets\Scripts\Game2\Mod.XMAP\XmapAlgorithm.cs" />
     <Compile Include="Assets\Scripts\Game3\GamePad.cs" />
@@ -1734,7 +1734,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Unity.VisualStudio.Editor.csproj">
-      <Project>{99C9FECD-8159-D51C-655B-3C37AE6D6D06}</Project>
+      <Project>{B385990C-40ED-D0BA-719D-A628D643CB06}</Project>
       <Name>Unity.VisualStudio.Editor</Name>
     </ProjectReference>
   </ItemGroup>
