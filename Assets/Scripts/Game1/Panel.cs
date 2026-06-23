@@ -110,6 +110,8 @@ namespace Game1
 
 		public static Image imgXu;
 
+		public static Image imgCapsulBang;
+
 		public static Image imgThoivang;
 
 		public static Image imgTicket;
@@ -416,7 +418,7 @@ namespace Game1
 
 		private int timeShow;
 
-		public bool isBoxClan;
+
 
 		public int w;
 
@@ -435,6 +437,8 @@ namespace Game1
 		public bool isMessage;
 
 		public bool isViewMember;
+
+		public bool isClanBox;
 
 		public const int TYPE_MAIN = 0;
 
@@ -883,6 +887,7 @@ namespace Game1
 			imgBantay = GameCanvas.loadImage("/mainImage/myTexture2dbantay.png");
 			imgX = GameCanvas.loadImage("/mainImage/myTexture2dbtX.png");
 			imgXu = GameCanvas.loadImage("/mainImage/myTexture2dimgMoney.png");
+			imgCapsulBang = GameCanvas.loadImage("/mainImage/capsulBang.png");
 			imgThoivang = GameCanvas.loadImage("/mainImage/thoivang.png");
 			imgLuong = GameCanvas.loadImage("/mainImage/myTexture2dimgDiamond.png");
 			imgLuongKhoa = GameCanvas.loadImage("/mainImage/luongkhoa.png");
@@ -1436,6 +1441,7 @@ namespace Game1
 		public void setTypeBox()
 		{
 			type = 2;
+			isClanBox = false;
 			if (GameCanvas.w > 2 * WIDTH_PANEL)
 			{
 				boxTabName = new string[1][] { mResources.chestt };
@@ -1445,6 +1451,41 @@ namespace Game1
 				boxTabName = new string[2][]
 				{
 					mResources.chestt,
+					mResources.inventory
+				};
+			}
+			tabName[2] = boxTabName;
+			setType(0);
+			if (currentTabIndex == 0)
+			{
+				setTabBox();
+			}
+			if (currentTabIndex == 1)
+			{
+				setTabInventory(resetSelect: true);
+			}
+			if (GameCanvas.w > 2 * WIDTH_PANEL)
+			{
+				GameCanvas.panel2 = new Panel();
+				GameCanvas.panel2.tabName[7] = new string[1][] { new string[1] { string.Empty } };
+				GameCanvas.panel2.setTypeBodyOnly();
+				GameCanvas.panel2.show();
+			}
+		}
+
+		public void setTypeClanBox()
+		{
+			type = 2;
+			isClanBox = true;
+			if (GameCanvas.w > 2 * WIDTH_PANEL)
+			{
+				boxTabName = new string[1][] { mResources.clanBox };
+			}
+			else
+			{
+				boxTabName = new string[2][]
+				{
+					mResources.clanBox,
 					mResources.inventory
 				};
 			}
@@ -3191,7 +3232,7 @@ namespace Game1
 			{
 				return;
 			}
-			if (!ModFunc.isInventory)
+			if (!ModFunc.isInventory && !isClanBox)
 			{
 				updateKeyScrollView222222();
 				return;
@@ -3239,7 +3280,7 @@ namespace Game1
 					}
 					else if (isTabBox())
 					{
-						selected = Char.myCharz().arrItemBox.Length - 1;
+						selected = (isClanBox ? Char.myCharz().arrItemClanBox : Char.myCharz().arrItemBox).Length - 1;
 					}
 					if (isClanOption)
 					{
@@ -3275,7 +3316,7 @@ namespace Game1
 				}
 				else if (isTabBox() && selected >= currentListLength)
 				{
-					if (selected >= Char.myCharz().arrItemBox.Length)
+					if (selected >= (isClanBox ? Char.myCharz().arrItemClanBox : Char.myCharz().arrItemBox).Length)
 					{
 						selected = 0;
 					}
@@ -3861,16 +3902,17 @@ namespace Game1
 			{
 				if (myMember.size() > 1)
 				{
-					clansOption = new string[3][]
+					clansOption = new string[4][]
 					{
 						mResources.chatClan,
 						mResources.request_pea2,
-						mResources.memberr
+						mResources.memberr,
+						mResources.clanBox
 					};
 				}
 				else
 				{
-					clansOption = new string[1][] { mResources.memberr };
+					clansOption = new string[2][] { mResources.memberr, mResources.clanBox };
 				}
 			}
 			else if (Char.myCharz().role > 0)
@@ -4070,8 +4112,8 @@ namespace Game1
 
 		private void setTabBox()
 		{
-			int boxLength = Char.myCharz().arrItemBox.Length;
-			if (ModFunc.isInventory)
+			int boxLength = (isClanBox ? Char.myCharz().arrItemClanBox : Char.myCharz().arrItemBox).Length;
+			if (ModFunc.isInventory || isClanBox)
 			{
 				int columns = 6;
 				int rows = boxLength / columns + ((boxLength % columns > 0) ? 1 : 0);
@@ -4132,7 +4174,7 @@ namespace Game1
 		}
 		public void setTabInventory(bool resetSelect)
 		{
-			if (!ModFunc.isInventory)
+			if (!ModFunc.isInventory && !isClanBox)
 			{
 				currentListLength = checkCurrentListLength(Char.myCharz().arrItemBody.Length + Char.myCharz().arrItemBag.Length);
 				ITEM_HEIGHT = 29;
@@ -5580,7 +5622,7 @@ namespace Game1
 			g.translate(0, -cmy);
 			try
 			{
-				Item[] arrItemBox = Char.myCharz().arrItemBox;
+				Item[] arrItemBox = isClanBox ? Char.myCharz().arrItemClanBox : Char.myCharz().arrItemBox;
 				currentListLength = checkCurrentListLength(arrItemBox.Length);
 				int num = arrItemBox.Length / 20 + ((arrItemBox.Length % 20 > 0) ? 1 : 0);
 				TAB_W_NEW = wScroll / num;
@@ -5724,7 +5766,7 @@ namespace Game1
 
 		private void paintBox(mGraphics g)
 		{
-			if (!ModFunc.isInventory)
+			if (!ModFunc.isInventory && !isClanBox)
 			{
 				paintBox222222(g);
 				return;
@@ -5734,7 +5776,7 @@ namespace Game1
 			g.translate(0, -cmy);
 			try
 			{
-				Item[] arrItemBox = Char.myCharz().arrItemBox;
+				Item[] arrItemBox = isClanBox ? Char.myCharz().arrItemClanBox : Char.myCharz().arrItemBox;
 				int columns = 6;
 				int rows = arrItemBox.Length / columns + ((arrItemBox.Length % columns > 0) ? 1 : 0);
 				currentListLength = rows;
@@ -6216,7 +6258,14 @@ namespace Game1
 					}
 					mFont2.drawString(g, member.name, num6 + 5, num7, 0);
 					mFont.tahoma_7_blue.drawString(g, mResources.power + ": " + member.powerPoint, num6 + 5, num7 + 11, 0);
-					SmallImage.drawSmallImage(g, 7223, num6 + num8 - 7, num7 + 12, 0, 3);
+					if (imgCapsulBang != null)
+					{
+						g.drawImage(imgCapsulBang, num6 + num8 - 7, num7 + 12, 3);
+					}
+					else
+					{
+						SmallImage.drawSmallImage(g, 7223, num6 + num8 - 7, num7 + 12, 0, 3);
+					}
 					mFont.tahoma_7_blue.drawString(g, string.Empty + member.clanPoint, num6 + num8 - 15, num7 + 6, mFont.RIGHT);
 					continue;
 				}
@@ -7117,6 +7166,10 @@ namespace Game1
 					mFont.tahoma_7b_white.drawString(g, clan.name, 60, 4, mFont.LEFT, mFont.tahoma_7b_dark);
 					mFont.tahoma_7_yellow.drawString(g, mResources.achievement_point + ": " + clan.powerPoint, 60, 16, mFont.LEFT, mFont.tahoma_7_grey);
 					mFont.tahoma_7_yellow.drawString(g, mResources.clan_point + ": " + clan.clanPoint, 60, 27, mFont.LEFT, mFont.tahoma_7_grey);
+					if (imgCapsulBang != null)
+					{
+						g.drawImage(imgCapsulBang, 60 + mFont.tahoma_7_yellow.getWidth(mResources.clan_point + ": " + clan.clanPoint) + 5, 27 + 5, 3);
+					}
 					mFont.tahoma_7_yellow.drawString(g, mResources.level + ": " + clan.level, 60, 38, mFont.LEFT, mFont.tahoma_7_grey);
 					TextInfo.paint(g, clan.slogan, 60, 38, wScroll - 70, ITEM_HEIGHT, mFont.tahoma_7_yellow);
 				}
@@ -7361,7 +7414,8 @@ namespace Game1
 
 		private void paintItemBoxInfo(mGraphics g)
 		{
-			string st = mResources.used + ": " + hasUse + "/" + Char.myCharz().arrItemBox.Length + " " + mResources.place;
+			Item[] array = isClanBox ? Char.myCharz().arrItemClanBox : Char.myCharz().arrItemBox;
+			string st = mResources.used + ": " + hasUse + "/" + array.Length + " " + mResources.place;
 			mFont.tahoma_7b_white.drawString(g, mResources.chest, 60, 4, 0);
 			mFont.tahoma_7_yellow.drawString(g, st, 60, 16, 0);
 		}
@@ -9449,13 +9503,34 @@ namespace Game1
 				{
 					if (isMessage)
 					{
-						if (cSelected == 0)
+						if (myMember.size() > 1)
 						{
-							if (myMember.size() > 1)
+							if (cSelected == 0)
 							{
 								chatClan();
 							}
-							else
+							else if (cSelected == 1)
+							{
+								Service.gI().clanMessage(1, null, -1);
+							}
+							else if (cSelected == 2)
+							{
+								member = null;
+								isSearchClan = false;
+								isViewMember = true;
+								isMessage = false;
+								currentListLength = myMember.size() + 2;
+								initTabClans();
+								getCurrClanOtion();
+							}
+							else if (cSelected == 3)
+							{
+								Service.gI().openClanBox();
+							}
+						}
+						else
+						{
+							if (cSelected == 0)
 							{
 								member = null;
 								isSearchClan = false;
@@ -9464,20 +9539,10 @@ namespace Game1
 								currentListLength = myMember.size() + 2;
 								initTabClans();
 							}
-						}
-						if (cSelected == 1)
-						{
-							Service.gI().clanMessage(1, null, -1);
-						}
-						if (cSelected == 2)
-						{
-							member = null;
-							isSearchClan = false;
-							isViewMember = true;
-							isMessage = false;
-							currentListLength = myMember.size() + 2;
-							initTabClans();
-							getCurrClanOtion();
+							else if (cSelected == 1)
+							{
+								Service.gI().openClanBox();
+							}
 						}
 					}
 					else if (isViewMember)
@@ -9934,14 +9999,14 @@ namespace Game1
 			{
 				if (selected == 0 && !ModFunc.isInventory)
 				{
-					setNewSelected(Char.myCharz().arrItemBox.Length, resetSelect: false);
+					setNewSelected((isClanBox ? Char.myCharz().arrItemClanBox : Char.myCharz().arrItemBox).Length, resetSelect: false);
 					return;
 				}
 				sbyte b = (sbyte)GetInventorySelect_body(selected, newSelected);
-				Item item = Char.myCharz().arrItemBox[b];
+				Item item = (isClanBox ? Char.myCharz().arrItemClanBox : Char.myCharz().arrItemBox)[b];
 				if (item != null)
 				{
-					if (isBoxClan)
+					if (isClanBox)
 					{
 						myVector.addElement(new Command(mResources.GETOUT, this, 1000, item));
 						myVector.addElement(new Command(mResources.USE, this, 2010, item));
@@ -9996,7 +10061,7 @@ namespace Game1
 			if (currItem != null)
 			{
 				Char.myCharz().setPartTemp(currItem.headTemp, currItem.bodyTemp, currItem.legTemp, currItem.bagTemp);
-				if (isBoxClan)
+				if (isClanBox)
 				{
 					myVector.addElement(new Command(mResources.MOVEOUT, this, 2011, currItem));
 				}

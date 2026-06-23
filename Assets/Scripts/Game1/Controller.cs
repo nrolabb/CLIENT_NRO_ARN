@@ -1540,6 +1540,45 @@ namespace Game1
 							GameScr.gI().clanInvite(strInvite, clanID, code);
 							break;
 						}
+					case -58:
+						{
+							sbyte action = msg.reader().readByte();
+							if (action == 0)
+							{
+								sbyte size = msg.reader().readByte();
+								int arraySize = size < 60 ? 60 : size;
+								Char.myCharz().arrItemClanBox = new Item[arraySize];
+								for (int i = 0; i < size; i++)
+								{
+									short templateId = msg.reader().readShort();
+									if (templateId != -1)
+									{
+										Char.myCharz().arrItemClanBox[i] = new Item();
+										Char.myCharz().arrItemClanBox[i].template = ItemTemplates.get(templateId);
+										Char.myCharz().arrItemClanBox[i].quantity = msg.reader().readInt();
+										Char.myCharz().arrItemClanBox[i].info = msg.reader().readUTF();
+										Char.myCharz().arrItemClanBox[i].content = msg.reader().readUTF();
+										sbyte optionsSize = msg.reader().readByte();
+										if (optionsSize != 0)
+										{
+											Char.myCharz().arrItemClanBox[i].itemOption = new ItemOption[optionsSize];
+											for (int j = 0; j < Char.myCharz().arrItemClanBox[i].itemOption.Length; j++)
+											{
+												int optId = msg.reader().readUnsignedByte();
+												int optParam = msg.reader().readUnsignedShort();
+												if (optId != 213)
+												{
+													Char.myCharz().arrItemClanBox[i].itemOption[j] = new ItemOption(optId, optParam);
+												}
+											}
+										}
+									}
+								}
+								GameCanvas.panel.setTypeClanBox();
+								GameCanvas.panel.show();
+							}
+							break;
+						}
 					case -51:
 						InfoDlg.hide();
 						readClanMsg(msg, 0);
@@ -2264,7 +2303,7 @@ namespace Game1
 								{
 								}
 								GameCanvas.panel.setTypeBox();
-								GameCanvas.panel.isBoxClan = isBoxClan;
+								GameCanvas.panel.isClanBox = isBoxClan;
 								GameCanvas.panel.show();
 							}
 							if (b68 == 2)

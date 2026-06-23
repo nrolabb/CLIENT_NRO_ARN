@@ -374,6 +374,28 @@ namespace Game1
 			}
 		}
 
+		public void openClanBox()
+		{
+			Message message = null;
+			try
+			{
+				message = new Message((sbyte)(-58));
+				message.writer().writeByte(0);
+				session.sendMessage(message);
+			}
+			catch (Exception ex)
+			{
+				Cout.println(ex.Message + ex.StackTrace);
+			}
+			finally
+			{
+				if (message != null)
+				{
+					message.cleanup();
+				}
+			}
+		}
+
 		public void clanMessage(int type, string text, int clanID)
 		{
 			Message message = null;
