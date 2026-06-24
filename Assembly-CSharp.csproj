@@ -646,6 +646,7 @@
     <Compile Include="Assets\Scripts\Game1\Mod\ShowBoss.cs" />
     <Compile Include="Assets\Scripts\Game1\EffectManager.cs" />
     <Compile Include="Assets\Scripts\Game1\NinjaUtil.cs" />
+    <Compile Include="Assets\Scripts\Game1\TabClanDistribute.cs" />
     <Compile Include="Assets\Scripts\Game2\Assets.src.g\PetFollow.cs" />
     <Compile Include="Assets\Scripts\Game3\IMapObject.cs" />
     <Compile Include="Assets\Scripts\Game2\SoundMn.cs" />

@@ -15,6 +15,7 @@
 *.suo
 *.vssscc
 *.json
+*.cache
 library/
 /Temp
 /ObjectCache

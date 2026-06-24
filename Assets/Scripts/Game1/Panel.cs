@@ -76,6 +76,8 @@ namespace Game1
 
 		public TabClanIcon tabIcon;
 
+		public TabClanDistribute tabClanDistribute;
+
 		public MyVector vItemCombine = new MyVector();
 
 		public int moneyGD;
@@ -2300,6 +2302,11 @@ namespace Game1
 
 		public void updateKey()
 		{
+			if (tabClanDistribute != null && tabClanDistribute.isShow)
+			{
+				tabClanDistribute.updateKey();
+				return;
+			}
 			if (isShowDistribute)
 			{
 				updateKeyDistribute();
@@ -4976,7 +4983,11 @@ namespace Game1
 			{
 				tabIcon.paint(g);
 			}
-			if (isShowDistribute)
+			if (tabClanDistribute != null && tabClanDistribute.isShow)
+			{
+				tabClanDistribute.paint(g);
+			}
+			else if (isShowDistribute)
 			{
 				paintDistribute(g);
 			}
@@ -8720,6 +8731,11 @@ namespace Game1
 				tabIcon.update();
 				return;
 			}
+			if (tabClanDistribute != null && tabClanDistribute.isShow)
+			{
+				tabClanDistribute.update();
+				return;
+			}
 			moveCamera();
 			if (isTabInven() && isnewInventory)
 			{
@@ -10875,32 +10891,15 @@ namespace Game1
 			if (idAction == 2012)
 			{
 				Item itemToDistribute = (Item)p;
-				this.itemDistributing = itemToDistribute;
-				this.isShowDistribute = true;
-				this.distributeScroll = 0;
-				if (myMember != null)
+				sbyte clanBoxIndex = (sbyte)GetItemIndexInClanBox(itemToDistribute);
+				if (itemToDistribute != null && clanBoxIndex != -1)
 				{
-					this.distributeQuantities = new int[myMember.size()];
-					for (int i = 0; i < myMember.size(); i++)
+					if (tabClanDistribute == null)
 					{
-						this.distributeQuantities[i] = 0;
+						tabClanDistribute = new TabClanDistribute();
 					}
+					tabClanDistribute.show(itemToDistribute, clanBoxIndex, myMember);
 				}
-				else
-				{
-					this.distributeQuantities = new int[0];
-				}
-				wPopup = 150;
-				hPopup = H - 60;
-				xPopup = GameCanvas.w - wPopup - 5;
-				if (xPopup < X + W + 2)
-				{
-					xPopup = X + W + 2;
-				}
-				yPopup = Y + 40;
-				xOk = xPopup + wPopup / 2 - btnW - 5;
-				xClose = xPopup + wPopup / 2 + 5;
-				yBtn = yPopup + hPopup - 25;
 			}
 			if (idAction == 2013)
 			{
