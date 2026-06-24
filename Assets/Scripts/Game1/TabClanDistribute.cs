@@ -243,6 +243,10 @@ namespace Game1
 			}
 			Service.gI().distributeClanBoxItem(itemIndex, distributions);
 			hide();
+			if (GameCanvas.panel2 != null && GameCanvas.panel2.isClanBox)
+			{
+				GameCanvas.panel2.requestClanBoxRefresh();
+			}
 		}
 	}
 }

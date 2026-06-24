@@ -1574,7 +1574,33 @@ namespace Game1
 										}
 									}
 								}
-								GameCanvas.panel.setTypeClanBoxInClanTab();
+								bool isShopOpenOnWideScreen = GameCanvas.w > 2 * Panel.WIDTH_PANEL
+									&& GameCanvas.panel != null
+									&& GameCanvas.panel.type == 1;
+								if (isShopOpenOnWideScreen)
+								{
+									if (GameCanvas.panel2 == null)
+									{
+										GameCanvas.panel2 = new Panel();
+									}
+									if (GameCanvas.panel2.clanBoxRefreshPending)
+									{
+										GameCanvas.panel2.clanBoxRefreshPending = false;
+										GameCanvas.panel2.refreshClanBoxRight();
+									}
+									else
+									{
+										GameCanvas.panel2.setTypeClanBoxRight();
+										if (!GameCanvas.panel2.isShow)
+										{
+											GameCanvas.panel2.show();
+										}
+									}
+								}
+								else
+								{
+									GameCanvas.panel.setTypeClanBoxInClanTab();
+								}
 							}
 							break;
 						}
@@ -2674,11 +2700,28 @@ namespace Game1
 							}
 							if (flag11)
 							{
+								bool isClanShop = false;
+								if (GameCanvas.panel.shopTabName != null && GameCanvas.panel.shopTabName.Length > 0 && GameCanvas.panel.shopTabName[0] != null && GameCanvas.panel.shopTabName[0].Length > 0 && GameCanvas.panel.shopTabName[0][0] != null)
+								{
+									string fName = GameCanvas.panel.shopTabName[0][0].ToLower();
+									if (fName.Contains("bang") || fName.Contains("clan"))
+									{
+										isClanShop = true;
+									}
+								}
+
 								if (type_shop != 2)
 								{
 									GameCanvas.panel2 = new Panel();
-									GameCanvas.panel2.tabName[7] = new string[1][] { new string[1] { string.Empty } };
-									GameCanvas.panel2.setTypeBodyOnly();
+									if (isClanShop)
+									{
+										GameCanvas.panel2.setTypeClanBoxRight();
+									}
+									else
+									{
+										GameCanvas.panel2.tabName[7] = new string[1][] { new string[1] { string.Empty } };
+										GameCanvas.panel2.setTypeBodyOnly();
+									}
 									GameCanvas.panel2.show();
 								}
 								else

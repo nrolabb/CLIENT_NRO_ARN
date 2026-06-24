@@ -443,6 +443,7 @@ namespace Game1
 		public bool isClanBox;
 
 		public bool isViewClanBox;
+		public bool clanBoxRefreshPending;
 
 		public bool isShowDistribute;
 		public Item itemDistributing;
@@ -1534,6 +1535,20 @@ namespace Game1
 			currentTabIndex = (mainTabName.Length > 4) ? 3 : 0;
 			lastTabIndex[type] = currentTabIndex;
 			setTabClanBox();
+		}
+
+		public void setTypeClanBoxRight()
+		{
+			type = 2;
+			isClanBox = true;
+			isViewClanBox = false;
+			myMember = (GameCanvas.panel != null) ? GameCanvas.panel.myMember : myMember;
+			boxTabName = new string[1][] { mResources.clanBox };
+			tabName[2] = boxTabName;
+			setType(1);
+			currentTabIndex = 0;
+			lastTabIndex[type] = currentTabIndex;
+			setTabBox();
 		}
 
 		private void setTabClanBox()
@@ -3684,7 +3699,14 @@ namespace Game1
 						{
 							int row3 = selected * (CountBoxInRow - 1);
 							int column2 = (GameCanvas.px - xScroll) / (WidthBoxNew + 1);
-							selected = selected + row3 + column2;
+							if (column2 >= CountBoxInRow)
+							{
+								selected = -1;
+							}
+							else
+							{
+								selected = selected + row3 + column2;
+							}
 						}
 						checkOptionSelect();
 					}
@@ -3749,13 +3771,27 @@ namespace Game1
 				{
 					int row5 = (selected - Char.myCharz().arrItemBody.Length) * (CountBoxInRow - 1);
 					int column3 = (GameCanvas.px - xScroll) / (WidthBoxNew + 1);
-					selected = selected + row5 + column3;
+					if (column3 >= CountBoxInRow)
+					{
+						selected = -1;
+					}
+					else
+					{
+						selected = selected + row5 + column3;
+					}
 				}
 				else if (isTabBox())
 				{
 					int row6 = selected * (CountBoxInRow - 1);
 					int column4 = (GameCanvas.px - xScroll) / (WidthBoxNew + 1);
-					selected = selected + row6 + column4;
+					if (column4 >= CountBoxInRow)
+					{
+						selected = -1;
+					}
+					else
+					{
+						selected = selected + row6 + column4;
+					}
 				}
 				checkOptionSelect();
 				pointerDownTime = 0;
@@ -7485,7 +7521,7 @@ namespace Game1
 			{
 				g.setColor(13524492);
 				g.fillRect(X + 1, 78, W - 2, 1);
-				mFont.tahoma_7b_dark.drawString(g, mResources.chest, xScroll + wScroll / 2, 59, mFont.CENTER);
+				mFont.tahoma_7b_dark.drawString(g, isClanBox ? (mResources.clanBox[0] + " " + mResources.clanBox[1]) : mResources.chest, xScroll + wScroll / 2, 59, mFont.CENTER);
 				return;
 			}
 			if (type == 3)
@@ -7937,7 +7973,7 @@ namespace Game1
 		{
 			Item[] array = isClanBox ? Char.myCharz().arrItemClanBox : Char.myCharz().arrItemBox;
 			string st = mResources.used + ": " + hasUse + "/" + array.Length + " " + mResources.place;
-			mFont.tahoma_7b_white.drawString(g, mResources.chest, 60, 4, 0);
+			mFont.tahoma_7b_white.drawString(g, isClanBox ? (mResources.clanBox[0] + " " + mResources.clanBox[1]) : mResources.chest, 60, 4, 0);
 			mFont.tahoma_7_yellow.drawString(g, st, 60, 16, 0);
 		}
 
@@ -10553,6 +10589,73 @@ namespace Game1
 			addItemDetail(currItem);
 		}
 
+		private void doFireClanBoxRight()
+		{
+			if (selected < 0)
+			{
+				return;
+			}
+			Item[] items = Char.myCharz().arrItemClanBox;
+			if (items == null || selected >= items.Length)
+			{
+				return;
+			}
+			currItem = items[selected];
+			if (currItem == null)
+			{
+				cp = null;
+				return;
+			}
+			MyVector actions = new MyVector();
+			actions.addElement(new Command("Phân phối", this, 2012, currItem));
+			actions.addElement(new Command("Vứt bỏ", this, 2013, currItem));
+			Char.myCharz().setPartTemp(currItem.headTemp, currItem.bodyTemp, currItem.legTemp, currItem.bagTemp);
+			GameCanvas.menu.startAt(actions, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
+			addItemDetail(currItem);
+		}
+
+		public void refreshClanBoxRight()
+		{
+			if (Equals(GameCanvas.panel2) && isClanBox)
+			{
+				int oldSelected = selected;
+				int oldCmy = cmy;
+				int oldCmtoY = cmtoY;
+				setTabBox();
+				if (oldSelected >= 0)
+				{
+					selected = Math.Min(oldSelected, Math.Max(0, (isClanBox ? Char.myCharz().arrItemClanBox : Char.myCharz().arrItemBox).Length - 1));
+				}
+				cmy = oldCmy;
+				cmtoY = oldCmtoY;
+				if (cmy > cmyLim)
+				{
+					cmy = cmyLim;
+				}
+				if (cmtoY > cmyLim)
+				{
+					cmtoY = cmyLim;
+				}
+				if (cmy < 0)
+				{
+					cmy = 0;
+				}
+				if (cmtoY < 0)
+				{
+					cmtoY = 0;
+				}
+			}
+		}
+
+		public void requestClanBoxRefresh()
+		{
+			if (GameCanvas.panel2 != null && GameCanvas.panel2.isClanBox)
+			{
+				GameCanvas.panel2.clanBoxRefreshPending = true;
+				Service.gI().openClanBox();
+			}
+		}
+
 		private void doFireBox()
 		{
 			if (selected < 0)
@@ -10561,6 +10664,11 @@ namespace Game1
 			}
 			currItem = null;
 			MyVector myVector = new MyVector();
+			if (Equals(GameCanvas.panel2) && isClanBox)
+			{
+				doFireClanBoxRight();
+				return;
+			}
 			if (currentTabIndex == 0 && !Equals(GameCanvas.panel2))
 			{
 				if (selected == 0 && !ModFunc.isInventory)
@@ -10905,7 +11013,12 @@ namespace Game1
 					{
 						tabClanDistribute = new TabClanDistribute();
 					}
-					tabClanDistribute.show(itemToDistribute, clanBoxIndex, myMember);
+					MyVector clanMembers = myMember;
+					if (clanMembers == null && GameCanvas.panel != null)
+					{
+						clanMembers = GameCanvas.panel.myMember;
+					}
+					tabClanDistribute.show(itemToDistribute, clanBoxIndex, clanMembers);
 				}
 			}
 			if (idAction == 2013)
@@ -10924,6 +11037,7 @@ namespace Game1
 				sbyte indexDiscard = (sbyte)(int)p;
 				Service.gI().discardClanBoxItem(indexDiscard);
 				GameCanvas.endDlg();
+				requestClanBoxRefresh();
 			}
 			if (idAction == 2000)
 			{
@@ -11028,12 +11142,14 @@ namespace Game1
 				Res.outz("mua do");
 				Item item10 = (Item)p;
 				Service.gI().buyItem(0, item10.template.id, 0);
+				requestClanBoxRefresh();
 			}
 			if (idAction == 3001)
 			{
 				Item item11 = (Item)p;
 				GameCanvas.msgdlg.pleasewait();
 				Service.gI().buyItem(1, item11.template.id, 0);
+				requestClanBoxRefresh();
 			}
 			if (idAction == 3002)
 			{
@@ -11053,16 +11169,19 @@ namespace Game1
 			{
 				Item item12 = (Item)p;
 				Service.gI().buyItem(3, item12.template.id, 0);
+				requestClanBoxRefresh();
 			}
 			if (idAction == 3005)
 			{
 				Item item13 = (Item)p;
 				Service.gI().buyItem(3, item13.template.id, 0);
+				requestClanBoxRefresh();
 			}
 			if (idAction == 3006)
 			{
 				Item item14 = (Item)p;
 				ModFunc.GI().AutoBuyItem(20, item14);
+				requestClanBoxRefresh();
 			}
 			if (idAction == 4000)
 			{

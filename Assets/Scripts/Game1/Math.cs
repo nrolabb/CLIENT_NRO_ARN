@@ -30,5 +30,24 @@ namespace Game1
     		}
     		return num;
     	}
+
+    	public static int max(int x, int y)
+    	{
+    		if (x > y)
+    		{
+    			return x;
+    		}
+    		return y;
+    	}
+
+    	public static int Min(int x, int y)
+    	{
+    		return min(x, y);
+    	}
+
+    	public static int Max(int x, int y)
+    	{
+    		return max(x, y);
+    	}
     }
 }
