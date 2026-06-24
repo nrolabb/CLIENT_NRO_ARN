@@ -1543,7 +1543,7 @@ namespace Game1
 					case -58:
 						{
 							sbyte action = msg.reader().readByte();
-							if (action == 0)
+							if (action == 0 || action == 1)
 							{
 								sbyte size = msg.reader().readByte();
 								int arraySize = size;
@@ -1574,32 +1574,61 @@ namespace Game1
 										}
 									}
 								}
-								bool isShopOpenOnWideScreen = GameCanvas.w > 2 * Panel.WIDTH_PANEL
-									&& GameCanvas.panel != null
-									&& GameCanvas.panel.type == 1;
-								if (isShopOpenOnWideScreen)
+								int clanBoxUsed = 0;
+								if (Char.myCharz().arrItemClanBox != null)
 								{
-									if (GameCanvas.panel2 == null)
+									for (int i = 0; i < Char.myCharz().arrItemClanBox.Length; i++)
 									{
-										GameCanvas.panel2 = new Panel();
-									}
-									if (GameCanvas.panel2.clanBoxRefreshPending)
-									{
-										GameCanvas.panel2.clanBoxRefreshPending = false;
-										GameCanvas.panel2.refreshClanBoxRight();
-									}
-									else
-									{
-										GameCanvas.panel2.setTypeClanBoxRight();
-										if (!GameCanvas.panel2.isShow)
+										if (Char.myCharz().arrItemClanBox[i] != null && Char.myCharz().arrItemClanBox[i].template != null)
 										{
-											GameCanvas.panel2.show();
+											clanBoxUsed++;
 										}
+									}
+								}
+								if (GameCanvas.panel != null)
+								{
+									GameCanvas.panel.hasUse = clanBoxUsed;
+								}
+								if (GameCanvas.panel2 != null)
+								{
+									GameCanvas.panel2.hasUse = clanBoxUsed;
+								}
+								if (action == 1)
+								{
+									if (GameCanvas.panel2 != null && GameCanvas.panel2.isClanBox && GameCanvas.panel2.isShow)
+									{
+										GameCanvas.panel2.refreshClanBoxRight();
 									}
 								}
 								else
 								{
-									GameCanvas.panel.setTypeClanBoxInClanTab();
+									bool isShopOpenOnWideScreen = GameCanvas.w > 2 * Panel.WIDTH_PANEL
+										&& GameCanvas.panel != null
+										&& GameCanvas.panel.type == 1;
+									if (isShopOpenOnWideScreen)
+									{
+										if (GameCanvas.panel2 == null)
+										{
+											GameCanvas.panel2 = new Panel();
+										}
+										if (GameCanvas.panel2.clanBoxRefreshPending)
+										{
+											GameCanvas.panel2.clanBoxRefreshPending = false;
+											GameCanvas.panel2.refreshClanBoxRight();
+										}
+										else
+										{
+											GameCanvas.panel2.setTypeClanBoxRight();
+											if (!GameCanvas.panel2.isShow)
+											{
+												GameCanvas.panel2.show();
+											}
+										}
+									}
+									else
+									{
+										GameCanvas.panel.setTypeClanBoxInClanTab();
+									}
 								}
 							}
 							break;

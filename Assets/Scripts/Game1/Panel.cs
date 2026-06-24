@@ -7972,9 +7972,28 @@ namespace Game1
 		private void paintItemBoxInfo(mGraphics g)
 		{
 			Item[] array = isClanBox ? Char.myCharz().arrItemClanBox : Char.myCharz().arrItemBox;
-			string st = mResources.used + ": " + hasUse + "/" + array.Length + " " + mResources.place;
+			int capacity = (array != null) ? array.Length : 0;
+			int used = CountUsedItems(array);
+			string st = mResources.used + ": " + used + "/" + capacity + " " + mResources.place;
 			mFont.tahoma_7b_white.drawString(g, isClanBox ? (mResources.clanBox[0] + " " + mResources.clanBox[1]) : mResources.chest, 60, 4, 0);
 			mFont.tahoma_7_yellow.drawString(g, st, 60, 16, 0);
+		}
+
+		private int CountUsedItems(Item[] items)
+		{
+			if (items == null)
+			{
+				return 0;
+			}
+			int used = 0;
+			for (int i = 0; i < items.Length; i++)
+			{
+					if (items[i] != null && items[i].template != null)
+					{
+						used++;
+					}
+			}
+			return used;
 		}
 
 		private void paintSkillInfo(mGraphics g)
