@@ -7522,6 +7522,15 @@ namespace Game1
 				g.setColor(13524492);
 				g.fillRect(X + 1, 78, W - 2, 1);
 				mFont.tahoma_7b_dark.drawString(g, isClanBox ? (mResources.clanBox[0] + " " + mResources.clanBox[1]) : mResources.chest, xScroll + wScroll / 2, 59, mFont.CENTER);
+				if (isClanBox && Equals(GameCanvas.panel2) && Char.myCharz().clan != null)
+				{
+					int clanX = xScroll + wScroll - 42;
+					if (imgCapsulBang != null)
+					{
+						g.drawImage(imgCapsulBang, clanX, 61, 3);
+					}
+					mFont.tahoma_7_yellow.drawString(g, Char.myCharz().clan.clanPoint + string.Empty, clanX + 10, 56, mFont.LEFT, mFont.tahoma_7_grey);
+				}
 				return;
 			}
 			if (type == 3)
