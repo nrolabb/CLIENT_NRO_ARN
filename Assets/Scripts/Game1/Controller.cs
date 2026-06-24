@@ -1574,8 +1574,7 @@ namespace Game1
 										}
 									}
 								}
-								GameCanvas.panel.setTypeClanBox();
-								GameCanvas.panel.show();
+								GameCanvas.panel.setTypeClanBoxInClanTab();
 							}
 							break;
 						}

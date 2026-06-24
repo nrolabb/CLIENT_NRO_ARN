@@ -374,6 +374,58 @@ namespace Game1
 			}
 		}
 
+		public class DistributeTarget
+		{
+			public int playerId;
+			public int quantity;
+			public DistributeTarget(int id, int qty)
+			{
+				this.playerId = id;
+				this.quantity = qty;
+			}
+		}
+
+		public void distributeClanBoxItem(sbyte index, MyVector distributions)
+		{
+			Message message = null;
+			try
+			{
+				message = new Message((sbyte)(-58));
+				message.writer().writeByte(1); // action = 1
+				message.writer().writeByte(index);
+				message.writer().writeByte((sbyte)distributions.size());
+				for (int i = 0; i < distributions.size(); i++)
+				{
+					DistributeTarget target = (DistributeTarget)distributions.elementAt(i);
+					message.writer().writeInt(target.playerId);
+					message.writer().writeInt(target.quantity);
+				}
+				session.sendMessage(message);
+			}
+			catch (Exception) {}
+			finally
+			{
+				if (message != null) message.cleanup();
+			}
+		}
+
+		public void discardClanBoxItem(sbyte index)
+		{
+			Message message = null;
+			try
+			{
+				message = new Message((sbyte)(-58));
+				message.writer().writeByte(2); // action = 2
+				message.writer().writeByte(index);
+				session.sendMessage(message);
+			}
+			catch (Exception) {}
+			finally
+			{
+				if (message != null) message.cleanup();
+			}
+		}
+
 		public void openClanBox()
 		{
 			Message message = null;

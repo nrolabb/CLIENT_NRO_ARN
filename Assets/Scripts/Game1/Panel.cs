@@ -440,6 +440,17 @@ namespace Game1
 
 		public bool isClanBox;
 
+		public bool isViewClanBox;
+
+		public bool isShowDistribute;
+		public Item itemDistributing;
+		public int[] distributeQuantities;
+		public int distributeScroll;
+		public int xPopup, yPopup, wPopup, hPopup;
+		public int btnW = 50;
+		public int btnH = 18;
+		public int xOk, xClose, yBtn;
+
 		public const int TYPE_MAIN = 0;
 
 		public const int TYPE_SHOP = 1;
@@ -1477,6 +1488,7 @@ namespace Game1
 		{
 			type = 2;
 			isClanBox = true;
+			isViewClanBox = false;
 			if (GameCanvas.w > 2 * WIDTH_PANEL)
 			{
 				boxTabName = new string[1][] { mResources.clanBox };
@@ -1506,6 +1518,38 @@ namespace Game1
 				GameCanvas.panel2.setTypeBodyOnly();
 				GameCanvas.panel2.show();
 			}
+		}
+
+		public void setTypeClanBoxInClanTab()
+		{
+			isClanBox = true;
+			isViewClanBox = true;
+			isMessage = true;
+			isViewMember = false;
+			isSearchClan = false;
+			type = 0;
+			currentTabName = tabName[type];
+			currentTabIndex = (mainTabName.Length > 4) ? 3 : 0;
+			lastTabIndex[type] = currentTabIndex;
+			setTabClanBox();
+		}
+
+		private void setTabClanBox()
+		{
+			ITEM_HEIGHT = 24;
+			initTabClans();
+			clanInfo = mResources.clanBox[0] + " " + mResources.clanBox[1];
+			Item[] arrItemClanBox = Char.myCharz().arrItemClanBox;
+			int itemCount = (arrItemClanBox == null) ? 0 : arrItemClanBox.Length;
+			currentListLength = (itemCount + CountBoxInRow - 1) / CountBoxInRow + 2;
+			cmyLim = currentListLength * ITEM_HEIGHT - hScroll;
+			if (cmyLim < 0)
+			{
+				cmyLim = 0;
+			}
+			cmy = (cmtoY = 0);
+			selected = (GameCanvas.isTouch ? (-1) : 0);
+			cSelected = -1;
 		}
 
 		public void setTypeCombine()
@@ -2156,8 +2200,111 @@ namespace Game1
 			}
 		}
 
+		private void updateKeyDistribute()
+		{
+			if (GameCanvas.pXYScrollMouse != 0)
+			{
+				distributeScroll += GameCanvas.pXYScrollMouse * 20;
+				GameCanvas.pXYScrollMouse = 0;
+			}
+			int maxScroll = (myMember != null ? myMember.size() : 0) * 20 - (hPopup - 70);
+			if (maxScroll < 0) maxScroll = 0;
+			if (distributeScroll < 0) distributeScroll = 0;
+			if (distributeScroll > maxScroll) distributeScroll = maxScroll;
+
+			if (GameCanvas.isPointerClick)
+			{
+				int px = GameCanvas.px;
+				int py = GameCanvas.py;
+
+				if (px >= xOk + btnW + 10 && px <= xOk + btnW + 10 + btnW && py >= yBtn && py <= yBtn + btnH)
+				{
+					isShowDistribute = false;
+					GameCanvas.isPointerClick = false;
+					return;
+				}
+
+				if (px >= xOk && px <= xOk + btnW && py >= yBtn && py <= yBtn + btnH)
+				{
+					MyVector distributions = new MyVector();
+					if (myMember != null)
+					{
+						for (int i = 0; i < myMember.size(); i++)
+						{
+							if (distributeQuantities[i] > 0)
+							{
+								Member member = (Member)myMember.elementAt(i);
+								distributions.addElement(new Service.DistributeTarget(member.ID, distributeQuantities[i]));
+							}
+						}
+					}
+					if (distributions.size() > 0)
+					{
+						sbyte indexItem = (sbyte)GetItemIndexInClanBox(itemDistributing);
+						if (indexItem != -1)
+						{
+							Service.gI().distributeClanBoxItem(indexItem, distributions);
+						}
+						isShowDistribute = false;
+					}
+					else
+					{
+						GameCanvas.startOKDlg("Vui lòng chọn ít nhất 1 thành viên để phân phối!");
+					}
+					GameCanvas.isPointerClick = false;
+					return;
+				}
+
+				if (myMember != null)
+				{
+					for (int i = 0; i < myMember.size(); i++)
+					{
+						int yItem = yPopup + 30 + i * 20 - distributeScroll;
+						if (yItem < yPopup + 30 || yItem >= yPopup + hPopup - 40)
+						{
+							continue;
+						}
+
+						if (px >= xPopup + wPopup - 65 && px <= xPopup + wPopup - 45 && py >= yItem - 2 && py <= yItem + 14)
+						{
+							if (distributeQuantities[i] > 0)
+							{
+								distributeQuantities[i]--;
+							}
+							GameCanvas.isPointerClick = false;
+							return;
+						}
+
+						if (px >= xPopup + wPopup - 25 && px <= xPopup + wPopup - 5 && py >= yItem - 2 && py <= yItem + 14)
+						{
+							int totalSelected = 0;
+							for (int k = 0; k < myMember.size(); k++)
+							{
+								totalSelected += distributeQuantities[k];
+							}
+							if (totalSelected < itemDistributing.quantity)
+							{
+								distributeQuantities[i]++;
+							}
+							else
+							{
+								GameCanvas.startOKDlg("Số lượng phân phối đã đạt tối đa của vật phẩm!");
+							}
+							GameCanvas.isPointerClick = false;
+							return;
+						}
+					}
+				}
+			}
+		}
+
 		public void updateKey()
 		{
+			if (isShowDistribute)
+			{
+				updateKeyDistribute();
+				return;
+			}
 			if ((chatTField != null && chatTField.isShow) || !GameCanvas.panel.isDoneCombine || InfoDlg.isShow)
 			{
 				return;
@@ -2853,7 +3000,7 @@ namespace Game1
 					isClanOption = true;
 				}
 			}
-			else if (selected != 1 && !isSearchClan && selected > 0)
+			else if (!isViewClanBox && selected != 1 && !isSearchClan && selected > 0)
 			{
 				currClanOption = new int[1];
 				for (int j = 0; j < currClanOption.Length; j++)
@@ -2900,8 +3047,138 @@ namespace Game1
 
 		private void updateKeyClans()
 		{
+			if (isViewClanBox)
+			{
+				updateKeyClanBoxInClanTab();
+				return;
+			}
 			updateKeyScrollView();
 			updateKeyClansOption();
+		}
+
+		private void updateKeyClanBoxInClanTab()
+		{
+			Item[] items = Char.myCharz().arrItemClanBox;
+			int itemCount = (items == null) ? 0 : items.Length;
+			bool moved = false;
+			if (selected == 0)
+			{
+				updateKeyClansOption();
+			}
+			else if (GameCanvas.keyPressed[(!Main.isPC) ? 4 : 23] && selected > 2)
+			{
+				selected--;
+				moved = true;
+			}
+			else if (GameCanvas.keyPressed[(!Main.isPC) ? 6 : 24] && selected >= 2 && selected < itemCount + 1)
+			{
+				selected++;
+				moved = true;
+			}
+			if (GameCanvas.keyPressed[(!Main.isPC) ? 2 : 21])
+			{
+				if (selected >= 2)
+				{
+					int itemIndex = selected - 2;
+					selected = (itemIndex < CountBoxInRow) ? 0 : selected - CountBoxInRow;
+				}
+				moved = true;
+			}
+			else if (GameCanvas.keyPressed[(!Main.isPC) ? 8 : 22])
+			{
+				if (selected == 0 && itemCount > 0)
+				{
+					selected = 2;
+				}
+				else if (selected >= 2 && selected - 2 + CountBoxInRow < itemCount)
+				{
+					selected += CountBoxInRow;
+				}
+				moved = true;
+			}
+			if (moved)
+			{
+				cSelected = (selected == 0) ? ((cSelected < 0) ? 0 : cSelected) : -1;
+				int row = (selected < 2) ? selected : ((selected - 2) / CountBoxInRow + 2);
+				cmtoY = row * ITEM_HEIGHT - hScroll / 2;
+				cmtoY = Math.min(cmtoY, cmyLim);
+				if (cmtoY < 0)
+				{
+					cmtoY = 0;
+				}
+				cmy = cmtoY;
+				getCurrClanOtion();
+			}
+
+			if (GameCanvas.isPointerDown)
+			{
+				justRelease = false;
+				if (!pointerIsDowning && GameCanvas.isPointer(xScroll, yScroll, wScroll, hScroll))
+				{
+					for (int i = 0; i < pointerDownLastX.Length; i++)
+					{
+						pointerDownLastX[i] = GameCanvas.py;
+					}
+					pointerDownFirstX = GameCanvas.py;
+					pointerIsDowning = true;
+					isDownWhenRunning = cmRun != 0;
+					cmRun = 0;
+				}
+				else if (pointerIsDowning)
+				{
+					pointerDownTime++;
+					int deltaY = GameCanvas.py - pointerDownLastX[0];
+					if (deltaY != 0)
+					{
+						selected = -1;
+						cSelected = -1;
+					}
+					for (int j = pointerDownLastX.Length - 1; j > 0; j--)
+					{
+						pointerDownLastX[j] = pointerDownLastX[j - 1];
+					}
+					pointerDownLastX[0] = GameCanvas.py;
+					cmtoY = Math.min(cmtoY - deltaY, cmyLim);
+					if (cmtoY < 0)
+					{
+						cmtoY = 0;
+					}
+					cmy -= deltaY;
+				}
+			}
+			if (!GameCanvas.isPointerJustRelease || !pointerIsDowning)
+			{
+				return;
+			}
+			int releaseDelta = GameCanvas.py - pointerDownLastX[0];
+			GameCanvas.isPointerJustRelease = false;
+			if (Res.abs(releaseDelta) < 20 && Res.abs(GameCanvas.py - pointerDownFirstX) < 20 && !isDownWhenRunning)
+			{
+				cmRun = 0;
+				cmtoY = cmy;
+				int row = (cmtoY + GameCanvas.py - yScroll) / ITEM_HEIGHT;
+				if (row == 0)
+				{
+					selected = 0;
+					checkOptionSelect();
+				}
+				else if (row >= 2)
+				{
+					int column = (GameCanvas.px - xScroll) / (WidthBoxNew + 1);
+					int itemIndex = (row - 2) * CountBoxInRow + column;
+					selected = (column >= 0 && column < CountBoxInRow && itemIndex < itemCount) ? itemIndex + 2 : -1;
+					cSelected = -1;
+				}
+				else
+				{
+					selected = 1;
+				}
+				pointerDownTime = 0;
+				waitToPerform = 10;
+				SoundMn.gI().panelClick();
+			}
+			pointerIsDowning = false;
+			pointerDownTime = 0;
 		}
 
 		private void checkOptionSelect()
@@ -2918,7 +3195,7 @@ namespace Game1
 					num = xScroll + wScroll / 2 - clansOption.Length * TAB_W / 2;
 					cSelected = (GameCanvas.px - num) / TAB_W;
 				}
-				else
+				else if (!isViewClanBox)
 				{
 					currMess = getCurrMessage();
 					if (currMess != null && currMess.option != null)
@@ -3961,6 +4238,7 @@ namespace Game1
 		public void setTabClans()
 		{
 			GameScr.isNewClanMessage = false;
+			isViewClanBox = false;
 			ITEM_HEIGHT = 24;
 			if (lastSelect != null && lastSelect[3] == 0)
 			{
@@ -4698,9 +4976,48 @@ namespace Game1
 			{
 				tabIcon.paint(g);
 			}
+			if (isShowDistribute)
+			{
+				paintDistribute(g);
+			}
 			g.translate(-g.getTranslateX(), -g.getTranslateY());
 			g.translate(X, Y);
 			g.translate(-cmx, 0);
+		}
+
+		public void paintDistribute(mGraphics g)
+		{
+			g.translate(-g.getTranslateX(), -g.getTranslateY());
+			GameCanvas.paintz.paintFrameSimple(xPopup, yPopup, wPopup, hPopup, g);
+			mFont.tahoma_7b_yellow.drawString(g, "PHÂN PHỐI", xPopup + wPopup / 2, yPopup + 10, mFont.CENTER);
+			g.setClip(xPopup, yPopup + 25, wPopup, hPopup - 55);
+			g.translate(0, -distributeScroll);
+			if (myMember != null)
+			{
+				for (int i = 0; i < myMember.size(); i++)
+				{
+					Member member = (Member)myMember.elementAt(i);
+					int yItem = yPopup + 30 + i * 20;
+					mFont.tahoma_7_white.drawString(g, member.name, xPopup + 10, yItem, 0);
+					g.setColor(16711680);
+					g.fillRect(xPopup + wPopup - 60, yItem, 12, 12);
+					mFont.tahoma_7_white.drawString(g, "-", xPopup + wPopup - 54, yItem - 1, mFont.CENTER);
+					mFont.tahoma_7b_yellow.drawString(g, string.Empty + distributeQuantities[i], xPopup + wPopup - 35, yItem, mFont.CENTER);
+					g.setColor(65280);
+					g.fillRect(xPopup + wPopup - 20, yItem, 12, 12);
+					mFont.tahoma_7_white.drawString(g, "+", xPopup + wPopup - 14, yItem - 1, mFont.CENTER);
+				}
+			}
+			g.translate(0, distributeScroll);
+			g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
+			g.setColor(32896);
+			g.fillRect(xOk, yBtn, btnW, btnH);
+			mFont.tahoma_7b_white.drawString(g, "OK", xOk + btnW / 2, yBtn + 3, mFont.CENTER);
+			g.fillRect(xClose, yBtn, btnW, btnH);
+			mFont.tahoma_7b_white.drawString(g, "Đóng", xClose + btnW / 2, yBtn + 3, mFont.CENTER);
+			
+			g.translate(-g.getTranslateX(), -g.getTranslateY());
+			g.translate(X - cmx, Y);
 		}
 
 		private void paintShop(mGraphics g)
@@ -6133,13 +6450,104 @@ namespace Game1
 			paintScrollArrow(g);
 		}
 
+		private void fillClanBoxRoundedRect(mGraphics g, int x, int y, int width, int height, int color)
+		{
+			g.setColor(color);
+			g.fillRect(x + 2, y, width - 4, height);
+			g.fillRect(x, y + 2, width, height - 4);
+			g.fillRect(x + 1, y + 1, width - 2, height - 2);
+		}
+
+		private void paintClanBoxInClanTab(mGraphics g)
+		{
+			Item[] items = Char.myCharz().arrItemClanBox;
+			int itemCount = (items == null) ? 0 : items.Length;
+			int gridRows = (itemCount + CountBoxInRow - 1) / CountBoxInRow;
+			currentListLength = gridRows + 2;
+			cmyLim = currentListLength * ITEM_HEIGHT - hScroll;
+			if (cmyLim < 0)
+			{
+				cmyLim = 0;
+			}
+			g.setClip(xScroll, yScroll, wScroll, hScroll);
+			g.translate(-cmx, -cmy);
+			int optionX = xScroll + wScroll / 2 - clansOption.Length * TAB_W / 2;
+			for (int i = 0; i < clansOption.Length; i++)
+			{
+				g.setColor((selected == 0 && cSelected == i) ? 16383818 : 15723751);
+				g.fillRect(optionX + i * TAB_W, yScroll, TAB_W - 1, 23);
+				for (int line = 0; line < clansOption[i].Length; line++)
+				{
+					mFont.tahoma_7_grey.drawString(g, clansOption[i][line], optionX + i * TAB_W + TAB_W / 2, yScroll + line * 11, mFont.CENTER);
+				}
+			}
+			int titleY = yScroll + ITEM_HEIGHT;
+			g.setColor((selected == 1) ? 16383818 : 15196114);
+			g.fillRect(xScroll, titleY, wScroll, ITEM_HEIGHT - 1);
+			mFont.tahoma_7b_dark.drawString(g, clanInfo, xScroll + wScroll / 2, titleY + 6, mFont.CENTER);
+
+			for (int itemIndex = 0; itemIndex < itemCount; itemIndex++)
+			{
+				int row = itemIndex / CountBoxInRow;
+				int column = itemIndex % CountBoxInRow;
+				int slotX = xScroll + column * (WidthBoxNew + 1);
+				int slotY = yScroll + (row + 2) * ITEM_HEIGHT;
+				int slotHeight = ITEM_HEIGHT - 1;
+				if (slotY - cmy > yScroll + hScroll || slotY - cmy < yScroll - ITEM_HEIGHT)
+				{
+					continue;
+				}
+				bool isSelected = selected == itemIndex + 2;
+				if (isSelected)
+				{
+					fillClanBoxRoundedRect(g, slotX, slotY, WidthBoxNew, slotHeight, 16711680);
+				}
+				fillClanBoxRoundedRect(g, slotX + (isSelected ? 1 : 0), slotY + (isSelected ? 1 : 0), WidthBoxNew - (isSelected ? 2 : 0), slotHeight - (isSelected ? 2 : 0), 6047789);
+				Item item = items[itemIndex];
+				paintEffectItem(g, item, slotX, slotY);
+				if (item == null)
+				{
+					continue;
+				}
+				SmallImage.drawSmallImage(g, item.template.iconID, slotX + WidthBoxNew / 2, slotY + slotHeight / 2, 0, 3);
+				if (item.itemOption != null)
+				{
+					for (int optionIndex = 0; optionIndex < item.itemOption.Length; optionIndex++)
+					{
+						if (item.itemOption[optionIndex] == null)
+						{
+							continue;
+						}
+						paintOptItemInventory(g, item.itemOption[optionIndex].optionTemplate.id, item.itemOption[optionIndex].param, slotX, slotY, WidthBoxNew, slotHeight, item);
+						paintOptSlotItem(g, item.itemOption[optionIndex].optionTemplate.id, item.itemOption[optionIndex].param, slotX, slotY, WidthBoxNew, slotHeight);
+					}
+				}
+				if (item.quantity > 1)
+				{
+					mFont.tahoma_7b_white.drawString(g, string.Empty + item.quantity, slotX + WidthBoxNew, slotY + slotHeight - mFont.tahoma_7_yellow.getHeight(), 1);
+				}
+			}
+			paintScrollArrow(g);
+		}
+
 		private void paintClans(mGraphics g)
 		{
+			if (isViewClanBox)
+			{
+				paintClanBoxInClanTab(g);
+				return;
+			}
 			g.setClip(xScroll, yScroll, wScroll, hScroll);
 			g.translate(-cmx, -cmy);
 			g.setColor(0);
 			int num = xScroll + wScroll / 2 - clansOption.Length * TAB_W / 2;
-			if (currentListLength == 2)
+			if (isViewClanBox)
+			{
+				Item[] arrItemClanBox = Char.myCharz().arrItemClanBox;
+				currentListLength = ((arrItemClanBox == null) ? 0 : arrItemClanBox.Length) + 2;
+				clanInfo = mResources.clanBox[0] + " " + mResources.clanBox[1];
+			}
+			if (currentListLength == 2 && !isViewClanBox)
 			{
 				mFont.tahoma_7_green2.drawString(g, clanReport, xScroll + wScroll / 2, yScroll + 24 + hScroll / 2 - mFont.tahoma_7.getHeight() / 2, 2);
 				if (isMessage && myMember.size() == 1)
@@ -6150,7 +6558,7 @@ namespace Game1
 					}
 				}
 			}
-			if (isMessage)
+			if (isMessage && !isViewClanBox)
 			{
 				currentListLength = ClanMessage.vMessage.size() + 2;
 			}
@@ -6191,6 +6599,101 @@ namespace Game1
 							mFont.tahoma_7b_dark.drawString(g, clanInfo, xScroll + wScroll / 2, num7 + 6, mFont.CENTER);
 						}
 						continue;
+				}
+				if (isViewClanBox)
+				{
+					Item[] arrItemClanBox2 = Char.myCharz().arrItemClanBox;
+					int itemIndex = j - 2;
+					if (arrItemClanBox2 == null || itemIndex < 0 || itemIndex >= arrItemClanBox2.Length)
+					{
+						continue;
+					}
+					Item item = arrItemClanBox2[itemIndex];
+					g.setColor((j != selected) ? 15196114 : 16383818);
+					g.fillRect(num6, num7, num8, num9);
+					g.setColor(6047789, 0.5f);
+					g.fillRect(num2, num3, num4, num5);
+					paintEffectItem(g, item, num2, num3);
+					if (item == null)
+					{
+						continue;
+					}
+					string text = string.Empty;
+					mFont mFont2 = mFont.tahoma_7_green2;
+					if (item.itemOption != null)
+					{
+						for (int i2 = 0; i2 < item.itemOption.Length; i2++)
+						{
+							if (item.itemOption[i2].optionTemplate.id == 72)
+							{
+								text = " [+" + item.itemOption[i2].getOptionString() + "]";
+							}
+							if (item.itemOption[i2].optionTemplate.id == 225)
+							{
+								if (item.itemOption[i2].param >= 1 && item.itemOption[i2].param <= 2)
+								{
+									mFont2 = GetFont(0);
+								}
+								else if (item.itemOption[i2].param >= 3 && item.itemOption[i2].param <= 4)
+								{
+									mFont2 = GetFont(2);
+								}
+								else if (item.itemOption[i2].param >= 5 && item.itemOption[i2].param <= 6)
+								{
+									mFont2 = GetFont(8);
+								}
+								else if (item.itemOption[i2].param >= 7 && item.itemOption[i2].param <= 10)
+								{
+									mFont2 = GetFont(7);
+								}
+							}
+						}
+					}
+					if (ModFunc.isShowID)
+					{
+						mFont2.drawString(g, "[" + item.template.id + "] " + item.template.name + text, num6 + 5, num7 + 1, 0);
+					}
+					else
+					{
+						mFont2.drawString(g, item.template.name + text, num6 + 5, num7 + 1, 0);
+					}
+					string text2 = string.Empty;
+					if (item.itemOption != null)
+					{
+						if (item.itemOption.Length != 0 && item.itemOption[0] != null)
+						{
+							text2 += item.itemOption[0].getOptionString();
+						}
+						mFont mFont3 = mFont.tahoma_7_blue;
+						if (item.itemOption.Length > 1)
+						{
+							for (int i3 = 1; i3 < Math.min(item.itemOption.Length, 3); i3++)
+							{
+								if (item.itemOption[i3] != null && item.itemOption[i3].IsValidOption())
+								{
+									text2 = text2 + ", " + item.itemOption[i3].getOptionString();
+								}
+							}
+						}
+						mFont3.drawString(g, text2, num6 + 5, num7 + 11, mFont.LEFT);
+					}
+					SmallImage.drawSmallImage(g, item.template.iconID, num2 + num4 / 2, num3 + num5 / 2, 0, 3);
+					if (item.itemOption != null)
+					{
+						for (int i4 = 0; i4 < item.itemOption.Length; i4++)
+						{
+							paintOptItemInventory(g, item.itemOption[i4].optionTemplate.id, item.itemOption[i4].param, num2, num3, num4, num5, item);
+						}
+						for (int i5 = 0; i5 < item.itemOption.Length; i5++)
+						{
+							paintOptSlotItem(g, item.itemOption[i5].optionTemplate.id, item.itemOption[i5].param, num2, num3, num4, num5);
+						}
+					}
+					if (item.quantity > 1)
+					{
+						mFont.tahoma_7_yellow.drawString(g, string.Empty + item.quantity, num2 + num4, num3 + num5 - mFont.tahoma_7_yellow.getHeight(), 1);
+					}
+					continue;
 				}
 				if (isSearchClan)
 				{
@@ -9515,6 +10018,7 @@ namespace Game1
 							}
 							else if (cSelected == 2)
 							{
+								isViewClanBox = false;
 								member = null;
 								isSearchClan = false;
 								isViewMember = true;
@@ -9532,6 +10036,7 @@ namespace Game1
 						{
 							if (cSelected == 0)
 							{
+								isViewClanBox = false;
 								member = null;
 								isSearchClan = false;
 								isViewMember = true;
@@ -9711,6 +10216,17 @@ namespace Game1
 					if (mainTabName.Length == 4)
 					{
 						doFireTool();
+					}
+					else if (isViewClanBox)
+					{
+						if (selected == 0)
+						{
+							doFireClanOption();
+						}
+						else if (selected >= 2)
+						{
+							doFireClanBoxInClanTab();
+						}
 					}
 					else
 					{
@@ -9987,6 +10503,33 @@ namespace Game1
 			cp.says[cp.says.Length - 1] = mResources.received + " " + recieve + "/" + maxCap;
 		}
 
+		private void doFireClanBoxInClanTab()
+		{
+			if (selected < 2)
+			{
+				return;
+			}
+			Item[] items = Char.myCharz().arrItemClanBox;
+			int itemIndex = selected - 2;
+			if (items == null || itemIndex < 0 || itemIndex >= items.Length)
+			{
+				return;
+			}
+			currItem = items[itemIndex];
+			if (currItem == null)
+			{
+				cp = null;
+				return;
+			}
+			MyVector actions = new MyVector();
+			actions.addElement(new Command("Phân phối", this, 2012, currItem));
+			actions.addElement(new Command("Vứt bỏ", this, 2013, currItem));
+			Char.myCharz().setPartTemp(currItem.headTemp, currItem.bodyTemp, currItem.legTemp, currItem.bagTemp);
+			int row = itemIndex / CountBoxInRow + 2;
+			GameCanvas.menu.startAt(actions, X, (row + 1) * ITEM_HEIGHT - cmy + yScroll);
+			addItemDetail(currItem);
+		}
+
 		private void doFireBox()
 		{
 			if (selected < 0)
@@ -10008,8 +10551,8 @@ namespace Game1
 				{
 					if (isClanBox)
 					{
-						myVector.addElement(new Command(mResources.GETOUT, this, 1000, item));
-						myVector.addElement(new Command(mResources.USE, this, 2010, item));
+						myVector.addElement(new Command("Phân phối", this, 2012, item));
+						myVector.addElement(new Command("Vứt bỏ", this, 2013, item));
 					}
 					else if (item.isTypeBody())
 					{
@@ -10061,10 +10604,7 @@ namespace Game1
 			if (currItem != null)
 			{
 				Char.myCharz().setPartTemp(currItem.headTemp, currItem.bodyTemp, currItem.legTemp, currItem.bagTemp);
-				if (isClanBox)
-				{
-					myVector.addElement(new Command(mResources.MOVEOUT, this, 2011, currItem));
-				}
+
 				GameCanvas.menu.startAt(myVector, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
 				addItemDetail(currItem);
 			}
@@ -10331,6 +10871,53 @@ namespace Game1
 				{
 					GameCanvas.panel.hide();
 				}
+			}
+			if (idAction == 2012)
+			{
+				Item itemToDistribute = (Item)p;
+				this.itemDistributing = itemToDistribute;
+				this.isShowDistribute = true;
+				this.distributeScroll = 0;
+				if (myMember != null)
+				{
+					this.distributeQuantities = new int[myMember.size()];
+					for (int i = 0; i < myMember.size(); i++)
+					{
+						this.distributeQuantities[i] = 0;
+					}
+				}
+				else
+				{
+					this.distributeQuantities = new int[0];
+				}
+				wPopup = 150;
+				hPopup = H - 60;
+				xPopup = GameCanvas.w - wPopup - 5;
+				if (xPopup < X + W + 2)
+				{
+					xPopup = X + W + 2;
+				}
+				yPopup = Y + 40;
+				xOk = xPopup + wPopup / 2 - btnW - 5;
+				xClose = xPopup + wPopup / 2 + 5;
+				yBtn = yPopup + hPopup - 25;
+			}
+			if (idAction == 2013)
+			{
+				Item itemToDiscard = (Item)p;
+				sbyte indexItemDiscard = (sbyte)GetItemIndexInClanBox(itemToDiscard);
+				if (indexItemDiscard != -1)
+				{
+					GameCanvas.startYesNoDlg("Bạn có chắc chắn muốn vứt bỏ " + itemToDiscard.template.name + "?",
+						new Command("Đồng ý", this, 2014, (int)indexItemDiscard),
+						new Command("Hủy", this, 4005, null));
+				}
+			}
+			if (idAction == 2014)
+			{
+				sbyte indexDiscard = (sbyte)(int)p;
+				Service.gI().discardClanBoxItem(indexDiscard);
+				GameCanvas.endDlg();
 			}
 			if (idAction == 2000)
 			{
@@ -12528,6 +13115,22 @@ namespace Game1
 				return num < arrItem.Length;
 			}
 			return false;
+		}
+
+		private int GetItemIndexInClanBox(Item item)
+		{
+			Item[] arr = Char.myCharz().arrItemClanBox;
+			if (arr != null)
+			{
+				for (int i = 0; i < arr.Length; i++)
+				{
+					if (arr[i] == item)
+					{
+						return i;
+					}
+				}
+			}
+			return -1;
 		}
 
 		private int GetInventorySelect_body(int select, int subSelect)
