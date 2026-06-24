@@ -1546,7 +1546,7 @@ namespace Game1
 							if (action == 0)
 							{
 								sbyte size = msg.reader().readByte();
-								int arraySize = size < 60 ? 60 : size;
+								int arraySize = size;
 								Char.myCharz().arrItemClanBox = new Item[arraySize];
 								for (int i = 0; i < size; i++)
 								{
