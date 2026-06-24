@@ -6128,8 +6128,9 @@ namespace Game1
 					if (i == selected)
 					{
 						g.setColor(16711680);
-						g.drawRect(num2 - 1, num3 - 1, itemWidth + 1, itemHeight);
+						g.fillRect(num2 - 1, num3 - 1, itemWidth + 2, itemHeight + 2, 5);
 					}
+					g.setColor((i == selected) ? 9541120 : 11837316);
 					Item item = arrItemBox[i];
 					if (item != null)
 					{
@@ -6145,8 +6146,7 @@ namespace Game1
 							}
 						}
 					}
-					g.setColor(6047789, 0.5f);
-					g.fillRect(num5, num6, num7, num8);
+					g.fillRect(num5, num6, num7, num8, 5);
 					paintEffectItem(g, item, num5, num6);
 					if (item == null)
 					{
@@ -6511,9 +6511,11 @@ namespace Game1
 				bool isSelected = selected == itemIndex + 2;
 				if (isSelected)
 				{
-					fillClanBoxRoundedRect(g, slotX, slotY, WidthBoxNew, slotHeight, 16711680);
+					g.setColor(16711680);
+					g.fillRect(slotX - 1, slotY - 1, WidthBoxNew + 2, slotHeight + 2, 5);
 				}
-				fillClanBoxRoundedRect(g, slotX + (isSelected ? 1 : 0), slotY + (isSelected ? 1 : 0), WidthBoxNew - (isSelected ? 2 : 0), slotHeight - (isSelected ? 2 : 0), 6047789);
+				g.setColor(isSelected ? 9541120 : 11837316);
+				g.fillRect(slotX, slotY, WidthBoxNew, slotHeight, 5);
 				Item item = items[itemIndex];
 				paintEffectItem(g, item, slotX, slotY);
 				if (item == null)
@@ -7087,6 +7089,11 @@ namespace Game1
 					int inventorySelect_bag = GetInventorySelect_bag(j, newSelected, Char.myCharz().arrItemBody);
 					g.setColor((j == selected) ? 16383818 : ((!inventorySelect_isbody) ? 15723751 : 15196114));
 					g.fillRect(num23, num24, num25, h2, 5);
+					if (j == selected)
+					{
+						g.setColor(16711680);
+						g.fillRect(num26 - 1, num27 - 1, num28 + 2, num29 + 2, 5);
+					}
 					g.setColor((j == selected) ? 9541120 : ((!inventorySelect_isbody) ? 11837316 : 9993045));
 					Item item3 = ((!inventorySelect_isbody) ? arrItemBag2[inventorySelect_bag] : arrItemBody2[inventorySelect_body]);
 					if (item3 != null)
