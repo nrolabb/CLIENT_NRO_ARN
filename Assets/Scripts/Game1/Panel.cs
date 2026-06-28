@@ -443,6 +443,7 @@ namespace Game1
 		public bool isClanBox;
 
 		public bool isViewClanBox;
+		public bool isViewClanIntrinsic;
 		public bool clanBoxRefreshPending;
 
 		public bool isShowDistribute;
@@ -1527,6 +1528,7 @@ namespace Game1
 		{
 			isClanBox = true;
 			isViewClanBox = true;
+			isViewClanIntrinsic = false;
 			isMessage = true;
 			isViewMember = false;
 			isSearchClan = false;
@@ -1535,6 +1537,21 @@ namespace Game1
 			currentTabIndex = (mainTabName.Length > 4) ? 3 : 0;
 			lastTabIndex[type] = currentTabIndex;
 			setTabClanBox();
+		}
+
+		public void setTypeClanIntrinsicInClanTab()
+		{
+			isClanBox = false;
+			isViewClanBox = false;
+			isViewClanIntrinsic = true;
+			isMessage = true;
+			isViewMember = false;
+			isSearchClan = false;
+			type = 0;
+			currentTabName = tabName[type];
+			currentTabIndex = (mainTabName.Length > 4) ? 3 : 0;
+			lastTabIndex[type] = currentTabIndex;
+			setTabClanIntrinsic();
 		}
 
 		public void setTypeClanBoxRight()
@@ -1559,6 +1576,24 @@ namespace Game1
 			Item[] arrItemClanBox = Char.myCharz().arrItemClanBox;
 			int itemCount = (arrItemClanBox == null) ? 0 : arrItemClanBox.Length;
 			currentListLength = (itemCount + CountBoxInRow - 1) / CountBoxInRow + 2;
+			cmyLim = currentListLength * ITEM_HEIGHT - hScroll;
+			if (cmyLim < 0)
+			{
+				cmyLim = 0;
+			}
+			cmy = (cmtoY = 0);
+			selected = (GameCanvas.isTouch ? (-1) : 0);
+			cSelected = -1;
+		}
+
+		private void setTabClanIntrinsic()
+		{
+			ITEM_HEIGHT = 24;
+			initTabClans();
+			clanInfo = mResources.clan_intrinsic;
+			ClanIntrinsicInfo[] arr = Char.myCharz().arrClanIntrinsic;
+			int count = (arr == null) ? 0 : arr.Length;
+			currentListLength = count + 2;
 			cmyLim = currentListLength * ITEM_HEIGHT - hScroll;
 			if (cmyLim < 0)
 			{
@@ -3022,7 +3057,7 @@ namespace Game1
 					isClanOption = true;
 				}
 			}
-			else if (!isViewClanBox && selected != 1 && !isSearchClan && selected > 0)
+			else if (!isViewClanBox && !isViewClanIntrinsic && selected != 1 && !isSearchClan && selected > 0)
 			{
 				currClanOption = new int[1];
 				for (int j = 0; j < currClanOption.Length; j++)
@@ -3072,6 +3107,11 @@ namespace Game1
 			if (isViewClanBox)
 			{
 				updateKeyClanBoxInClanTab();
+				return;
+			}
+			if (isViewClanIntrinsic)
+			{
+				updateKeyClanIntrinsicInClanTab();
 				return;
 			}
 			updateKeyScrollView();
@@ -3189,6 +3229,106 @@ namespace Game1
 					int column = (GameCanvas.px - xScroll) / (WidthBoxNew + 1);
 					int itemIndex = (row - 2) * CountBoxInRow + column;
 					selected = (column >= 0 && column < CountBoxInRow && itemIndex < itemCount) ? itemIndex + 2 : -1;
+					cSelected = -1;
+				}
+				else
+				{
+					selected = 1;
+				}
+				pointerDownTime = 0;
+				waitToPerform = 10;
+				SoundMn.gI().panelClick();
+			}
+			pointerIsDowning = false;
+			pointerDownTime = 0;
+		}
+
+		private void updateKeyClanIntrinsicInClanTab()
+		{
+			ClanIntrinsicInfo[] items = Char.myCharz().arrClanIntrinsic;
+			int itemCount = (items == null) ? 0 : items.Length;
+			bool moved = false;
+			if (selected == 0)
+			{
+				updateKeyClansOption();
+			}
+			else if (GameCanvas.keyPressed[(!Main.isPC) ? 2 : 21] && selected > 0)
+			{
+				selected--;
+				moved = true;
+			}
+			else if (GameCanvas.keyPressed[(!Main.isPC) ? 8 : 22] && selected < itemCount + 1)
+			{
+				selected++;
+				moved = true;
+			}
+			if (moved)
+			{
+				cSelected = (selected == 0) ? ((cSelected < 0) ? 0 : cSelected) : -1;
+				cmtoY = selected * ITEM_HEIGHT - hScroll / 2;
+				cmtoY = Math.min(cmtoY, cmyLim);
+				if (cmtoY < 0)
+				{
+					cmtoY = 0;
+				}
+				cmy = cmtoY;
+				getCurrClanOtion();
+			}
+			if (GameCanvas.isPointerDown)
+			{
+				justRelease = false;
+				if (!pointerIsDowning && GameCanvas.isPointer(xScroll, yScroll, wScroll, hScroll))
+				{
+					for (int i = 0; i < pointerDownLastX.Length; i++)
+					{
+						pointerDownLastX[i] = GameCanvas.py;
+					}
+					pointerDownFirstX = GameCanvas.py;
+					pointerIsDowning = true;
+					isDownWhenRunning = cmRun != 0;
+					cmRun = 0;
+				}
+				else if (pointerIsDowning)
+				{
+					pointerDownTime++;
+					int deltaY = GameCanvas.py - pointerDownLastX[0];
+					if (deltaY != 0)
+					{
+						selected = -1;
+						cSelected = -1;
+					}
+					for (int j = pointerDownLastX.Length - 1; j > 0; j--)
+					{
+						pointerDownLastX[j] = pointerDownLastX[j - 1];
+					}
+					pointerDownLastX[0] = GameCanvas.py;
+					cmtoY = Math.min(cmtoY - deltaY, cmyLim);
+					if (cmtoY < 0)
+					{
+						cmtoY = 0;
+					}
+					cmy -= deltaY;
+				}
+			}
+			if (!GameCanvas.isPointerJustRelease || !pointerIsDowning)
+			{
+				return;
+			}
+			int releaseDelta = GameCanvas.py - pointerDownLastX[0];
+			GameCanvas.isPointerJustRelease = false;
+			if (Res.abs(releaseDelta) < 20 && Res.abs(GameCanvas.py - pointerDownFirstX) < 20 && !isDownWhenRunning)
+			{
+				cmRun = 0;
+				cmtoY = cmy;
+				int row = (cmtoY + GameCanvas.py - yScroll) / ITEM_HEIGHT;
+				if (row == 0)
+				{
+					selected = 0;
+					checkOptionSelect();
+				}
+				else if (row >= 2 && row < itemCount + 2)
+				{
+					selected = row;
 					cSelected = -1;
 				}
 				else
@@ -4206,8 +4346,17 @@ namespace Game1
 			}
 			else if (isMessage)
 			{
-				currentListLength = ClanMessage.vMessage.size() + 2;
-				clanInfo = mResources.msg;
+				if (isViewClanIntrinsic)
+				{
+					ClanIntrinsicInfo[] arr = Char.myCharz().arrClanIntrinsic;
+					currentListLength = ((arr == null) ? 0 : arr.Length) + 2;
+					clanInfo = mResources.clan_intrinsic;
+				}
+				else
+				{
+					currentListLength = ClanMessage.vMessage.size() + 2;
+					clanInfo = mResources.msg;
+				}
 				clanReport = string.Empty;
 			}
 			if (Char.myCharz().clan == null)
@@ -4222,17 +4371,18 @@ namespace Game1
 			{
 				if (myMember.size() > 1)
 				{
-					clansOption = new string[4][]
+					clansOption = new string[5][]
 					{
 						mResources.chatClan,
 						mResources.request_pea2,
 						mResources.memberr,
-						mResources.clanBox
+						mResources.clanBox,
+						mResources.clanIntrinsic
 					};
 				}
 				else
 				{
-					clansOption = new string[2][] { mResources.memberr, mResources.clanBox };
+					clansOption = new string[3][] { mResources.memberr, mResources.clanBox, mResources.clanIntrinsic };
 				}
 			}
 			else if (Char.myCharz().role > 0)
@@ -4282,6 +4432,7 @@ namespace Game1
 		{
 			GameScr.isNewClanMessage = false;
 			isViewClanBox = false;
+			isViewClanIntrinsic = false;
 			ITEM_HEIGHT = 24;
 			if (lastSelect != null && lastSelect[3] == 0)
 			{
@@ -6579,11 +6730,65 @@ namespace Game1
 			paintScrollArrow(g);
 		}
 
+		private void paintClanIntrinsicInClanTab(mGraphics g)
+		{
+			ClanIntrinsicInfo[] items = Char.myCharz().arrClanIntrinsic;
+			int itemCount = (items == null) ? 0 : items.Length;
+			currentListLength = itemCount + 2;
+			cmyLim = currentListLength * ITEM_HEIGHT - hScroll;
+			if (cmyLim < 0)
+			{
+				cmyLim = 0;
+			}
+			g.setClip(xScroll, yScroll, wScroll, hScroll);
+			g.translate(-cmx, -cmy);
+			int optionX = xScroll + wScroll / 2 - clansOption.Length * TAB_W / 2;
+			for (int i = 0; i < clansOption.Length; i++)
+			{
+				g.setColor((selected == 0 && cSelected == i) ? 16383818 : 15723751);
+				g.fillRect(optionX + i * TAB_W, yScroll, TAB_W - 1, 23);
+				for (int line = 0; line < clansOption[i].Length; line++)
+				{
+					mFont.tahoma_7_grey.drawString(g, clansOption[i][line], optionX + i * TAB_W + TAB_W / 2, yScroll + line * 11, mFont.CENTER);
+				}
+			}
+			int titleY = yScroll + ITEM_HEIGHT;
+			g.setColor((selected == 1) ? 16383818 : 15196114);
+			g.fillRect(xScroll, titleY, wScroll, ITEM_HEIGHT - 1);
+			mFont.tahoma_7b_dark.drawString(g, clanInfo, xScroll + wScroll / 2, titleY + 6, mFont.CENTER);
+			for (int i = 0; i < itemCount; i++)
+			{
+				int row = i + 2;
+				int y = yScroll + row * ITEM_HEIGHT;
+				if (y - cmy > yScroll + hScroll || y - cmy < yScroll - ITEM_HEIGHT)
+				{
+					continue;
+				}
+				ClanIntrinsicInfo info = items[i];
+				g.setColor((selected == row) ? 16383818 : 15196114);
+				g.fillRect(xScroll + 24, y, wScroll - 24, ITEM_HEIGHT - 1);
+				g.setColor((selected == row) ? 9541120 : 9993045);
+				g.fillRect(xScroll, y, 24, ITEM_HEIGHT - 1);
+				if (info != null)
+				{
+					SmallImage.drawSmallImage(g, info.icon, xScroll + 12, y + (ITEM_HEIGHT - 1) / 2, 0, 3);
+					mFont.tahoma_7b_green2.drawString(g, info.name, xScroll + 29, y + 1, 0);
+					mFont.tahoma_7_blue.drawString(g, mResources.level + " " + info.level + "/" + info.maxLevel + "  +" + info.value + "%", xScroll + 29, y + 11, 0);
+				}
+			}
+			paintScrollArrow(g);
+		}
+
 		private void paintClans(mGraphics g)
 		{
 			if (isViewClanBox)
 			{
 				paintClanBoxInClanTab(g);
+				return;
+			}
+			if (isViewClanIntrinsic)
+			{
+				paintClanIntrinsicInClanTab(g);
 				return;
 			}
 			g.setClip(xScroll, yScroll, wScroll, hScroll);
@@ -10097,15 +10302,20 @@ namespace Game1
 						{
 							if (cSelected == 0)
 							{
+								isViewClanBox = false;
+								isViewClanIntrinsic = false;
 								chatClan();
 							}
 							else if (cSelected == 1)
 							{
+								isViewClanBox = false;
+								isViewClanIntrinsic = false;
 								Service.gI().clanMessage(1, null, -1);
 							}
 							else if (cSelected == 2)
 							{
 								isViewClanBox = false;
+								isViewClanIntrinsic = false;
 								member = null;
 								isSearchClan = false;
 								isViewMember = true;
@@ -10118,12 +10328,17 @@ namespace Game1
 							{
 								Service.gI().openClanBox();
 							}
+							else if (cSelected == 4)
+							{
+								Service.gI().openClanIntrinsics();
+							}
 						}
 						else
 						{
 							if (cSelected == 0)
 							{
 								isViewClanBox = false;
+								isViewClanIntrinsic = false;
 								member = null;
 								isSearchClan = false;
 								isViewMember = true;
@@ -10135,6 +10350,10 @@ namespace Game1
 							{
 								Service.gI().openClanBox();
 							}
+							else if (cSelected == 2)
+							{
+								Service.gI().openClanIntrinsics();
+							}
 						}
 					}
 					else if (isViewMember)
@@ -10144,6 +10363,8 @@ namespace Game1
 							isSearchClan = false;
 							isViewMember = false;
 							isMessage = true;
+							isViewClanBox = false;
+							isViewClanIntrinsic = false;
 							currentListLength = ClanMessage.vMessage.size() + 2;
 							initTabClans();
 						}
@@ -10313,6 +10534,17 @@ namespace Game1
 						else if (selected >= 2)
 						{
 							doFireClanBoxInClanTab();
+						}
+					}
+					else if (isViewClanIntrinsic)
+					{
+						if (selected == 0)
+						{
+							doFireClanOption();
+						}
+						else if (selected >= 2)
+						{
+							doFireClanIntrinsicInClanTab();
 						}
 					}
 					else
@@ -10588,6 +10820,63 @@ namespace Game1
 		public void updateRequest(int recieve, int maxCap)
 		{
 			cp.says[cp.says.Length - 1] = mResources.received + " " + recieve + "/" + maxCap;
+		}
+
+		private ClanIntrinsicInfo getCurrClanIntrinsic()
+		{
+			ClanIntrinsicInfo[] arr = Char.myCharz().arrClanIntrinsic;
+			int index = selected - 2;
+			if (arr == null || index < 0 || index >= arr.Length)
+			{
+				return null;
+			}
+			return arr[index];
+		}
+
+		private void addClanIntrinsicDetail(ClanIntrinsicInfo info)
+		{
+			if (info == null)
+			{
+				cp = null;
+				return;
+			}
+			string text = "|0|1|" + info.name;
+			text += "\n|2|" + info.description;
+			text += "\n|5|" + mResources.level + ": " + info.level + "/" + info.maxLevel;
+			text += "\n|5|Hiệu quả: +" + info.value + "%";
+			if (info.level < info.maxLevel)
+			{
+				text += "\n|5|Cấp sau: +" + info.nextValue + "%";
+				text += "\n|5|Cần: " + info.cost + " Capsule bang";
+			}
+			else
+			{
+				text += "\n|5|" + mResources.max_level_reach;
+			}
+			currItem = null;
+			partID = null;
+			charInfo = null;
+			idIcon = info.icon;
+			cp = new ChatPopup();
+			popUpDetailInit(cp, text);
+		}
+
+		private void doFireClanIntrinsicInClanTab()
+		{
+			ClanIntrinsicInfo info = getCurrClanIntrinsic();
+			if (info == null)
+			{
+				cp = null;
+				return;
+			}
+			MyVector actions = new MyVector();
+			if (info.canUpgrade)
+			{
+				actions.addElement(new Command(mResources.UPGRADE, this, 2015, info));
+			}
+			actions.addElement(new Command(mResources.CLOSE, this, 8000, info));
+			GameCanvas.menu.startAt(actions, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
+			addClanIntrinsicDetail(info);
 		}
 
 		private void doFireClanBoxInClanTab()
@@ -11066,6 +11355,14 @@ namespace Game1
 				Service.gI().discardClanBoxItem(indexDiscard);
 				GameCanvas.endDlg();
 				requestClanBoxRefresh();
+			}
+			if (idAction == 2015)
+			{
+				ClanIntrinsicInfo info = (ClanIntrinsicInfo)p;
+				if (info != null)
+				{
+					Service.gI().upgradeClanIntrinsic(info.id);
+				}
 			}
 			if (idAction == 2000)
 			{

@@ -1631,6 +1631,30 @@ namespace Game1
 									}
 								}
 							}
+							else if (action == 3 || action == 4)
+							{
+								sbyte sizeIntrinsic = msg.reader().readByte();
+								Char.myCharz().arrClanIntrinsic = new ClanIntrinsicInfo[sizeIntrinsic];
+								for (int i = 0; i < sizeIntrinsic; i++)
+								{
+									ClanIntrinsicInfo info = new ClanIntrinsicInfo();
+									info.id = msg.reader().readByte();
+									info.icon = msg.reader().readShort();
+									info.name = msg.reader().readUTF();
+									info.description = msg.reader().readUTF();
+									info.level = msg.reader().readByte();
+									info.maxLevel = msg.reader().readByte();
+									info.value = msg.reader().readUnsignedShort();
+									info.nextValue = msg.reader().readUnsignedShort();
+									info.cost = msg.reader().readInt();
+									info.canUpgrade = msg.reader().readBoolean();
+									Char.myCharz().arrClanIntrinsic[i] = info;
+								}
+								if (GameCanvas.panel != null)
+								{
+									GameCanvas.panel.setTypeClanIntrinsicInClanTab();
+								}
+							}
 							break;
 						}
 					case -51:

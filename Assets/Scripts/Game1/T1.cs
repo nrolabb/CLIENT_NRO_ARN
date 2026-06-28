@@ -364,6 +364,8 @@ namespace Game1
     		mResources.level = "Cấp";
     		mResources.clan_birthday = "Ngày thành lập: ";
     		mResources.clan_list = "Danh sách bang";
+    		mResources.clanIntrinsic = new string[2] { "Nội", "tại" };
+    		mResources.clan_intrinsic = "Nội tại bang";
     		mResources.create = "Lập";
     		mResources.find = "Tìm";
     		mResources.leave = "Rời";
