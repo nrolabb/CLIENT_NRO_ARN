@@ -1605,7 +1605,7 @@ namespace Game1
 				}
 			}
 			currentListLength = count + 2;
-			cmyLim = currentListLength * ITEM_HEIGHT - hScroll;
+			cmyLim = 48 + count * ITEM_HEIGHT - hScroll;
 			if (cmyLim < 0)
 			{
 				cmyLim = 0;
@@ -3276,7 +3276,18 @@ namespace Game1
 			if (moved)
 			{
 				cSelected = (selected == 0) ? ((cSelected < 0) ? 0 : cSelected) : -1;
-				cmtoY = selected * ITEM_HEIGHT - hScroll / 2;
+				if (selected == 0)
+				{
+					cmtoY = -hScroll / 2;
+				}
+				else if (selected == 1)
+				{
+					cmtoY = 24 - hScroll / 2;
+				}
+				else
+				{
+					cmtoY = 48 + (selected - 2) * ITEM_HEIGHT - hScroll / 2;
+				}
 				cmtoY = Math.min(cmtoY, cmyLim);
 				if (cmtoY < 0)
 				{
@@ -3331,7 +3342,20 @@ namespace Game1
 			{
 				cmRun = 0;
 				cmtoY = cmy;
-				int row = (cmtoY + GameCanvas.py - yScroll) / ITEM_HEIGHT;
+				int py = cmtoY + GameCanvas.py - yScroll;
+				int row = 0;
+				if (py < 24)
+				{
+					row = 0;
+				}
+				else if (py < 48)
+				{
+					row = 1;
+				}
+				else
+				{
+					row = 2 + (py - 48) / ITEM_HEIGHT;
+				}
 				if (row == 0)
 				{
 					selected = 0;
@@ -6747,7 +6771,7 @@ namespace Game1
 			int itemCount = (items == null) ? 0 : items.Length;
 			int iconBoxSize = 30;
 			currentListLength = itemCount + 2;
-			cmyLim = currentListLength * ITEM_HEIGHT - hScroll;
+			cmyLim = 48 + itemCount * ITEM_HEIGHT - hScroll;
 			if (cmyLim < 0)
 			{
 				cmyLim = 0;
@@ -6764,14 +6788,14 @@ namespace Game1
 					mFont.tahoma_7_grey.drawString(g, clansOption[i][line], optionX + i * TAB_W + TAB_W / 2, yScroll + line * 11, mFont.CENTER);
 				}
 			}
-			int titleY = yScroll + ITEM_HEIGHT;
+			int titleY = yScroll + 24;
 			g.setColor((selected == 1) ? 16383818 : 15196114);
-			g.fillRect(xScroll, titleY, wScroll, ITEM_HEIGHT - 1);
+			g.fillRect(xScroll, titleY, wScroll, 23);
 			mFont.tahoma_7b_dark.drawString(g, clanInfo, xScroll + wScroll / 2, titleY + 6, mFont.CENTER);
 			for (int i = 0; i < itemCount; i++)
 			{
 				int row = i + 2;
-				int y = yScroll + row * ITEM_HEIGHT;
+				int y = yScroll + 48 + i * ITEM_HEIGHT;
 				if (y - cmy > yScroll + hScroll || y - cmy < yScroll - ITEM_HEIGHT)
 				{
 					continue;
