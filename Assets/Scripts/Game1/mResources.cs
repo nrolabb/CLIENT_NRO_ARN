@@ -717,6 +717,10 @@ namespace Game1
     	public static string member = string.Empty;
 
 		public static string[] clanBox = new string[2] { "Kho", "bang" };
+
+		public static string[] clanIntrinsic = new string[2] { "Nội", "tại" };
+
+		public static string clan_intrinsic = "Nội tại bang";
     
     	public static string[] memberr = new string[2]
     	{

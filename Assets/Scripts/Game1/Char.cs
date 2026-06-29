@@ -278,6 +278,8 @@ namespace Game1
 
 		public Item[] arrItemClanBox;
 
+		public ClanIntrinsicInfo[] arrClanIntrinsic;
+
 		public Item[] arrItemBody;
 
 		public Skill[] arrPetSkill;

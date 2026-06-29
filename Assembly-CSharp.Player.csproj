@@ -93,6 +93,7 @@
     <Compile Include="Assets\Scripts\Game3\AdminPopup.cs" />
     <Compile Include="Assets\Scripts\Game2\CreateCharScr.cs" />
     <Compile Include="Assets\Scripts\Game3\Assets.src.g\ClientInput.cs" />
+    <Compile Include="Assets\Scripts\Game1\ClanIntrinsicInfo.cs" />
     <Compile Include="Assets\Scripts\Game3\myReader.cs" />
     <Compile Include="Assets\Scripts\Game1\Image.cs" />
     <Compile Include="Assets\Scripts\Game3\ClanImage.cs" />

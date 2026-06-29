@@ -448,6 +448,51 @@ namespace Game1
 			}
 		}
 
+		public void openClanIntrinsics()
+		{
+			Message message = null;
+			try
+			{
+				message = new Message((sbyte)(-58));
+				message.writer().writeByte(3);
+				session.sendMessage(message);
+			}
+			catch (Exception ex)
+			{
+				Cout.println(ex.Message + ex.StackTrace);
+			}
+			finally
+			{
+				if (message != null)
+				{
+					message.cleanup();
+				}
+			}
+		}
+
+		public void upgradeClanIntrinsic(int id)
+		{
+			Message message = null;
+			try
+			{
+				message = new Message((sbyte)(-58));
+				message.writer().writeByte(4);
+				message.writer().writeByte((sbyte)id);
+				session.sendMessage(message);
+			}
+			catch (Exception ex)
+			{
+				Cout.println(ex.Message + ex.StackTrace);
+			}
+			finally
+			{
+				if (message != null)
+				{
+					message.cleanup();
+				}
+			}
+		}
+
 		public void clanMessage(int type, string text, int clanID)
 		{
 			Message message = null;
