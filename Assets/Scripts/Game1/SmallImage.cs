@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Game1.Assets.src.e;
+using UnityEngine;
 
 namespace Game1
 {
@@ -23,9 +24,13 @@ namespace Game1
     
     	public static int smallCount;
     
-    	public static short maxSmall;
+    	public static int maxSmall;
     
-    	public static Dictionary<int, Image> imageRaw = new Dictionary<int, Image>();
+	public static Dictionary<int, Image> imageRaw = new Dictionary<int, Image>();
+
+	private const int IMAGE_CAPACITY_CHUNK = 512;
+
+	private static readonly Dictionary<int, long> lastRequestTimeById = new Dictionary<int, long>();
     
     	public SmallImage()
     	{
@@ -86,22 +91,64 @@ namespace Game1
     		}
     	}
     
-    	public static void clearHastable()
-    	{
-    	}
-    
-    	public static void createImage(int id)
-    	{
-    		if (mGraphics.zoomLevel == 1)
-    		{
-    			Image image = GameCanvas.loadImage("/SmallImage/Small" + id + ".png");
+	public static void clearHastable()
+	{
+	}
+
+	public static void ensureImageCapacity(int id)
+	{
+		if (id < 0)
+		{
+			return;
+		}
+		int capacity = ((id / IMAGE_CAPACITY_CHUNK) + 1) * IMAGE_CAPACITY_CHUNK;
+		if (imgNew == null)
+		{
+			//Debug.Log("SMALL_IMAGE_CHUNK: Allocated initial chunk. Capacity: " + capacity + " (IDs 0 to " + (capacity - 1) + ") for requested id: " + id);
+			imgNew = new Small[capacity];
+		}
+		else if (id >= imgNew.Length)
+		{
+			int oldCapacity = imgNew.Length;
+			Array.Resize(ref imgNew, capacity);
+			//Debug.Log("SMALL_IMAGE_CHUNK: Expanded capacity from " + oldCapacity + " to " + capacity + " (IDs " + oldCapacity + " to " + (capacity - 1) + ") for requested id: " + id);
+		}
+		if (newSmallVersion != null && id >= newSmallVersion.Length)
+		{
+			Array.Resize(ref newSmallVersion, capacity);
+		}
+		if (id + 1 > maxSmall)
+		{
+			maxSmall = id + 1;
+		}
+	}
+
+	public static void ensureImageSlot(int id)
+	{
+		ensureImageCapacity(id);
+		if (id >= 0 && imgNew[id] == null)
+		{
+			imgNew[id] = new Small(imgEmpty, id);
+		}
+	}
+
+	public static void createImage(int id)
+	{
+		if (id < 0)
+		{
+			return;
+		}
+		ensureImageCapacity(id);
+		if (mGraphics.zoomLevel == 1)
+		{
+			Image image = GameCanvas.loadImage("/SmallImage/Small" + id + ".png");
     			if (image != null)
     			{
     				imgNew[id] = new Small(image, id);
     				return;
     			}
     			imgNew[id] = new Small(imgEmpty, id);
-    			Service.gI().requestIcon(id);
+    			requestIconIfNeeded(id);
     			return;
     		}
     		Image image2 = GameCanvas.loadImage("/SmallImage/Small" + id + ".png");
@@ -131,15 +178,52 @@ namespace Game1
     		if (flag)
     		{
     			imgNew[id] = new Small(imgEmpty, id);
-    			Service.gI().requestIcon(id);
+    			requestIconIfNeeded(id);
     		}
     	}
+
+	public static bool isRealImageLoaded(int id)
+	{
+		if (id < 0 || imgNew == null || id >= imgNew.Length || imgNew[id] == null || imgNew[id].img == null)
+		{
+			return false;
+		}
+		return mGraphics.getImageWidth(imgNew[id].img) > 1 && mGraphics.getImageHeight(imgNew[id].img) > 1;
+	}
+
+	public static void requestIconIfNeeded(int id)
+	{
+		if (id < 0 || isRealImageLoaded(id))
+		{
+			return;
+		}
+		if (lastRequestTimeById.ContainsKey(id))
+		{
+			return;
+		}
+		lastRequestTimeById[id] = mSystem.currentTimeMillis();
+		//Debug.Log("SMALL_IMAGE_REQUEST id=" + id);
+		Service.gI().requestIcon(id);
+	}
+
+	public static void markIconResponse(int id)
+	{
+		if (lastRequestTimeById.ContainsKey(id))
+		{
+			lastRequestTimeById.Remove(id);
+		}
+	}
     
-    	public static void drawSmallImage(mGraphics g, int id, int x, int y, int transform, int anchor)
-    	{
-    		if (imgbig == null)
-    		{
-    			Small small = imgNew[id];
+	public static void drawSmallImage(mGraphics g, int id, int x, int y, int transform, int anchor)
+	{
+		if (id < 0)
+		{
+			return;
+		}
+		ensureImageCapacity(id);
+		if (imgbig == null)
+		{
+			Small small = imgNew[id];
     			if (small == null)
     			{
     				createImage(id);
@@ -182,10 +266,15 @@ namespace Game1
     		}
     	}
     
-    	public static void drawSmallImage(mGraphics g, int id, int f, int x, int y, int w, int h, int transform, int anchor)
-    	{
-    		if (imgbig == null)
-    		{
+	public static void drawSmallImage(mGraphics g, int id, int f, int x, int y, int w, int h, int transform, int anchor)
+	{
+		if (id < 0)
+		{
+			return;
+		}
+		ensureImageCapacity(id);
+		if (imgbig == null)
+		{
     			Small small = imgNew[id];
     			if (small == null)
     			{
@@ -256,10 +345,6 @@ namespace Game1
     				imgNew[i].update();
     				smallCount++;
     			}
-    		}
-    		if (num > 200 && GameCanvas.lowGraphic)
-    		{
-    			imgNew = new Small[maxSmall];
     		}
     	}
     }

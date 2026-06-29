@@ -1082,7 +1082,7 @@ namespace Game1
 						}
 					case -77:
 						{
-							short num260 = msg.reader().readShort();
+							int num260 = msg.reader().readShort() & 0xFFFF;
 							SmallImage.newSmallVersion = new sbyte[num260];
 							SmallImage.maxSmall = num260;
 							SmallImage.imgNew = new Small[num260];
@@ -1639,7 +1639,7 @@ namespace Game1
 								{
 									ClanIntrinsicInfo info = new ClanIntrinsicInfo();
 									info.id = msg.reader().readByte();
-									info.icon = msg.reader().readShort();
+									info.icon = msg.reader().readUnsignedShort();
 									info.name = msg.reader().readUTF();
 									info.description = msg.reader().readUTF();
 									info.level = msg.reader().readByte();
@@ -2937,7 +2937,9 @@ namespace Game1
 							{
 								data7 = NinjaUtil.readByteArray(msg);
 								Image img = ((!ModFunc.isEncryptIcon) ? createImage(data7) : createImage(data7, key));
+								SmallImage.ensureImageSlot(iconId);
 								SmallImage.imgNew[iconId].img = img;
+								SmallImage.markIconResponse(iconId);
 								if (mGraphics.zoomLevel > 1)
 								{
 									SmallImage.imageRaw.Add(iconId, img);
@@ -2945,7 +2947,9 @@ namespace Game1
 							}
 							catch (Exception)
 							{
+								SmallImage.ensureImageSlot(iconId);
 								SmallImage.imgNew[iconId].img = Image.createRGBImage(new int[1], 1, 1, bl: true);
+								SmallImage.markIconResponse(iconId);
 							}
 							break;
 						}

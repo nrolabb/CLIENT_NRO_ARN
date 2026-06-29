@@ -1588,11 +1588,22 @@ namespace Game1
 
 		private void setTabClanIntrinsic()
 		{
-			ITEM_HEIGHT = 24;
+			ITEM_HEIGHT = 29;
 			initTabClans();
 			clanInfo = mResources.clan_intrinsic;
 			ClanIntrinsicInfo[] arr = Char.myCharz().arrClanIntrinsic;
 			int count = (arr == null) ? 0 : arr.Length;
+			if (arr != null)
+			{
+				for (int i = 0; i < arr.Length; i++)
+				{
+					if (arr[i] != null)
+					{
+						requestClanIntrinsicDbIcon(arr[i].icon);
+						logClanIntrinsicIconState(i, arr[i]);
+					}
+				}
+			}
 			currentListLength = count + 2;
 			cmyLim = currentListLength * ITEM_HEIGHT - hScroll;
 			if (cmyLim < 0)
@@ -6734,6 +6745,7 @@ namespace Game1
 		{
 			ClanIntrinsicInfo[] items = Char.myCharz().arrClanIntrinsic;
 			int itemCount = (items == null) ? 0 : items.Length;
+			int iconBoxSize = 30;
 			currentListLength = itemCount + 2;
 			cmyLim = currentListLength * ITEM_HEIGHT - hScroll;
 			if (cmyLim < 0)
@@ -6765,15 +6777,26 @@ namespace Game1
 					continue;
 				}
 				ClanIntrinsicInfo info = items[i];
+				int iconBoxW = iconBoxSize;
+				int iconX = xScroll;
+				int iconY = y;
+				int textX = xScroll + iconBoxW + 5;
 				g.setColor((selected == row) ? 16383818 : 15196114);
-				g.fillRect(xScroll + 24, y, wScroll - 24, ITEM_HEIGHT - 1);
+				g.fillRect(xScroll + iconBoxW, y, wScroll - iconBoxW, ITEM_HEIGHT - 1);
 				g.setColor((selected == row) ? 9541120 : 9993045);
-				g.fillRect(xScroll, y, 24, ITEM_HEIGHT - 1);
+				g.fillRect(iconX, iconY, iconBoxW, ITEM_HEIGHT - 1);
+				g.drawImage(GameScr.imgSkill, iconX, iconY, 0);
 				if (info != null)
 				{
-					SmallImage.drawSmallImage(g, info.icon, xScroll + 12, y + (ITEM_HEIGHT - 1) / 2, 0, 3);
-					mFont.tahoma_7b_green2.drawString(g, info.name, xScroll + 29, y + 1, 0);
-					mFont.tahoma_7_blue.drawString(g, mResources.level + " " + info.level + "/" + info.maxLevel + "  +" + info.value + "%", xScroll + 29, y + 11, 0);
+					int iconId = isLoadedSmallImage(info.icon) ? info.icon : getClanIntrinsicFallbackIcon(i);
+					if (iconId != info.icon)
+					{
+						SmallImage.requestIconIfNeeded(info.icon);
+					}
+					SmallImage.drawSmallImage(g, iconId, iconX + 4, iconY + 4, 0, 0);
+					mFont nameFont = (info.level == 0) ? mFont.tahoma_7b_green : mFont.tahoma_7b_blue;
+					nameFont.drawString(g, info.name, textX, y + 3, 0);
+					mFont.tahoma_7_green2.drawString(g, mResources.level + " " + info.level + "/" + info.maxLevel + "  +" + info.value + "%", textX, y + 15, 0);
 				}
 			}
 			paintScrollArrow(g);
@@ -10831,6 +10854,64 @@ namespace Game1
 				return null;
 			}
 			return arr[index];
+		}
+
+		private bool isSmallImageInAtlas(int id)
+		{
+			return id >= 0 && SmallImage.smallImg != null && id < SmallImage.smallImg.Length && SmallImage.smallImg[id] != null && SmallImage.smallImg[id][1] < 256 && SmallImage.smallImg[id][2] < 256 && SmallImage.smallImg[id][3] < 256 && SmallImage.smallImg[id][4] < 256;
+		}
+
+		private bool isLoadedSmallImage(int id)
+		{
+			if (isSmallImageInAtlas(id))
+			{
+				return true;
+			}
+			return SmallImage.isRealImageLoaded(id);
+		}
+
+		private void requestClanIntrinsicDbIcon(int id)
+		{
+			if (id < 0 || isSmallImageInAtlas(id))
+			{
+				return;
+			}
+			if (!isLoadedSmallImage(id))
+			{
+				SmallImage.createImage(id);
+				SmallImage.requestIconIfNeeded(id);
+			}
+		}
+
+		private int getClanIntrinsicFallbackIcon(int index)
+		{
+			switch (index)
+			{
+				case 0:
+					return 567;
+				case 1:
+					return 569;
+				case 2:
+					return 568;
+				case 3:
+					return 721;
+				case 4:
+					return 719;
+				default:
+					return 567;
+			}
+		}
+
+		private void logClanIntrinsicIconState(int index, ClanIntrinsicInfo info)
+		{
+			if (info == null)
+			{
+				return;
+			}
+			int id = info.icon;
+			bool inAtlas = isSmallImageInAtlas(id);
+			bool inImgNewRange = id >= 0 && SmallImage.imgNew != null && id < SmallImage.imgNew.Length;
+			bool loaded = isLoadedSmallImage(id);
 		}
 
 		private void addClanIntrinsicDetail(ClanIntrinsicInfo info)

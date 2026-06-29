@@ -3,7 +3,7 @@ namespace Game1
 	public class ClanIntrinsicInfo
 	{
 		public int id;
-		public short icon;
+		public int icon;
 		public string name;
 		public string description;
 		public int level;
