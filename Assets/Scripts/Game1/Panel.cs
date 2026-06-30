@@ -3891,7 +3891,16 @@ namespace Game1
 					if (pointerDownTime > CountBoxInRow && pointerDownFirstX == GameCanvas.py && !isDownWhenRunning)
 					{
 						pointerDownFirstX = -1000;
-						int row = (cmtoY + GameCanvas.py - yScroll) / ITEM_HEIGHT;
+						int pyOffset = GameCanvas.py - yScroll;
+						int row = (cmtoY + pyOffset) / ITEM_HEIGHT;
+						if (type == 0 && pyOffset >= 0 && pyOffset < 48)
+						{
+							row = pyOffset / 24;
+						}
+						else if (type == 0 && isViewClanIntrinsic)
+						{
+							row = (cmtoY + pyOffset - 48) / ITEM_HEIGHT + 2;
+						}
 						selected = row;
 						if (selected >= currentListLength)
 						{
@@ -3969,7 +3978,16 @@ namespace Game1
 				cmRun = 0;
 				cmtoY = cmy;
 				pointerDownFirstX = -1000;
-				int row4 = (cmtoY + GameCanvas.py - yScroll) / ITEM_HEIGHT;
+				int pyOffset = GameCanvas.py - yScroll;
+				int row4 = (cmtoY + pyOffset) / ITEM_HEIGHT;
+				if (type == 0 && pyOffset >= 0 && pyOffset < 48)
+				{
+					row4 = pyOffset / 24;
+				}
+				else if (type == 0 && isViewClanIntrinsic)
+				{
+					row4 = (cmtoY + pyOffset - 48) / ITEM_HEIGHT + 2;
+				}
 				selected = row4;
 				if (selected >= currentListLength)
 				{
