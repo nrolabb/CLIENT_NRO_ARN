@@ -62,6 +62,7 @@ namespace Game1
         public void paint(mGraphics g)
         {
             if (!isShow) return;
+            if (GameScr.gI().isNotPaintTouchControl()) return;
             firstCommand.paint(g);
             paintTab(g);
             int currentTabIndex = -1;
@@ -100,6 +101,8 @@ namespace Game1
         public bool isPointerHoldInTab()
         {
             if (!isShow)
+                return false;
+            if (GameScr.gI().isNotPaintTouchControl())
                 return false;
             if (firstCommand.isPointerInside())
             {
