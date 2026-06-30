@@ -3229,7 +3229,16 @@ namespace Game1
 			{
 				cmRun = 0;
 				cmtoY = cmy;
-				int row = (cmtoY + GameCanvas.py - yScroll) / ITEM_HEIGHT;
+				int pyOffset = GameCanvas.py - yScroll;
+				int row;
+				if (pyOffset >= 0 && pyOffset < 48)
+				{
+					row = pyOffset / 24;
+				}
+				else
+				{
+					row = (cmtoY + pyOffset) / ITEM_HEIGHT;
+				}
 				if (row == 0)
 				{
 					selected = 0;
@@ -3342,19 +3351,19 @@ namespace Game1
 			{
 				cmRun = 0;
 				cmtoY = cmy;
-				int py = cmtoY + GameCanvas.py - yScroll;
+				int pyOffset = GameCanvas.py - yScroll;
 				int row = 0;
-				if (py < 24)
+				if (pyOffset >= 0 && pyOffset < 24)
 				{
 					row = 0;
 				}
-				else if (py < 48)
+				else if (pyOffset >= 24 && pyOffset < 48)
 				{
 					row = 1;
 				}
 				else
 				{
-					row = 2 + (py - 48) / ITEM_HEIGHT;
+					row = 2 + (cmtoY + pyOffset - 48) / ITEM_HEIGHT;
 				}
 				if (row == 0)
 				{
@@ -3590,7 +3599,19 @@ namespace Game1
 					if (pointerDownTime > 5 && pointerDownFirstX == GameCanvas.py && !isDownWhenRunning)
 					{
 						pointerDownFirstX = -1000;
-						selected = (cmtoY + GameCanvas.py - yScroll) / ITEM_HEIGHT;
+						int pyOffset = GameCanvas.py - yScroll;
+						if (type == 0 && pyOffset >= 0 && pyOffset < 48)
+						{
+							selected = pyOffset / 24;
+						}
+						else if (type == 0 && isViewClanIntrinsic)
+						{
+							selected = (cmtoY + pyOffset - 48) / ITEM_HEIGHT + 2;
+						}
+						else
+						{
+							selected = (cmtoY + pyOffset) / ITEM_HEIGHT;
+						}
 						if (selected >= currentListLength)
 						{
 							selected = -1;
@@ -3654,7 +3675,19 @@ namespace Game1
 				cmRun = 0;
 				cmtoY = cmy;
 				pointerDownFirstX = -1000;
-				selected = (cmtoY + GameCanvas.py - yScroll) / ITEM_HEIGHT;
+				int pyOffset2 = GameCanvas.py - yScroll;
+				if (type == 0 && pyOffset2 >= 0 && pyOffset2 < 48)
+				{
+					selected = pyOffset2 / 24;
+				}
+				else if (type == 0 && isViewClanIntrinsic)
+				{
+					selected = (cmtoY + pyOffset2 - 48) / ITEM_HEIGHT + 2;
+				}
+				else
+				{
+					selected = (cmtoY + pyOffset2) / ITEM_HEIGHT;
+				}
 				if (selected >= currentListLength)
 				{
 					selected = -1;
@@ -4372,12 +4405,14 @@ namespace Game1
 			{
 				currentListLength = ((clans != null) ? (clans.Length + 2) : 2);
 				clanInfo = mResources.clan_list;
+				ITEM_HEIGHT = 24;
 			}
 			else if (isViewMember)
 			{
 				clanReport = string.Empty;
 				currentListLength = ((member != null) ? member.size() : myMember.size()) + 2;
 				clanInfo = mResources.member + " " + ((currClan == null) ? Char.myCharz().clan.name : currClan.name);
+				ITEM_HEIGHT = 24;
 			}
 			else if (isMessage)
 			{
@@ -4391,6 +4426,7 @@ namespace Game1
 				{
 					currentListLength = ClanMessage.vMessage.size() + 2;
 					clanInfo = mResources.msg;
+					ITEM_HEIGHT = 24;
 				}
 				clanReport = string.Empty;
 			}
@@ -6709,7 +6745,6 @@ namespace Game1
 				cmyLim = 0;
 			}
 			g.setClip(xScroll, yScroll, wScroll, hScroll);
-			g.translate(-cmx, -cmy);
 			int optionX = xScroll + wScroll / 2 - clansOption.Length * TAB_W / 2;
 			for (int i = 0; i < clansOption.Length; i++)
 			{
@@ -6724,6 +6759,9 @@ namespace Game1
 			g.setColor((selected == 1) ? 16383818 : 15196114);
 			g.fillRect(xScroll, titleY, wScroll, ITEM_HEIGHT - 1);
 			mFont.tahoma_7b_dark.drawString(g, clanInfo, xScroll + wScroll / 2, titleY + 6, mFont.CENTER);
+
+			g.setClip(xScroll, yScroll + 48, wScroll, hScroll - 48);
+			g.translate(-cmx, -cmy);
 
 			for (int itemIndex = 0; itemIndex < itemCount; itemIndex++)
 			{
@@ -6783,7 +6821,6 @@ namespace Game1
 				cmyLim = 0;
 			}
 			g.setClip(xScroll, yScroll, wScroll, hScroll);
-			g.translate(-cmx, -cmy);
 			int optionX = xScroll + wScroll / 2 - clansOption.Length * TAB_W / 2;
 			for (int i = 0; i < clansOption.Length; i++)
 			{
@@ -6798,6 +6835,10 @@ namespace Game1
 			g.setColor((selected == 1) ? 16383818 : 15196114);
 			g.fillRect(xScroll, titleY, wScroll, 23);
 			mFont.tahoma_7b_dark.drawString(g, clanInfo, xScroll + wScroll / 2, titleY + 6, mFont.CENTER);
+
+			g.setClip(xScroll, yScroll + 48, wScroll, hScroll - 48);
+			g.translate(-cmx, -cmy);
+
 			for (int i = 0; i < itemCount; i++)
 			{
 				int row = i + 2;
@@ -6845,7 +6886,6 @@ namespace Game1
 				return;
 			}
 			g.setClip(xScroll, yScroll, wScroll, hScroll);
-			g.translate(-cmx, -cmy);
 			g.setColor(0);
 			int num = xScroll + wScroll / 2 - clansOption.Length * TAB_W / 2;
 			if (isViewClanBox)
@@ -6869,7 +6909,29 @@ namespace Game1
 			{
 				currentListLength = ClanMessage.vMessage.size() + 2;
 			}
-			for (int j = 0; j < currentListLength; j++)
+			
+			for (int k = 0; k < clansOption.Length; k++)
+			{
+				g.setColor((k != cSelected || 0 != selected) ? 15723751 : 16383818);
+				g.fillRect(num + k * TAB_W, yScroll, TAB_W - 1, 23);
+				for (int l = 0; l < clansOption[k].Length; l++)
+				{
+					mFont.tahoma_7_grey.drawString(g, clansOption[k][l], num + k * TAB_W + TAB_W / 2, yScroll + l * 11, mFont.CENTER);
+				}
+			}
+			
+			int num7_title = yScroll + ITEM_HEIGHT;
+			g.setColor((1 != selected) ? 15196114 : 16383818);
+			g.fillRect(xScroll, num7_title, wScroll, ITEM_HEIGHT - 1);
+			if (clanInfo != null)
+			{
+				mFont.tahoma_7b_dark.drawString(g, clanInfo, xScroll + wScroll / 2, num7_title + 6, mFont.CENTER);
+			}
+
+			g.setClip(xScroll, yScroll + 48, wScroll, hScroll - 48);
+			g.translate(-cmx, -cmy);
+
+			for (int j = 2; j < currentListLength; j++)
 			{
 				int num2 = xScroll;
 				int num3 = yScroll + j * ITEM_HEIGHT;
@@ -6882,30 +6944,6 @@ namespace Game1
 				if (num7 - cmy > yScroll + hScroll || num7 - cmy < yScroll - ITEM_HEIGHT)
 				{
 					continue;
-				}
-				switch (j)
-				{
-					case 0:
-						{
-							for (int k = 0; k < clansOption.Length; k++)
-							{
-								g.setColor((k != cSelected || j != selected) ? 15723751 : 16383818);
-								g.fillRect(num + k * TAB_W, num7, TAB_W - 1, 23);
-								for (int l = 0; l < clansOption[k].Length; l++)
-								{
-									mFont.tahoma_7_grey.drawString(g, clansOption[k][l], num + k * TAB_W + TAB_W / 2, yScroll + l * 11, mFont.CENTER);
-								}
-							}
-							continue;
-						}
-					case 1:
-						g.setColor((j != selected) ? 15196114 : 16383818);
-						g.fillRect(xScroll, num7, wScroll, num9);
-						if (clanInfo != null)
-						{
-							mFont.tahoma_7b_dark.drawString(g, clanInfo, xScroll + wScroll / 2, num7 + 6, mFont.CENTER);
-						}
-						continue;
 				}
 				if (isViewClanBox)
 				{
@@ -7032,7 +7070,7 @@ namespace Game1
 					mFont.tahoma_7b_green2.drawString(g, st, num6 + 5, num7, 0);
 					g.setClip(num6, num7, num8 - 10, num9);
 					mFont.tahoma_7_blue.drawString(g, clans[j - 2].slogan, num6 + 5, num7 + 11, 0);
-					g.setClip(xScroll, yScroll + cmy, wScroll, hScroll);
+					g.setClip(xScroll, yScroll + 48 + cmy, wScroll, hScroll - 48);
 					mFont.tahoma_7_green2.drawString(g, clans[j - 2].currMember + "/" + clans[j - 2].maxMember, num6 + num8 - 5, num7, mFont.RIGHT);
 					continue;
 				}
@@ -7052,7 +7090,7 @@ namespace Game1
 						Part part = GameScr.parts[member.head];
 						SmallImage.drawSmallImage(g, part.pi[Char.CharInfo[0][0][0]].id, num2 + part.pi[Char.CharInfo[0][0][0]].dx, num3 + 3 + part.pi[Char.CharInfo[0][0][0]].dy, 0, 0);
 					}
-					g.setClip(xScroll, yScroll + cmy, wScroll, hScroll);
+					g.setClip(xScroll, yScroll + 48 + cmy, wScroll, hScroll - 48);
 					mFont mFont2 = mFont.tahoma_7b_dark;
 					if (member.role == 0)
 					{
@@ -10366,12 +10404,14 @@ namespace Game1
 							{
 								isViewClanBox = false;
 								isViewClanIntrinsic = false;
+								initTabClans();
 								chatClan();
 							}
 							else if (cSelected == 1)
 							{
 								isViewClanBox = false;
 								isViewClanIntrinsic = false;
+								initTabClans();
 								Service.gI().clanMessage(1, null, -1);
 							}
 							else if (cSelected == 2)
