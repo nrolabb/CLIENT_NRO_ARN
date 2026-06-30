@@ -25,7 +25,7 @@ namespace Game1
 
 		public TabClanDistribute()
 		{
-			left = new Command("Phân phối", this, 1, null);
+			left = new Command("Phân phát", this, 1, null);
 			right = new Command(mResources.CLOSE, this, 2, null);
 		}
 
@@ -94,7 +94,7 @@ namespace Game1
 		{
 			g.translate(-cmx, 0);
 			PopUp.paintPopUp(g, x, y - 17, w, h + 17, -1, isButton: true);
-			mFont.tahoma_7b_dark.drawString(g, "PHÂN PHỐI", x + w / 2, y - 7, mFont.CENTER);
+			mFont.tahoma_7b_dark.drawString(g, "PHÂN PHÁT", x + w / 2, y - 7, mFont.CENTER);
 			if (item != null)
 			{
 				SmallImage.drawSmallImage(g, item.template.iconID, x + 17, y + 18, 0, 3);
@@ -238,7 +238,7 @@ namespace Game1
 			}
 			if (distributions.size() == 0)
 			{
-				GameCanvas.startOKDlg("Vui lòng chọn ít nhất 1 thành viên để phân phối!");
+				GameCanvas.startOKDlg("Vui lòng chọn ít nhất 1 thành viên để phân phát!");
 				return;
 			}
 			Service.gI().distributeClanBoxItem(itemIndex, distributions);

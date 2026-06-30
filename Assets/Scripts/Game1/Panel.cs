@@ -2312,7 +2312,7 @@ namespace Game1
 					}
 					else
 					{
-						GameCanvas.startOKDlg("Vui lòng chọn ít nhất 1 thành viên để phân phối!");
+						GameCanvas.startOKDlg("Vui lòng chọn ít nhất 1 thành viên để phân phát!");
 					}
 					GameCanvas.isPointerClick = false;
 					return;
@@ -2351,7 +2351,7 @@ namespace Game1
 							}
 							else
 							{
-								GameCanvas.startOKDlg("Số lượng phân phối đã đạt tối đa của vật phẩm!");
+								GameCanvas.startOKDlg("Số lượng phân phát đã đạt tối đa của vật phẩm!");
 							}
 							GameCanvas.isPointerClick = false;
 							return;
@@ -5222,7 +5222,7 @@ namespace Game1
 		{
 			g.translate(-g.getTranslateX(), -g.getTranslateY());
 			GameCanvas.paintz.paintFrameSimple(xPopup, yPopup, wPopup, hPopup, g);
-			mFont.tahoma_7b_yellow.drawString(g, "PHÂN PHỐI", xPopup + wPopup / 2, yPopup + 10, mFont.CENTER);
+			mFont.tahoma_7b_yellow.drawString(g, "PHÂN PHÁT", xPopup + wPopup / 2, yPopup + 10, mFont.CENTER);
 			g.setClip(xPopup, yPopup + 25, wPopup, hPopup - 55);
 			g.translate(0, -distributeScroll);
 			if (myMember != null)
@@ -11018,7 +11018,7 @@ namespace Game1
 				return;
 			}
 			MyVector actions = new MyVector();
-			actions.addElement(new Command("Phân phối", this, 2012, currItem));
+			actions.addElement(new Command("Phân phát", this, 2012, currItem));
 			actions.addElement(new Command("Vứt bỏ", this, 2013, currItem));
 			Char.myCharz().setPartTemp(currItem.headTemp, currItem.bodyTemp, currItem.legTemp, currItem.bagTemp);
 			int row = itemIndex / CountBoxInRow + 2;
@@ -11044,7 +11044,7 @@ namespace Game1
 				return;
 			}
 			MyVector actions = new MyVector();
-			actions.addElement(new Command("Phân phối", this, 2012, currItem));
+			actions.addElement(new Command("Phân phát", this, 2012, currItem));
 			actions.addElement(new Command("Vứt bỏ", this, 2013, currItem));
 			Char.myCharz().setPartTemp(currItem.headTemp, currItem.bodyTemp, currItem.legTemp, currItem.bagTemp);
 			GameCanvas.menu.startAt(actions, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
@@ -11119,7 +11119,7 @@ namespace Game1
 				{
 					if (isClanBox)
 					{
-						myVector.addElement(new Command("Phân phối", this, 2012, item));
+						myVector.addElement(new Command("Phân phát", this, 2012, item));
 						myVector.addElement(new Command("Vứt bỏ", this, 2013, item));
 					}
 					else if (item.isTypeBody())
