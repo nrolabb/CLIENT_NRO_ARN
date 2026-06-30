@@ -7786,15 +7786,6 @@ namespace Game1
 				g.setColor(13524492);
 				g.fillRect(X + 1, 78, W - 2, 1);
 				mFont.tahoma_7b_dark.drawString(g, isClanBox ? (mResources.clanBox[0] + " " + mResources.clanBox[1]) : mResources.chest, xScroll + wScroll / 2, 59, mFont.CENTER);
-				if (isClanBox && Equals(GameCanvas.panel2) && Char.myCharz().clan != null)
-				{
-					int clanX = xScroll + wScroll - 42;
-					if (imgCapsulBang != null)
-					{
-						g.drawImage(imgCapsulBang, clanX, 61, 3);
-					}
-					mFont.tahoma_7_yellow.drawString(g, Char.myCharz().clan.clanPoint + string.Empty, clanX + 10, 56, mFont.LEFT, mFont.tahoma_7_grey);
-				}
 				return;
 			}
 			if (type == 3)
@@ -8438,6 +8429,18 @@ namespace Game1
 					{
 						SmallImage.drawSmallImage(g, Char.myCharz().avatarz(), X + 25, 50, 0, 33);
 						paintItemBodyBagInfo(g);
+					}
+					if (isClanBox && Equals(GameCanvas.panel2) && Char.myCharz().clan != null)
+					{
+						string capText = Char.myCharz().clan.clanPoint + string.Empty;
+						int capX = X + 60;
+						int capY = 25;
+						if (imgCapsulBang != null)
+						{
+							g.drawImage(imgCapsulBang, capX, capY, mGraphics.VCENTER | mGraphics.LEFT);
+						}
+						int iconW = (imgCapsulBang != null) ? imgCapsulBang.getWidth() : 10;
+						mFont.tahoma_7_yellow.drawString(g, capText, capX + iconW + 5, capY - mFont.tahoma_7_yellow.getHeight() / 2, mFont.LEFT, mFont.tahoma_7_grey);
 					}
 					break;
 				case 3:
