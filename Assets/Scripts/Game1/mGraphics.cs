@@ -275,6 +275,116 @@ namespace Game1
     		fillRect(x + w, y, num, h + 1);
     		fillRect(x, y + h, w + 1, num);
     	}
+
+    	private static bool isInsideRoundedRect(float x, float y, float width, float height, float radius)
+    	{
+    		if (x < 0f || y < 0f || x >= width || y >= height)
+    		{
+    			return false;
+    		}
+    		if (radius <= 0f)
+    		{
+    			return true;
+    		}
+    		float num = Mathf.Clamp(x, radius, width - radius);
+    		float num2 = Mathf.Clamp(y, radius, height - radius);
+    		float num3 = x - num;
+    		float num4 = y - num2;
+    		return num3 * num3 + num4 * num4 <= radius * radius;
+    	}
+
+    	public void drawRoundRectBorder(int x, int y, int w, int h, int border, int thickness)
+    	{
+    		x *= zoomLevel;
+    		y *= zoomLevel;
+    		w *= zoomLevel;
+    		h *= zoomLevel;
+    		border *= zoomLevel;
+    		thickness *= zoomLevel;
+    		if (w <= 0 || h <= 0 || thickness <= 0)
+    		{
+    			return;
+    		}
+    		if (isTranslate)
+    		{
+    			x += translateX;
+    			y += translateY;
+    		}
+    		int num = Mathf.Max(1, w);
+    		int num2 = Mathf.Max(1, h);
+    		int num3 = Mathf.Min(Mathf.Max(0, border), Mathf.Min(num, num2) / 2);
+    		int num4 = Mathf.Min(Mathf.Max(1, thickness), Mathf.Min(num, num2) / 2);
+    		float num5 = (a > 1f) ? 1f : a;
+    		int num6 = Mathf.RoundToInt(r * 255f);
+    		int num7 = Mathf.RoundToInt(g * 255f);
+    		int num8 = Mathf.RoundToInt(b * 255f);
+    		int num9 = Mathf.RoundToInt(num5 * 255f);
+    		string key = "rrb" + num + "_" + num2 + "_" + num3 + "_" + num4 + "_" + num6 + "_" + num7 + "_" + num8 + "_" + num9;
+    		Texture2D texture2D = (Texture2D)cachedTextures[key];
+    		if (texture2D == null)
+    		{
+    			texture2D = new Texture2D(num, num2, TextureFormat.ARGB32, false);
+    			texture2D.filterMode = FilterMode.Bilinear;
+    			texture2D.wrapMode = TextureWrapMode.Clamp;
+    			Color color = new Color(r, g, b, num5);
+    			Color clear = new Color(0f, 0f, 0f, 0f);
+    			for (int i = 0; i < num2; i++)
+    			{
+    				for (int j = 0; j < num; j++)
+    				{
+    					int num10 = 0;
+    					for (int k = 0; k < 3; k++)
+    					{
+    						for (int l = 0; l < 3; l++)
+    						{
+    							float num11 = (float)j + ((float)l + 0.5f) / 3f;
+    							float num12 = (float)i + ((float)k + 0.5f) / 3f;
+    							bool flag = isInsideRoundedRect(num11, num12, num, num2, num3);
+    							bool flag2 = isInsideRoundedRect(num11 - (float)num4, num12 - (float)num4, num - num4 * 2, num2 - num4 * 2, Mathf.Max(0, num3 - num4));
+    							if (flag && !flag2)
+    							{
+    								num10++;
+    							}
+    						}
+    					}
+    					if (num10 == 0)
+    					{
+    						texture2D.SetPixel(j, i, clear);
+    					}
+    					else
+    					{
+    						Color color2 = color;
+    						color2.a *= (float)num10 / 9f;
+    						texture2D.SetPixel(j, i, color2);
+    					}
+    				}
+    			}
+    			texture2D.Apply();
+    			cache(key, texture2D);
+    		}
+    		int num13 = 0;
+    		int num14 = 0;
+    		int num15 = 0;
+    		int num16 = 0;
+    		if (isClip)
+    		{
+    			num13 = clipX;
+    			num14 = clipY;
+    			num15 = clipW;
+    			num16 = clipH;
+    			if (isTranslate)
+    			{
+    				num13 += clipTX;
+    				num14 += clipTY;
+    			}
+    			GUI.BeginGroup(new Rect(num13, num14, num15, num16));
+    		}
+    		GUI.DrawTexture(new Rect(x - num13, y - num14, num, num2), texture2D);
+    		if (isClip)
+    		{
+    			GUI.EndGroup();
+    		}
+    	}
     
     	public void fillRect(int x, int y, int w, int h, int border)
     	{

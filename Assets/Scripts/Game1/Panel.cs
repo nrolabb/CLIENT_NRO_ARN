@@ -6691,6 +6691,12 @@ namespace Game1
 			g.fillRect(x + 1, y + 1, width - 2, height - 2);
 		}
 
+		private void paintInventorySelectedBorder(mGraphics g, int x, int y, int width, int height)
+		{
+			g.setColor(16711680);
+			g.drawRoundRectBorder(x, y, width, height, 5, 1);
+		}
+
 		private void paintClanBoxInClanTab(mGraphics g)
 		{
 			Item[] items = Char.myCharz().arrItemClanBox;
@@ -7482,7 +7488,8 @@ namespace Game1
 						}
 						mFont5.drawString(g, text4, num23 + 5, num24 + 11, mFont.LEFT);
 					}
-					SmallImage.drawSmallImage(g, item3.template.iconID, num26 + num28 / 2, num27 + num29 / 2, 0, 3);
+					float iconOffset = (j == selected) ? ((float)System.Math.Sin(GameCanvas.gameTick * 0.2f) * 2f) : 0f;
+					SmallImage.drawSmallImage(g, item3.template.iconID, num26 + num28 / 2, num27 + num29 / 2 + (int)iconOffset, 0, 3);
 					if (item3.itemOption != null)
 					{
 						for (int n = 0; n < item3.itemOption.Length; n++)
@@ -7564,6 +7571,10 @@ namespace Game1
 						g.setColor((j != selected) ? 6047789 : 7040779);
 						g.fillRect(num7, num8, num9, num10, 5);
 					}
+					if (j == selected)
+					{
+						paintInventorySelectedBorder(g, num7 - 1, num8 - 1, num9 + 2, num10 + 2);
+					}
 					if (item == null || item == null)
 					{
 						continue;
@@ -7622,7 +7633,8 @@ namespace Game1
 						}
 						mFont3.drawString(g, text2, x + 5, y + 10, mFont.LEFT);
 					}
-					SmallImage.drawSmallImage(g, item.template.iconID, num7 + num9 / 2, num8 + num10 / 2, 0, 3);
+					float iconOffset = (j == selected) ? ((float)System.Math.Sin(GameCanvas.gameTick * 0.2f) * 2f) : 0f;
+					SmallImage.drawSmallImage(g, item.template.iconID, num7 + num9 / 2, num8 + num10 / 2 + (int)iconOffset, 0, 3);
 					if (item.itemOption != null)
 					{
 						for (int n = 0; n < item.itemOption.Length; n++)
@@ -7643,15 +7655,10 @@ namespace Game1
 					int num13 = x2;
 					int num14 = y2;
 					int num15 = ITEM_HEIGHT - 1;
+					bool isSelectedBagItem = num11 == GetInventorySelect_bag(selected, newSelected, Char.myCharz().arrItemBody);
 					if (y2 - cmy > yScroll + hScroll || y2 - cmy < yScroll - ITEM_HEIGHT)
 					{
 						continue;
-					}
-					int inventorySelect_bag = GetInventorySelect_bag(selected, newSelected, Char.myCharz().arrItemBody);
-					if (num11 == inventorySelect_bag)
-					{
-						g.setColor(16711680);
-						g.drawRect(x2 - 1, y2 - 1, num12 + 1, ITEM_HEIGHT);
 					}
 					Item item2 = arrItemBag[num11];
 					if (item2 != null)
@@ -7663,7 +7670,7 @@ namespace Game1
 								byte id2 = (byte)GetColor_Item_Upgrade(item2.itemOption[num16].param);
 								if (GetColor_ItemBg(id2) != -1)
 								{
-									g.setColor((num11 != inventorySelect_bag) ? GetColor_ItemBg(id2) : GetColor_ItemBg(id2));
+									g.setColor(GetColor_ItemBg(id2));
 								}
 							}
 						}
@@ -7682,8 +7689,12 @@ namespace Game1
 					g.fillRect(x2, y2, num12, num15, 5);
 					if (item2 != null && item2.isSelect && GameCanvas.panel.type == 12)
 					{
-						g.setColor((num11 != inventorySelect_bag) ? 6047789 : 7040779);
+						g.setColor(isSelectedBagItem ? 7040779 : 6047789);
 						g.fillRect(x2, y2, num12, num15, 5);
+					}
+					if (isSelectedBagItem)
+					{
+						paintInventorySelectedBorder(g, x2 - 1, y2 - 1, num12 + 2, num15 + 2);
 					}
 					if (item2 == null)
 					{
@@ -7715,7 +7726,8 @@ namespace Game1
 							}
 						}
 					}
-					SmallImage.drawSmallImage(g, item2.template.iconID, x2 + num12 / 2, y2 + ITEM_HEIGHT / 2, 0, 3);
+					float iconOffset = isSelectedBagItem ? ((float)System.Math.Sin(GameCanvas.gameTick * 0.2f) * 2f) : 0f;
+					SmallImage.drawSmallImage(g, item2.template.iconID, x2 + num12 / 2, y2 + ITEM_HEIGHT / 2 + (int)iconOffset, 0, 3);
 					if (item2.itemOption != null)
 					{
 						for (int num18 = 0; num18 < item2.itemOption.Length; num18++)
