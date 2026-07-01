@@ -284,6 +284,12 @@ namespace Game1
 
 		public Skill[] arrPetSkill;
 
+		public sbyte petIntrinsicType;
+
+		public short petIntrinsicParam;
+
+		public string petIntrinsicInfo;
+
 		public Item[][] arrItemShop;
 
 		public string[][] infoSpeacialSkill;

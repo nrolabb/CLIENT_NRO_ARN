@@ -265,6 +265,58 @@ namespace Game1
     			}
     		}
     	}
+
+	public static void drawSmallImageScale(mGraphics g, int id, int x, int y, int w, int h)
+	{
+		if (id < 0)
+		{
+			return;
+		}
+		ensureImageCapacity(id);
+		if (imgbig == null)
+		{
+			Small small = imgNew[id];
+			if (small == null)
+			{
+				createImage(id);
+			}
+			else
+			{
+				g.drawRegionScale(small.img, 0, 0, mGraphics.getImageWidth(small.img), mGraphics.getImageHeight(small.img), x, y, w, h);
+			}
+		}
+		else if (smallImg != null)
+		{
+			if (id >= smallImg.Length || smallImg[id] == null || smallImg[id][1] >= 256 || smallImg[id][3] >= 256 || smallImg[id][2] >= 256 || smallImg[id][4] >= 256)
+			{
+				Small small2 = imgNew[id];
+				if (small2 == null)
+				{
+					createImage(id);
+				}
+				else
+				{
+					g.drawRegionScale(small2.img, 0, 0, mGraphics.getImageWidth(small2.img), mGraphics.getImageHeight(small2.img), x, y, w, h);
+				}
+			}
+			else if (imgbig[smallImg[id][0]] != null)
+			{
+				g.drawRegionScale(imgbig[smallImg[id][0]], smallImg[id][1], smallImg[id][2], smallImg[id][3], smallImg[id][4], x, y, w, h);
+			}
+		}
+		else if (GameCanvas.currentScreen != GameScr.gI())
+		{
+			Small small3 = imgNew[id];
+			if (small3 == null)
+			{
+				createImage(id);
+			}
+			else
+			{
+				g.drawRegionScale(small3.img, 0, 0, mGraphics.getImageWidth(small3.img), mGraphics.getImageHeight(small3.img), x, y, w, h);
+			}
+		}
+	}
     
 	public static void drawSmallImage(mGraphics g, int id, int f, int x, int y, int w, int h, int transform, int anchor)
 	{

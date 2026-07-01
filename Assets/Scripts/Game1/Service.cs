@@ -236,6 +236,24 @@ namespace Game1
 			}
 		}
 
+		public void petIntrinsic()
+		{
+			Message message = null;
+			try
+			{
+				message = new Message((sbyte)112);
+				message.writer().writeByte(1);
+				session.sendMessage(message);
+			}
+			catch (Exception)
+			{
+			}
+			finally
+			{
+				message.cleanup();
+			}
+		}
+
 		public void mobCapcha(char ch)
 		{
 			Res.outz("cap char c= " + ch);

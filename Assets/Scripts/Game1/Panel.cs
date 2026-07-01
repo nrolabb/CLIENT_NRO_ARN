@@ -4377,7 +4377,7 @@ namespace Game1
 		private void setTabPetSkill(bool isPet2)
 		{
 			ITEM_HEIGHT = 30;
-			currentListLength = (isPet2 ? Char.MyPet2z() : Char.myPetz()).arrPetSkill.Length + 5;
+			currentListLength = (isPet2 ? Char.MyPet2z() : Char.myPetz()).arrPetSkill.Length + 6;
 			cmyLim = currentListLength * ITEM_HEIGHT - hScroll;
 			if (cmyLim < 0)
 			{
@@ -5620,7 +5620,7 @@ namespace Game1
 			g.setClip(xScroll, yScroll, wScroll, hScroll);
 			g.translate(0, -cmy);
 			Char pet = (isPet2 ? Char.MyPet2z() : Char.myPetz());
-			int num = 5 + pet.arrPetSkill.Length;
+			int num = 6 + pet.arrPetSkill.Length;
 			for (int i = 0; i < num; i++)
 			{
 				int num2 = xScroll + 30;
@@ -5677,7 +5677,7 @@ namespace Game1
 					_ = t_tiemnang[num10];
 					mFont.tahoma_7b_blue.drawString(g, st5, num2 + 5, num3 + 3, 0);
 				}
-				if (i >= 5)
+				if (i >= 5 && i < 5 + pet.arrPetSkill.Length)
 				{
 					Skill skill = pet.arrPetSkill[i - 5];
 					g.drawImage(GameScr.imgSkill2, num5, num6, 0);
@@ -5692,6 +5692,26 @@ namespace Game1
 						mFont.tahoma_7_green2.drawString(g, skill.moreInfo, num2 + 5, num3 + 3, 0);
 						mFont.tahoma_7_green2.drawString(g, mResources.level + ": " + 0, num2 + 5, num3 + 15, 0);
 						SmallImage.drawSmallImage(g, GameScr.efs[98].arrEfInfo[0].idImg, num5 + 8, num6 + 7, 0, 0);
+					}
+				}
+				if (i == 5 + pet.arrPetSkill.Length)
+				{
+					bool flag = pet.petIntrinsicType > 0;
+					g.drawImage(flag ? GameScr.imgSkill : GameScr.imgSkill2, num5, num6, 0);
+					string text = pet.petIntrinsicInfo;
+					if (text == null || text.Length == 0)
+					{
+						text = "Chưa mở (Cần 20 tỷ SM)";
+					}
+					mFont.tahoma_7_blue.drawString(g, "Nội tại đệ tử", num2 + 5, num3 + 3, 0);
+					mFont.tahoma_7_green2.drawString(g, text, num2 + 5, num3 + 15, 0);
+					if (flag)
+					{
+						SmallImage.drawSmallImage(g, 14551, num5 + 13, num6 + 13, 0, StaticObj.VCENTER_HCENTER);
+					}
+					else
+					{
+						SmallImage.drawSmallImage(g, GameScr.efs[98].arrEfInfo[0].idImg, num5 + 15, num6 + 15, 0, StaticObj.VCENTER_HCENTER);
 					}
 				}
 			}
@@ -9317,6 +9337,10 @@ namespace Game1
 					}
 				}
 			}
+			else if (currentTabIndex == 1)
+			{
+				doFirePetSkill();
+			}
 			else if (currentTabIndex != 1)
 			{
 				if (currentTabIndex == 2)
@@ -9327,6 +9351,24 @@ namespace Game1
 				{
 					doFireInventory();
 				}
+			}
+		}
+
+		private void doFirePetSkill()
+		{
+			Char pet = (type == 28) ? Char.MyPet2z() : Char.myPetz();
+			if (selected == -1 || pet == null || pet.arrPetSkill == null)
+			{
+				return;
+			}
+			if (selected == 5 + pet.arrPetSkill.Length)
+			{
+				if (type == 28)
+				{
+					GameCanvas.startOKDlg("Không thể mở nội tại cho đệ tử này");
+					return;
+				}
+				GameCanvas.startYesNoDlg("Bạn có muốn mở/đổi nội tại đệ tử với giá 100 thỏi vàng?", new Command(mResources.YES, this, 8012, null), new Command(mResources.NO, this, 4005, null));
 			}
 		}
 
@@ -11303,6 +11345,11 @@ namespace Game1
 			{
 				TopInfo topInfo = (TopInfo)p;
 				Service.gI().sendThachDau(topInfo.pId);
+			}
+			if (idAction == 8012)
+			{
+				GameCanvas.endDlg();
+				Service.gI().petIntrinsic();
 			}
 			if (idAction == 170391)
 			{

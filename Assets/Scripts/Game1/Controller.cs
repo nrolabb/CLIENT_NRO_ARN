@@ -2104,6 +2104,16 @@ namespace Game1
 								Char.myPetz().arrPetSkill[num154].template = null;
 								Char.myPetz().arrPetSkill[num154].moreInfo = msg.reader().readUTF();
 							}
+							msg.reader().readByte();
+							msg.reader().readShort();
+							Char.myPetz().cHPGoc = msg.reader().readIntToLongDQT();
+							Char.myPetz().cMPGoc = msg.reader().readIntToLongDQT();
+							Char.myPetz().cDamGoc = msg.reader().readIntToLongDQT();
+							Char.myPetz().cDefGoc = msg.reader().readInt();
+							Char.myPetz().cCriticalGoc = msg.reader().readByte();
+							Char.myPetz().petIntrinsicType = msg.reader().readByte();
+							Char.myPetz().petIntrinsicParam = msg.reader().readShort();
+							Char.myPetz().petIntrinsicInfo = msg.reader().readUTF();
 							break;
 						}
 					case 3:

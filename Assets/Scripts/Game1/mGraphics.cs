@@ -1038,6 +1038,22 @@ namespace Game1
     			Graphics.DrawTexture(new Rect(x + translateX, y + translateY, (tranform != 0) ? (-w) : w, h), image.texture);
     		}
     	}
+
+	public void drawRegionScale(Image image, int x0, int y0, int w0, int h0, int x, int y, int w, int h)
+	{
+		x *= zoomLevel;
+		y *= zoomLevel;
+		w *= zoomLevel;
+		h *= zoomLevel;
+		x0 *= zoomLevel;
+		y0 *= zoomLevel;
+		w0 *= zoomLevel;
+		h0 *= zoomLevel;
+		if (image != null)
+		{
+			Graphics.DrawTexture(new Rect(x + translateX, y + translateY, w, h), image.texture, new Rect((float)x0 / (float)image.texture.width, ((float)image.texture.height - h0 - y0) / (float)image.texture.height, (float)w0 / (float)image.texture.width, (float)h0 / (float)image.texture.height), 0, 0, 0, 0);
+		}
+	}
     
     	public static int getImageWidth(Image image)
     	{
