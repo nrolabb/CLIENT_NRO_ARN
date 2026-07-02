@@ -1870,6 +1870,7 @@ namespace Game1
 				}
 				_ = mFont.tahoma_7b_dark;
 				string text2 = string.Empty;
+				string itemName = ModFunc.isShowID ? ("[" + item.template.id + "] " + item.template.name) : item.template.name;
 				if (item.itemOption != null)
 				{
 					for (int i = 0; i < item.itemOption.Length; i++)
@@ -1894,19 +1895,19 @@ namespace Game1
 							flag = true;
 							if (item.itemOption[j].param >= 1 && item.itemOption[j].param <= 2)
 							{
-								text = text + "|0|1|" + item.template.name + text2;
+								text = text + "|0|1|" + itemName + text2;
 							}
 							if (item.itemOption[j].param >= 3 && item.itemOption[j].param <= 4)
 							{
-								text = text + "|2|1|" + item.template.name + text2;
+								text = text + "|2|1|" + itemName + text2;
 							}
 							if (item.itemOption[j].param >= 5 && item.itemOption[j].param <= 6)
 							{
-								text = text + "|8|1|" + item.template.name + text2;
+								text = text + "|8|1|" + itemName + text2;
 							}
 							if (item.itemOption[j].param >= 7 && item.itemOption[j].param <= 10)
 							{
-								text = text + "|7|1|" + item.template.name + text2;
+								text = text + "|7|1|" + itemName + text2;
 							}
 						}
 						if (item.itemOption[j].optionTemplate.id == 72)
@@ -1914,22 +1915,22 @@ namespace Game1
 							flag = true;
 							if (item.itemOption[j].param >= 1 && item.itemOption[j].param <= 5)
 							{
-								text = text + "|2|1|" + item.template.name + text2;
+								text = text + "|2|1|" + itemName + text2;
 							}
 							if (item.itemOption[j].param >= 6 && item.itemOption[j].param <= 7)
 							{
-								text = text + "|8|1|" + item.template.name + text2;
+								text = text + "|8|1|" + itemName + text2;
 							}
 							if (item.itemOption[j].param >= 8 && item.itemOption[j].param <= 10)
 							{
-								text = text + "|7|1|" + item.template.name + text2;
+								text = text + "|7|1|" + itemName + text2;
 							}
 						}
 					}
 				}
 				if (!flag)
 				{
-					text = text + "|0|1|" + item.template.name + text2;
+					text = text + "|0|1|" + itemName + text2;
 				}
 				if (item.itemOption != null)
 				{
@@ -3814,12 +3815,9 @@ namespace Game1
 						selected = currentListLength - 1;
 					}
 				}
-				else if (isTabInven() && selected >= currentListLength - Char.myCharz().arrItemBag.Length / CountBoxInRow)
+				else if (isTabInven() && selected >= Char.myCharz().arrItemBody.Length + Char.myCharz().arrItemBag.Length)
 				{
-					if (selected >= Char.myCharz().arrItemBody.Length + Char.myCharz().arrItemBag.Length)
-					{
-						selected = 0;
-					}
+					selected = 0;
 				}
 				else if (isTabBox() && selected >= currentListLength)
 				{
@@ -3851,12 +3849,12 @@ namespace Game1
 			}
 			if (flag)
 			{
-				int s = selected;
-				if (isTabInven() && selected >= currentListLength - Char.myCharz().arrItemBag.Length / CountBoxInRow)
+				int s = GetInventoryRowForSelected(selected);
+				if (s < 0)
 				{
-					s = (selected - Char.myCharz().arrItemBody.Length) / CountBoxInRow + Char.myCharz().arrItemBody.Length;
+					s = selected;
 				}
-				else if (isTabBox())
+				if (isTabBox())
 				{
 					s = selected / CountBoxInRow;
 				}
@@ -3906,11 +3904,9 @@ namespace Game1
 						{
 							selected = -1;
 						}
-						else if (isTabInven() && selected >= currentListLength - Char.myCharz().arrItemBag.Length / CountBoxInRow - 1)
+						else if (isTabInven())
 						{
-							int row2 = (selected - Char.myCharz().arrItemBody.Length) * (CountBoxInRow - 1);
-							int column = (GameCanvas.px - xScroll) / (WidthBoxNew + 1);
-							selected = selected + row2 + column;
+							selected = GetInventorySelectAtPointer(pyOffset);
 						}
 						else if (isTabBox())
 						{
@@ -3993,18 +3989,9 @@ namespace Game1
 				{
 					selected = -1;
 				}
-				else if (isTabInven() && selected >= currentListLength - Char.myCharz().arrItemBag.Length / CountBoxInRow)
+				else if (isTabInven())
 				{
-					int row5 = (selected - Char.myCharz().arrItemBody.Length) * (CountBoxInRow - 1);
-					int column3 = (GameCanvas.px - xScroll) / (WidthBoxNew + 1);
-					if (column3 >= CountBoxInRow)
-					{
-						selected = -1;
-					}
-					else
-					{
-						selected = selected + row5 + column3;
-					}
+					selected = GetInventorySelectAtPointer(pyOffset);
 				}
 				else if (isTabBox())
 				{
@@ -4046,7 +4033,7 @@ namespace Game1
 					cmRun = -num3 * 100;
 				}
 			}
-			if (isTabInven() && GameCanvas.py < yScroll + 21)
+			if (isTabInven() && !ModFunc.isInventory && GameCanvas.py < yScroll + 21)
 			{
 				selected = 0;
 				updateKeyInvenTab();
@@ -4760,7 +4747,7 @@ namespace Game1
 			}
 			else
 			{
-				currentListLength = checkCurrentListLength(Char.myCharz().arrItemBody.Length + Char.myCharz().arrItemBag.Length / 6);
+				currentListLength = GetNewInventoryRowCount();
 				ITEM_HEIGHT = 29;
 				cmyLim = currentListLength * ITEM_HEIGHT - hScroll + 8;
 				cmy = (cmtoY = cmyLast[currentTabIndex]);
@@ -7599,7 +7586,7 @@ namespace Game1
 			g.setColor(16711680);
 			Item[] arrItemBody = Char.myCharz().arrItemBody;
 			Item[] arrItemBag = Char.myCharz().arrItemBag;
-			currentListLength = checkCurrentListLength(arrItemBody.Length + arrItemBag.Length / 6);
+			currentListLength = GetNewInventoryRowCount();
 			TAB_W_NEW = 1;
 			g.setClip(xScroll, yScroll, wScroll, hScroll);
 			g.translate(0, -cmy);
@@ -9867,7 +9854,7 @@ namespace Game1
 							}
 						}
 					}
-					GameCanvas.menu.startAt(myVector, X, (selected + 1) * ITEM_HEIGHT - cmy + yScroll);
+					GameCanvas.menu.startAt(myVector, X, GetInventoryMenuY(selected));
 					addItemDetail(currItem);
 				}
 				else
@@ -13790,6 +13777,73 @@ namespace Game1
 				return num < arrItem.Length;
 			}
 			return false;
+		}
+
+		private int GetInventoryBagRowCount(Item[] arrItemBag)
+		{
+			int length = (arrItemBag == null) ? 0 : arrItemBag.Length;
+			return (length + CountBoxInRow - 1) / CountBoxInRow;
+		}
+
+		private int GetNewInventoryRowCount()
+		{
+			Item[] arrItemBody = Char.myCharz().arrItemBody;
+			Item[] arrItemBag = Char.myCharz().arrItemBag;
+			return arrItemBody.Length + GetInventoryBagRowCount(arrItemBag);
+		}
+
+		private int GetInventoryRowForSelected(int select)
+		{
+			if (!ModFunc.isInventory || !isTabInven() || select < 0)
+			{
+				return -1;
+			}
+			int bodyLength = Char.myCharz().arrItemBody.Length;
+			if (select < bodyLength)
+			{
+				return select;
+			}
+			int bagIndex = select - bodyLength;
+			if (bagIndex < 0 || bagIndex >= Char.myCharz().arrItemBag.Length)
+			{
+				return -1;
+			}
+			return bodyLength + bagIndex / CountBoxInRow;
+		}
+
+		private int GetInventorySelectAtPointer(int pyOffset)
+		{
+			int row = (cmtoY + pyOffset) / ITEM_HEIGHT;
+			if (row < 0)
+			{
+				return -1;
+			}
+			Item[] arrItemBody = Char.myCharz().arrItemBody;
+			if (row < arrItemBody.Length)
+			{
+				return row;
+			}
+			int column = (GameCanvas.px - xScroll) / (WidthBoxNew + 1);
+			if (column < 0 || column >= CountBoxInRow)
+			{
+				return -1;
+			}
+			int bagIndex = (row - arrItemBody.Length) * CountBoxInRow + column;
+			if (bagIndex < 0 || bagIndex >= Char.myCharz().arrItemBag.Length)
+			{
+				return -1;
+			}
+			return arrItemBody.Length + bagIndex;
+		}
+
+		private int GetInventoryMenuY(int select)
+		{
+			int row = GetInventoryRowForSelected(select);
+			if (row < 0)
+			{
+				row = select;
+			}
+			return (row + 1) * ITEM_HEIGHT - cmy + yScroll;
 		}
 
 		private int GetItemIndexInClanBox(Item item)
