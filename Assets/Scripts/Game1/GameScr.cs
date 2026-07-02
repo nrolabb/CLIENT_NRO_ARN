@@ -87,11 +87,23 @@ namespace Game1
     
     	public Command cmdFocus;
     
-    	public static int d;
-    
-    	public static int hpPotion;
-    
-    	public static SkillPaint[] sks;
+	public static int d;
+
+	public static int hpPotion;
+
+	private const int PeaBgX = 10;
+
+	private const int PeaBgY = 12;
+
+	private const int PeaBgW = 20;
+
+	private const int PeaBgH = 18;
+
+	private const int PeaTextX = 20;
+
+	private const int PeaTextY = 15;
+
+	public static SkillPaint[] sks;
     
     	public static Arrowpaint[] arrs;
     
@@ -5706,8 +5718,8 @@ namespace Game1
     		return false;
     	}
     
-    	private void paintSelectedSkill(mGraphics g)
-    	{
+	private void paintSelectedSkill(mGraphics g)
+	{
     		if (mobCapcha != null)
     		{
     			paintCapcha(g);
@@ -5742,12 +5754,7 @@ namespace Game1
     				{
     					if (isAnalog != 1)
     					{
-    						g.setColor(9670800);
-    						g.fillRect(xHP + 9, yHP + 10, 22, 20);
-    						g.setColor(16777215);
-    						g.fillRect(xHP + 9, yHP + 10 + ((num3 != 0) ? (20 - num3) : 0), 22, (num3 == 0) ? 20 : num3);
-    						g.drawImage((mScreen.keyTouch != 10) ? imgHP1 : imgHP2, xHP, yHP, 0);
-    						mFont.tahoma_7_green2.drawString(g, string.Empty + hpPotion, xHP + 20, yHP + 15, 2);
+    						paintPeaButton(g, (mScreen.keyTouch != 10) ? imgHP1 : imgHP2, xHP, yHP, num3);
     					}
     					else if (isAnalog == 1)
     					{
@@ -5764,12 +5771,7 @@ namespace Game1
     				}
     				else if (isAnalog != 1)
     				{
-    					g.setColor(9670800);
-    					g.fillRect(xHP + 9, yHP + 10 - 6, 22, 20);
-    					g.setColor(16777215);
-    					g.fillRect(xHP + 9, yHP + 10 + ((num3 != 0) ? (20 - num3) : 0) - 6, 22, (num3 == 0) ? 20 : num3);
-    					g.drawImage((mScreen.keyTouch != 10) ? imgHP1 : imgHP2, xHP + 5, yHP - 3, 0);
-    					mFont.tahoma_7_green2.drawString(g, string.Empty + hpPotion, xHP + 22, yHP + 15 - 6, 2);
+    					paintPeaButton(g, (mScreen.keyTouch != 10) ? imgHP1 : imgHP2, xHP + 5, yHP - 3, num3);
     				}
     				else
     				{
@@ -5820,7 +5822,19 @@ namespace Game1
     			paintGamePad(g);
     		}
     	}
-    
+
+	private static void paintPeaButton(mGraphics g, Image image, int iconX, int iconY, int cooldownHeight)
+	{
+		int fillHeight = (cooldownHeight > PeaBgH) ? PeaBgH : cooldownHeight;
+		g.setColor(9670800);
+		g.fillRect(iconX + PeaBgX, iconY + PeaBgY, PeaBgW, PeaBgH);
+		g.setColor(16777215);
+		int fillY = iconY + PeaBgY + ((fillHeight != 0) ? (PeaBgH - fillHeight) : 0);
+		g.fillRect(iconX + PeaBgX, fillY, PeaBgW, (fillHeight == 0) ? PeaBgH : fillHeight);
+		g.drawImage(image, iconX, iconY, 0);
+		mFont.tahoma_7_green2.drawString(g, string.Empty + hpPotion, iconX + PeaTextX, iconY + PeaTextY, 2);
+	}
+
     	public static void startFlyText(string flyString, int x, int y, int dx, int dy, int color)
     	{
     		int num = -1;
