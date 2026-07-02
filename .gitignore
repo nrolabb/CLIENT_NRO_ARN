@@ -25,3 +25,5 @@ library/
 /UserSettings
 /Local
 /out
+*.7z
+*.zip
