@@ -5963,6 +5963,21 @@ namespace Game1
 										continue;
 									}
 									ItemTemplate itemTemplate = ItemTemplates.get(num7);
+									if (itemTemplate == null)
+									{
+										Debug.LogError("Missing body item template id: " + num7 + " slot: " + k);
+										Char.myCharz().arrItemBody[k] = null;
+										int quantity = msg.reader().readInt();
+										string info = msg.reader().readUTF();
+										string content = msg.reader().readUTF();
+										int optionCount = msg.reader().readUnsignedByte();
+										for (int optionIndex = 0; optionIndex < optionCount; optionIndex++)
+										{
+											msg.reader().readShortOptionTemp();
+											msg.reader().ReadParamDQT();
+										}
+										continue;
+									}
 									int num8 = itemTemplate.type;
 									Char.myCharz().arrItemBody[k] = new Item();
 									Char.myCharz().arrItemBody[k].template = itemTemplate;
@@ -6009,6 +6024,21 @@ namespace Game1
 								}
 								Char.myCharz().arrItemBag[m] = new Item();
 								Char.myCharz().arrItemBag[m].template = ItemTemplates.get(num11);
+								if (Char.myCharz().arrItemBag[m].template == null)
+								{
+									Debug.LogError("Missing bag item template id: " + num11 + " slot: " + m);
+									msg.reader().readInt();
+									msg.reader().readUTF();
+									msg.reader().readUTF();
+									sbyte optionCount = msg.reader().readByte();
+									for (int optionIndex = 0; optionIndex < optionCount; optionIndex++)
+									{
+										msg.reader().readShortOptionTemp();
+										msg.reader().ReadParamDQT();
+									}
+									Char.myCharz().arrItemBag[m] = null;
+									continue;
+								}
 								Char.myCharz().arrItemBag[m].quantity = msg.reader().readInt();
 								Char.myCharz().arrItemBag[m].info = msg.reader().readUTF();
 								Char.myCharz().arrItemBag[m].content = msg.reader().readUTF();
@@ -6044,6 +6074,21 @@ namespace Game1
 								}
 								Char.myCharz().arrItemBox[num13] = new Item();
 								Char.myCharz().arrItemBox[num13].template = ItemTemplates.get(num14);
+								if (Char.myCharz().arrItemBox[num13].template == null)
+								{
+									Debug.LogError("Missing box item template id: " + num14 + " slot: " + num13);
+									msg.reader().readInt();
+									msg.reader().readUTF();
+									msg.reader().readUTF();
+									sbyte optionCount = msg.reader().readByte();
+									for (int optionIndex = 0; optionIndex < optionCount; optionIndex++)
+									{
+										msg.reader().readShortOptionTemp();
+										msg.reader().ReadParamDQT();
+									}
+									Char.myCharz().arrItemBox[num13] = null;
+									continue;
+								}
 								Char.myCharz().arrItemBox[num13].quantity = msg.reader().readInt();
 								Char.myCharz().arrItemBox[num13].info = msg.reader().readUTF();
 								Char.myCharz().arrItemBox[num13].content = msg.reader().readUTF();

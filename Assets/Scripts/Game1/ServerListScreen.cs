@@ -632,12 +632,12 @@ namespace Game1
 					lengthServer = new int[3];
 					mResources.loadLanguague(0);
 					string[] serverList = ListIP.Split(',');
-					if (serverList.Length <= 1)
+					if (serverList.Length <= 2)
 					{
 						GetServerList(linkDefault);
 						return;
 					}
-					int serverLength = serverList.Length;
+					int serverLength = serverList.Length - 2;
 					nameServer = new string[serverLength];
 					address = new string[serverLength];
 					port = new short[serverLength];
@@ -659,7 +659,7 @@ namespace Game1
 							nameServer[i] = serverInfo[0];
 							address[i] = serverInfo[1];
 							port[i] = short.Parse(serverInfo[2]);
-							language[i] = 0;
+							language[i] = (sbyte)((serverInfo.Length > 3) ? sbyte.Parse(serverInfo[3].Trim()) : 0);
 							lengthServer[language[i]]++;
 						}
 						catch (Exception ex)

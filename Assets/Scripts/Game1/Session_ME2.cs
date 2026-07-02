@@ -177,10 +177,10 @@ namespace Game1
     				{
     					b = readKey(b);
     				}
-    				if (b == -32 || b == -66 || b == 11 || b == -67 || b == -74 || b == -87)
-    				{
-    					return readMessage2(b);
-    				}
+				if (b == -32 || b == -66 || b == 11 || b == -67 || b == -74 || b == -87 || b == -28 || b == 66)
+				{
+					return readMessage2(b);
+				}
     				int num;
     				if (getKeyComplete)
     				{

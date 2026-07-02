@@ -266,12 +266,16 @@ namespace Game1
     		return item;
     	}
     
-    	public bool isTypeBody()
-    	{
-    		if ((0 <= template.type && template.type < 6) || template.type == 32 || template.type == 35 || template.type == 11 || template.type == 23)
-    		{
-    			return true;
-    		}
+	public bool isTypeBody()
+	{
+		if (template == null)
+		{
+			return false;
+		}
+		if ((0 <= template.type && template.type < 6) || template.type == 32 || template.type == 35 || template.type == 11 || template.type == 23)
+		{
+			return true;
+		}
     		return false;
     	}
     

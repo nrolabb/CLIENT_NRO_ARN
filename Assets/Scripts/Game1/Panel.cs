@@ -8186,13 +8186,13 @@ namespace Game1
 
 		public int getCompare(Item item)
 		{
-			if (item == null)
+			if (item == null || item.template == null)
 			{
 				return -1;
 			}
 			if (item.isTypeBody())
 			{
-				if (item.itemOption == null)
+				if (item.itemOption == null || item.itemOption.Length == 0 || item.itemOption[0] == null)
 				{
 					return -1;
 				}
