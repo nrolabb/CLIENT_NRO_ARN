@@ -96,6 +96,12 @@ namespace Game1
 
 		public ChatTextField chatTField;
 
+		private TField clanChatField;
+
+		private const int CLAN_CHAT_INPUT_HEIGHT = 36;
+
+		private const int CLAN_CHAT_SEND_WIDTH = 54;
+
 		public static string specialInfo;
 
 		public static short spearcialImage;
@@ -2378,6 +2384,13 @@ namespace Game1
 			{
 				return;
 			}
+			if (isShowClanChatInput() && clanChatField != null && clanChatField.isFocus && (GameCanvas.keyPressed[15] || GameCanvas.keyPressed[25]))
+			{
+				sendClanChatInput();
+				GameCanvas.keyPressed[15] = false;
+				GameCanvas.keyPressed[25] = false;
+				return;
+			}
 			if (tabIcon != null && tabIcon.isShow)
 			{
 				tabIcon.updateKey();
@@ -3126,8 +3139,97 @@ namespace Game1
 				updateKeyClanIntrinsicInClanTab();
 				return;
 			}
+			if (updateKeyClanChatInput())
+			{
+				return;
+			}
 			updateKeyScrollView();
 			updateKeyClansOption();
+		}
+
+		private bool isShowClanChatInput()
+		{
+			return type == 0 && mainTabName != null && mainTabName.Length == 5 && currentTabIndex == 3 && isMessage && !isViewClanBox && !isViewClanIntrinsic && Char.myCharz().clan != null;
+		}
+
+		private void ensureClanChatField()
+		{
+			if (clanChatField == null)
+			{
+				clanChatField = new TField();
+				clanChatField.height = mScreen.ITEM_HEIGHT + 2;
+				clanChatField.name = mResources.msg;
+				clanChatField.setMaxTextLenght(80);
+				clanChatField.setIputType(TField.INPUT_TYPE_ANY);
+			}
+			clanChatField.x = xScroll + 5;
+			clanChatField.y = yScroll + hScroll - CLAN_CHAT_INPUT_HEIGHT + 6;
+			clanChatField.width = wScroll - CLAN_CHAT_SEND_WIDTH - 14;
+		}
+
+		private void sendClanChatInput()
+		{
+			if (clanChatField == null)
+			{
+				return;
+			}
+			string text = clanChatField.getText();
+			if (text == null || text.Trim().Equals(string.Empty))
+			{
+				return;
+			}
+			InfoDlg.showWait();
+			Service.gI().clanMessage(0, text, -1);
+			clanChatField.setText(string.Empty);
+			clanChatField.clearKb();
+		}
+
+		private void focusClanChatInput()
+		{
+			if (!isShowClanChatInput())
+			{
+				return;
+			}
+			ensureClanChatField();
+			clanChatField.setFocusWithKb(isFocus: true);
+		}
+
+		private bool updateKeyClanChatInput()
+		{
+			if (!isShowClanChatInput())
+			{
+				if (clanChatField != null)
+				{
+					clanChatField.setFocus(isFocus: false);
+				}
+				return false;
+			}
+			ensureClanChatField();
+			clanChatField.update();
+			int sendX = xScroll + wScroll - CLAN_CHAT_SEND_WIDTH - 5;
+			int sendY = yScroll + hScroll - CLAN_CHAT_INPUT_HEIGHT + 7;
+			int sendH = 24;
+			if (GameCanvas.isPointerJustRelease && GameCanvas.isPointer(sendX, sendY, CLAN_CHAT_SEND_WIDTH, sendH))
+			{
+				SoundMn.gI().buttonClick();
+				sendClanChatInput();
+				GameCanvas.clearAllPointerEvent();
+				return true;
+			}
+			if (GameCanvas.keyAsciiPress != 0 && clanChatField.isFocus)
+			{
+				clanChatField.keyPressed(GameCanvas.keyAsciiPress);
+				GameCanvas.keyAsciiPress = 0;
+				return true;
+			}
+			if (GameCanvas.keyPressed[15] && clanChatField.isFocus)
+			{
+				sendClanChatInput();
+				GameCanvas.keyPressed[15] = false;
+				GameCanvas.keyPressed[(!Main.isPC) ? 5 : 25] = false;
+				return true;
+			}
+			return clanChatField.isFocus;
 		}
 
 		private void updateKeyClanBoxInClanTab()
@@ -4488,7 +4590,8 @@ namespace Game1
 					mResources.bieu_tuongg
 				};
 			}
-			cmyLim = currentListLength * ITEM_HEIGHT - hScroll;
+			int clanChatInputHeight = (isMessage && !isViewClanIntrinsic && Char.myCharz().clan != null) ? CLAN_CHAT_INPUT_HEIGHT : 0;
+			cmyLim = currentListLength * ITEM_HEIGHT - (hScroll - clanChatInputHeight);
 			if (cmyLim < 0)
 			{
 				cmyLim = 0;
@@ -6953,7 +7056,8 @@ namespace Game1
 				mFont.tahoma_7b_dark.drawString(g, clanInfo, xScroll + wScroll / 2, num7_title + 6, mFont.CENTER);
 			}
 
-			g.setClip(xScroll, yScroll + 48, wScroll, hScroll - 48);
+			int clanChatInputHeight = isShowClanChatInput() ? CLAN_CHAT_INPUT_HEIGHT : 0;
+			g.setClip(xScroll, yScroll + 48, wScroll, hScroll - 48 - clanChatInputHeight);
 			g.translate(-cmx, -cmy);
 
 			for (int j = 2; j < currentListLength; j++)
@@ -7169,7 +7273,35 @@ namespace Game1
 					}
 				}
 			}
+			g.translate(cmx, cmy);
+			if (isShowClanChatInput())
+			{
+				paintClanChatInput(g);
+			}
 			paintScrollArrow(g);
+		}
+
+		private void paintClanChatInput(mGraphics g)
+		{
+			ensureClanChatField();
+			int inputY = yScroll + hScroll - CLAN_CHAT_INPUT_HEIGHT;
+			int sendX = xScroll + wScroll - CLAN_CHAT_SEND_WIDTH - 5;
+			int sendY = inputY + 7;
+			int sendH = 24;
+			GameCanvas.resetTrans(g);
+			g.translate(X - cmx, Y);
+			g.setClip(xScroll, inputY, wScroll, CLAN_CHAT_INPUT_HEIGHT);
+			g.setColor(15196114);
+			g.fillRect(xScroll, inputY, wScroll, CLAN_CHAT_INPUT_HEIGHT);
+			g.setColor(0xD6B98F);
+			g.fillRect(xScroll, inputY, wScroll, 1);
+			clanChatField.paint(g);
+			g.setClip(xScroll, inputY, wScroll, CLAN_CHAT_INPUT_HEIGHT);
+			g.drawImage(GameScr.imgLbtn2, sendX + CLAN_CHAT_SEND_WIDTH / 2, sendY + sendH / 2, StaticObj.VCENTER_HCENTER);
+			mFont.tahoma_7b_dark.drawString(g, "Gửi", sendX + CLAN_CHAT_SEND_WIDTH / 2, sendY + 6, mFont.CENTER);
+			g.translate(-g.getTranslateX(), -g.getTranslateY());
+			g.translate(-cmx, 0);
+			g.translate(X, Y);
 		}
 
 		private void paintArchivement(mGraphics g)
@@ -10452,7 +10584,7 @@ namespace Game1
 								isViewClanBox = false;
 								isViewClanIntrinsic = false;
 								initTabClans();
-								chatClan();
+								focusClanChatInput();
 							}
 							else if (cSelected == 1)
 							{
