@@ -27,3 +27,5 @@ library/
 /out
 *.7z
 *.zip
+*.asset
+*.unity

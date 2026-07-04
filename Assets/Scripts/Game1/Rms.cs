@@ -194,10 +194,24 @@ namespace Game1
     	public static void clearAll()
     	{
     		Cout.LogError3("clean rms");
-    		FileInfo[] files = new DirectoryInfo(GetiPhoneDocumentsPath() + "/").GetFiles();
-    		for (int i = 0; i < files.Length; i++)
+    		try
     		{
-    			files[i].Delete();
+    			FileInfo[] files = new DirectoryInfo(GetiPhoneDocumentsPath() + "/").GetFiles();
+    			for (int i = 0; i < files.Length; i++)
+    			{
+    				try
+    				{
+    					files[i].Delete();
+    				}
+    				catch (Exception ex)
+    				{
+    					Debug.LogWarning("Cannot delete RMS file " + files[i].Name + ": " + ex.Message);
+    				}
+    			}
+    		}
+    		catch (Exception ex2)
+    		{
+    			Debug.LogWarning("Cannot clear RMS: " + ex2.Message);
     		}
     	}
     

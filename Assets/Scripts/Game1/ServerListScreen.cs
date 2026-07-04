@@ -92,7 +92,7 @@ namespace Game1
 		{
 			if (imgAnhNen == null)
 			{
-				imgAnhNen = UnityEngine.Resources.Load<UnityEngine.Texture2D>("anhnen");
+				imgAnhNen = UnityEngine.Resources.Load<UnityEngine.Texture2D>("nen4");
 			}
 
 			int num = 4;
@@ -284,7 +284,7 @@ namespace Game1
 			address = new string[array.Length - 2];
 			port = new short[array.Length - 2];
 			language = new sbyte[array.Length - 2];
-			hasConnected = new bool[2];
+			hasConnected = new bool[Math.Max(3, nameServer.Length)];
 			for (int i = 0; i < array.Length - 2; i++)
 			{
 				string[] array2 = Res.split(array[i].Trim(), ":", 0);
@@ -1007,8 +1007,26 @@ namespace Game1
 						break;
 					}
 				case 15:
+					int selectedServer = ipSelect;
 					Rms.clearAll();
-					GameCanvas.startOK(mResources.plsRestartGame, 8885, null);
+					InfoDlg.hide();
+					GameCanvas.currentDialog = null;
+					Session_ME.gI().close();
+					Session_ME2.gI().close();
+					Session_ME.gI().clearSendingMessage();
+					Session_ME2.gI().clearSendingMessage();
+					ipSelect = selectedServer;
+					if (ipSelect < 0 || nameServer == null || ipSelect >= nameServer.Length)
+					{
+						ipSelect = 0;
+					}
+					Rms.saveRMSInt("svselect", ipSelect);
+					Rms.saveRMSInt("lastZoomlevel", mGraphics.zoomLevel);
+					LoadIP();
+					isAutoConect = true;
+					countDieConnect = 0;
+					testConnect = -1;
+					show2();
 					break;
 				case 16:
 					InfoDlg.hide();

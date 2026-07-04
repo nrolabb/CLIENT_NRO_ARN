@@ -42,29 +42,11 @@ namespace Game1
     				SoundMn.gI().loadSound(TileMap.mapID);
     			}
     			SoundMn.gI().getStrOption();
-    			if (Rms.loadRMSInt("svselect") == -1)
-    			{
-    				string[] array = Res.split(ServerListScreen.linkDefault.Trim(), ",", 0);
-    				mResources.loadLanguague(sbyte.Parse(array[array.Length - 2]));
-    				ServerListScreen.nameServer = new string[array.Length - 2];
-    				ServerListScreen.address = new string[array.Length - 2];
-    				ServerListScreen.port = new short[array.Length - 2];
-    				ServerListScreen.language = new sbyte[array.Length - 2];
-    				ServerListScreen.hasConnected = new bool[2];
-    				for (int i = 0; i < array.Length - 2; i++)
-    				{
-    					string[] array2 = Res.split(array[i].Trim(), ":", 0);
-    					ServerListScreen.nameServer[i] = array2[0];
-    					ServerListScreen.address[i] = array2[1];
-    					ServerListScreen.port[i] = short.Parse(array2[2]);
-    					ServerListScreen.language[i] = sbyte.Parse(array2[3].Trim());
-    				}
-    				GameCanvas.serverScr.switchToMe();
-    			}
-    			else
-    			{
-    				ServerListScreen.LoadIP();
-    			}
+				ServerListScreen.LoadIP();
+				if (Rms.loadRMSString("ResVersion") == null)
+				{
+					GameCanvas.serverScreen.show2();
+				}
     		}
     		splashScrStat++;
     		if (splashScrStat >= 150)

@@ -105,11 +105,11 @@ namespace Game1
                 level = Rms.loadRMSInt("levelScreenKN");
                 if (level == 1)
                 {
-                    Screen.SetResolution(720, 320, fullscreen: false);
+                    Screen.SetResolution(1024, 600, fullscreen: false);
                 }
                 else
                 {
-                    Screen.SetResolution(1024, 600, fullscreen: false);
+                    Screen.SetResolution(1600, 900, fullscreen: false);
                 }
             }
             else if (isIPhone)
@@ -427,9 +427,13 @@ namespace Game1
     
         public static void exit()
         {
+            GameCanvas.bRun = false;
+            Session_ME.gI().close();
+            Session_ME2.gI().close();
+            mSystem.gcc();
             if (isPC)
             {
-                main.OnApplicationQuit();
+                Application.Quit();
             }
             else
             {
