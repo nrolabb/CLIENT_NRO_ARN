@@ -7725,25 +7725,25 @@ namespace Game1
 			try
 			{
 				int bodyStartY = yScroll;
-				int bagStartY = bodyStartY + arrItemBody.Length * ITEM_HEIGHT;
+				int bagStartY = bodyStartY + GetInventoryBodyLayoutHeight() + GetInventoryBodyBagGap();
 				for (int j = 0; j < arrItemBody.Length; j++)
 				{
-					int x = xScroll + 29;
-					int y = bodyStartY + j * ITEM_HEIGHT;
-					_ = xScroll;
-					int num7 = xScroll;
-					int num8 = y;
-					int num9 = ITEM_HEIGHT - 1;
-					int num10 = ITEM_HEIGHT - 1;
-					if (y - cmy > yScroll + hScroll || y - cmy < yScroll - ITEM_HEIGHT)
+					int num7;
+					int num8;
+					int num9;
+					int num10;
+					GetInventoryBodySlotRect(j, bodyStartY, out num7, out num8, out num9, out num10);
+					if (num8 - cmy > yScroll + hScroll || num8 - cmy < yScroll - ITEM_HEIGHT)
 					{
 						continue;
 					}
 					GetInventorySelect_isbody(j, newSelected, Char.myCharz().arrItemBody);
-					g.setColor((j == selected) ? 16383818 : 15196114);
-					g.fillRect(x, y, wScroll, ITEM_HEIGHT - 1, 5);
 					g.setColor((j == selected) ? 9541120 : 9993045);
 					Item item = arrItemBody[j];
+					if (item != null)
+					{
+						item.indexUI = j;
+					}
 					if (item != null)
 					{
 						for (int k = 0; k < item.itemOption.Length; k++)
@@ -7774,60 +7774,6 @@ namespace Game1
 					{
 						continue;
 					}
-					mFont mFont2 = mFont.tahoma_7_green2;
-					if (item.itemOption != null)
-					{
-						for (int l = 0; l < item.itemOption.Length; l++)
-						{
-							if (item.itemOption[l].optionTemplate.id == 72)
-							{
-								if (item.itemOption[l].param >= 1 && item.itemOption[l].param <= 5)
-								{
-									mFont2 = GetFont(0);
-								}
-								else if (item.itemOption[l].param >= 6 && item.itemOption[l].param <= 7)
-								{
-									mFont2 = GetFont(8);
-								}
-								else if (item.itemOption[l].param >= 8 && item.itemOption[l].param <= 10)
-								{
-									mFont2 = GetFont(7);
-								}
-							}
-						}
-					}
-					if (ModFunc.isShowID)
-					{
-						mFont2.drawString(g, "[" + item.template.id + "] " + item.template.name, x + 5, y + 1, 0);
-					}
-					else
-					{
-						mFont2.drawString(g, item.template.name, x + 5, y + 1, 0);
-					}
-					string text2 = string.Empty;
-					if (item.itemOption != null)
-					{
-						if (item.itemOption.Length != 0 && item.itemOption[0] != null && item.itemOption[0].IsValidOption())
-						{
-							text2 += item.itemOption[0].getOptionString();
-						}
-						mFont mFont3 = mFont.tahoma_7_blue;
-						if (item.compare < 0 && item.template.type != 5)
-						{
-							mFont3 = mFont.tahoma_7_red;
-						}
-						if (item.itemOption.Length > 1)
-						{
-							for (int i = 1; i < Math.min(item.itemOption.Length, 3); i++)
-							{
-								if (item.itemOption[i] != null && item.itemOption[i].IsValidOption())
-								{
-									text2 = text2 + ", " + item.itemOption[i].getOptionString();
-								}
-							}
-						}
-						mFont3.drawString(g, text2, x + 5, y + 10, mFont.LEFT);
-					}
 					float iconOffset = (j == selected) ? ((float)System.Math.Sin(GameCanvas.gameTick * 0.2f) * 2f) : 0f;
 					SmallImage.drawSmallImage(g, item.template.iconID, num7 + num9 / 2, num8 + num10 / 2 + (int)iconOffset, 0, 3);
 					if (item.itemOption != null)
@@ -7842,6 +7788,8 @@ namespace Game1
 						}
 					}
 				}
+				PaintInventoryBodyCharacter(g, bodyStartY);
+				PaintInventorySeparator(g, bagStartY - GetInventoryBodyBagGap() / 2);
 				for (int num11 = 0; num11 < arrItemBag.Length; num11++)
 				{
 					int num12 = 28;
@@ -7944,6 +7892,84 @@ namespace Game1
 			{
 			}
 			paintScrollArrow(g);
+		}
+
+		private int GetInventoryBodyLayoutHeight()
+		{
+			return ITEM_HEIGHT * 6;
+		}
+
+		private int GetInventoryBodyBagGap()
+		{
+			return 6;
+		}
+
+		private void PaintInventorySeparator(mGraphics g, int y)
+		{
+			g.setColor(16777215);
+			g.fillRect(xScroll, y, wScroll, 1);
+		}
+
+		private int GetInventoryBodyRowCount()
+		{
+			return GetInventoryBodyLayoutHeight() / ITEM_HEIGHT;
+		}
+
+		private void GetInventoryBodySlotRect(int index, int bodyStartY, out int x, out int y, out int w, out int h)
+		{
+			h = WidthBoxNew;
+			if (index < 5)
+			{
+				w = WidthBoxNew;
+				x = xScroll;
+				y = bodyStartY + index * ITEM_HEIGHT;
+				return;
+			}
+			if (index < 10)
+			{
+				w = WidthBoxNew;
+				x = xScroll + wScroll - WidthBoxNew;
+				y = bodyStartY + (index - 5) * ITEM_HEIGHT;
+				return;
+			}
+			int bottomIndex = index - 10;
+			int gap = 1;
+			w = (wScroll - gap * 4) / 5;
+			x = xScroll + bottomIndex * (w + gap);
+			if (bottomIndex == 4)
+			{
+				w = xScroll + wScroll - x;
+			}
+			y = bodyStartY + ITEM_HEIGHT * 5;
+		}
+
+		private int GetInventoryBodySelectAtPointer(int pyOffset)
+		{
+			int contentX = GameCanvas.px;
+			int contentY = yScroll + cmtoY + pyOffset;
+			Item[] arrItemBody = Char.myCharz().arrItemBody;
+			for (int i = 0; i < arrItemBody.Length; i++)
+			{
+				int x;
+				int y;
+				int w;
+				int h;
+				GetInventoryBodySlotRect(i, yScroll, out x, out y, out w, out h);
+				if (contentX >= x && contentX <= x + w && contentY >= y && contentY <= y + h)
+				{
+					return i;
+				}
+			}
+			return -1;
+		}
+
+		private void PaintInventoryBodyCharacter(mGraphics g, int bodyStartY)
+		{
+			int charX = xScroll + wScroll / 2;
+			int charY = bodyStartY + ITEM_HEIGHT * 4 - 15;
+			g.setColor(6047789, 0.15f);
+			g.fillRect(xScroll + WidthBoxNew + 4, bodyStartY + 4, wScroll - WidthBoxNew * 2 - 8, ITEM_HEIGHT * 5 - 8, 5);
+			Char.myCharz().paintCharBody(g, charX, charY, 1, 0, isPaintBag: true);
 		}
 
 		private void paintTab(mGraphics g)
@@ -13919,9 +13945,8 @@ namespace Game1
 
 		private int GetNewInventoryRowCount()
 		{
-			Item[] arrItemBody = Char.myCharz().arrItemBody;
 			Item[] arrItemBag = Char.myCharz().arrItemBag;
-			return arrItemBody.Length + GetInventoryBagRowCount(arrItemBag);
+			return GetInventoryBodyRowCount() + GetInventoryBagRowCount(arrItemBag);
 		}
 
 		private int GetInventoryRowForSelected(int select)
@@ -13933,14 +13958,19 @@ namespace Game1
 			int bodyLength = Char.myCharz().arrItemBody.Length;
 			if (select < bodyLength)
 			{
-				return select;
+				int x;
+				int y;
+				int w;
+				int h;
+				GetInventoryBodySlotRect(select, yScroll, out x, out y, out w, out h);
+				return (y - yScroll) / ITEM_HEIGHT;
 			}
 			int bagIndex = select - bodyLength;
 			if (bagIndex < 0 || bagIndex >= Char.myCharz().arrItemBag.Length)
 			{
 				return -1;
 			}
-			return bodyLength + bagIndex / CountBoxInRow;
+			return GetInventoryBodyRowCount() + bagIndex / CountBoxInRow;
 		}
 
 		private int GetInventorySelectAtPointer(int pyOffset)
@@ -13951,16 +13981,16 @@ namespace Game1
 				return -1;
 			}
 			Item[] arrItemBody = Char.myCharz().arrItemBody;
-			if (row < arrItemBody.Length)
+			if (row < GetInventoryBodyRowCount())
 			{
-				return row;
+				return GetInventoryBodySelectAtPointer(pyOffset);
 			}
 			int column = (GameCanvas.px - xScroll) / (WidthBoxNew + 1);
 			if (column < 0 || column >= CountBoxInRow)
 			{
 				return -1;
 			}
-			int bagIndex = (row - arrItemBody.Length) * CountBoxInRow + column;
+			int bagIndex = (row - GetInventoryBodyRowCount()) * CountBoxInRow + column;
 			if (bagIndex < 0 || bagIndex >= Char.myCharz().arrItemBag.Length)
 			{
 				return -1;
@@ -13970,6 +14000,15 @@ namespace Game1
 
 		private int GetInventoryMenuY(int select)
 		{
+			if (ModFunc.isInventory && isTabInven() && select >= 0 && select < Char.myCharz().arrItemBody.Length)
+			{
+				int x;
+				int y;
+				int w;
+				int h;
+				GetInventoryBodySlotRect(select, yScroll, out x, out y, out w, out h);
+				return y + h - cmy;
+			}
 			int row = GetInventoryRowForSelected(select);
 			if (row < 0)
 			{
