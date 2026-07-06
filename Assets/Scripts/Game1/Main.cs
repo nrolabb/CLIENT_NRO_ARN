@@ -69,6 +69,10 @@ namespace Game1
         private long timeup;
     
         private bool isRun;
+
+        private const int DefaultLowFrameRate = 30;
+
+        private const int DefaultHighFrameRate = 60;
     
         public static int waitTick;
     
@@ -99,6 +103,7 @@ namespace Game1
             mainThreadName = Thread.CurrentThread.Name;
             isPC = Application.platform != RuntimePlatform.Android && Application.platform != RuntimePlatform.IPhonePlayer;
             isIPhone = (IphoneVersionApp = Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android);
+            ApplyFramePacing(Rms.loadRMSInt("isHighFps") != 0);
             started = true;
             if (isPC && !isIPhone)
             {
@@ -118,6 +123,68 @@ namespace Game1
                 GameCanvas.isTouch = true;
             }
             ModFunc.GI().LoadGame();
+        }
+
+        public static int ApplyFramePacing(bool highFps)
+        {
+            int targetFrameRate = ResolveTargetFrameRate(highFps);
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = targetFrameRate;
+            Time.fixedDeltaTime = 1f / targetFrameRate;
+            Time.maximumDeltaTime = Mathf.Max(0.1f, Time.fixedDeltaTime * 3f);
+            return targetFrameRate;
+        }
+
+        private static int ResolveTargetFrameRate(bool highFps)
+        {
+            if (!highFps)
+            {
+                return DefaultLowFrameRate;
+            }
+            int refreshRate = GetDisplayRefreshRate();
+            if (refreshRate <= 0)
+            {
+                return DefaultHighFrameRate;
+            }
+            if (refreshRate >= 50 && refreshRate <= 75)
+            {
+                return refreshRate;
+            }
+            if (refreshRate % DefaultHighFrameRate == 0)
+            {
+                return DefaultHighFrameRate;
+            }
+            int bestFrameRate = DefaultHighFrameRate;
+            int bestError = int.MaxValue;
+            for (int divisor = 2; divisor <= 6; divisor++)
+            {
+                int candidate = Mathf.RoundToInt((float)refreshRate / divisor);
+                if (candidate < 45 || candidate > 75)
+                {
+                    continue;
+                }
+                int error = Mathf.Abs(DefaultHighFrameRate - candidate);
+                if (error < bestError)
+                {
+                    bestError = error;
+                    bestFrameRate = candidate;
+                }
+            }
+            return bestFrameRate;
+        }
+
+        private static int GetDisplayRefreshRate()
+        {
+#if UNITY_2022_2_OR_NEWER
+            double refreshRateRatio = Screen.currentResolution.refreshRateRatio.value;
+            if (refreshRateRatio > 0.0)
+            {
+                return Mathf.RoundToInt((float)refreshRateRatio);
+            }
+#endif
+#pragma warning disable CS0618
+            return Screen.currentResolution.refreshRate;
+#pragma warning restore CS0618
         }
     
         private void SetInit()

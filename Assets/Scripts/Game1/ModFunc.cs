@@ -2410,14 +2410,7 @@ namespace Game1
 		public void ChangeFPSTarget()
 		{
 			Rms.saveRMSInt("isHighFps", isHighFps ? 1 : 0);
-			if (isHighFps)
-			{
-				Application.targetFrameRate = 60;
-			}
-			else
-			{
-				Application.targetFrameRate = 30;
-			}
+			Main.ApplyFramePacing(isHighFps);
 		}
 
 		public static void changeStatusEffectInven()
