@@ -6634,7 +6634,8 @@ namespace Game1
 							int num = d.readShort();
 							for (int j = 0; j < num; j++)
 							{
-								ItemTemplates.add(new ItemTemplate((short)j, d.readByte(), d.readByte(), d.readUTF(), d.readUTF(), d.readByte(), d.readInt(), d.readShort(), d.readShort(), d.readBoolean()));
+								short realId = d.readShort();
+								ItemTemplates.add(new ItemTemplate(realId, d.readByte(), d.readByte(), d.readUTF(), d.readUTF(), d.readByte(), d.readInt(), d.readShort(), d.readShort(), d.readBoolean()));
 							}
 							if (isSave)
 							{
@@ -6647,11 +6648,11 @@ namespace Game1
 						}
 					case 2:
 						{
-							short num2 = d.readShort();
-							int num3 = d.readShort();
-							for (int k = num2; k < num3; k++)
+							int count2 = d.readShort();
+							for (int k = 0; k < count2; k++)
 							{
-								ItemTemplates.add(new ItemTemplate((short)k, d.readByte(), d.readByte(), d.readUTF(), d.readUTF(), d.readByte(), d.readInt(), d.readShort(), d.readShort(), d.readBoolean()));
+								short realId = d.readShort();
+								ItemTemplates.add(new ItemTemplate(realId, d.readByte(), d.readByte(), d.readUTF(), d.readUTF(), d.readByte(), d.readInt(), d.readShort(), d.readShort(), d.readBoolean()));
 							}
 							if (isSave)
 							{
