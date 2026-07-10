@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
+using System.Collections.Concurrent;
 using System.Text;
 using System.Threading;
 using UnityEngine;
@@ -266,7 +267,7 @@ namespace Game1
     
     	private long timeWaitConnect;
     
-    	public static MyVector recieveMsg = new MyVector();
+	public static ConcurrentQueue<Message> recieveMsg = new ConcurrentQueue<Message>();
     
     	public void clearSendingMessage()
     	{
@@ -445,28 +446,24 @@ namespace Game1
     		}
     		else
     		{
-    			recieveMsg.addElement(msg);
+			recieveMsg.Enqueue(msg);
     		}
     	}
     
-    	public static void update()
-    	{
-    		while (recieveMsg.size() > 0)
-    		{
-    			Message message = (Message)recieveMsg.elementAt(0);
-    			if (!Controller.isStopReadMessage)
-    			{
-    				if (message == null)
-    				{
-    					recieveMsg.removeElementAt(0);
-    					break;
-    				}
-    				messageHandler.onMessage(message);
-    				recieveMsg.removeElementAt(0);
-    				continue;
-    			}
-    			break;
-    		}
+	public static void update(int maxMessages = 100)
+	{
+		int processed = 0;
+		while (processed < maxMessages && recieveMsg.TryDequeue(out Message message))
+		{
+			if (!Controller.isStopReadMessage)
+			{
+				messageHandler.onMessage(message);
+				processed++;
+				continue;
+			}
+			recieveMsg.Enqueue(message);
+			break;
+		}
     	}
     
     	public void close()

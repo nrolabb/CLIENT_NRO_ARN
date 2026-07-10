@@ -73,6 +73,10 @@ namespace Game1
         private const int DefaultLowFrameRate = 30;
 
         private const int DefaultHighFrameRate = 60;
+
+        private const int MaxNetworkMessagesPerTick = 100;
+
+        public static bool isInBackground;
     
         public static int waitTick;
     
@@ -103,6 +107,7 @@ namespace Game1
             mainThreadName = Thread.CurrentThread.Name;
             isPC = Application.platform != RuntimePlatform.Android && Application.platform != RuntimePlatform.IPhonePlayer;
             isIPhone = (IphoneVersionApp = Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android);
+            Application.runInBackground = true;
             ApplyFramePacing(Rms.loadRMSInt("isHighFps") != 0);
             started = true;
             if (isPC && !isIPhone)
@@ -194,14 +199,8 @@ namespace Game1
     
         private void OnHideUnity(bool isGameShown)
         {
-            if (!isGameShown)
-            {
-                Time.timeScale = 0f;
-            }
-            else
-            {
-                Time.timeScale = 1f;
-            }
+            isInBackground = !isGameShown;
+            AudioListener.pause = !isGameShown;
         }
     
         private void OnGUI()
@@ -223,9 +222,7 @@ namespace Game1
             fps++;
             if (TabMn.tab == TabE.Tab1)
                 checkInput();
-            Session_ME.update();
-            Session_ME2.update();
-            if (TabMn.tab == TabE.Tab1 && Event.current.type.Equals(EventType.Repaint) && paintCount <= updateCount)
+            if (!isInBackground && TabMn.tab == TabE.Tab1 && Event.current.type.Equals(EventType.Repaint) && paintCount <= updateCount)
             {
                 if (GameMidlet.gameCanvas != null)
                 {
@@ -261,7 +258,6 @@ namespace Game1
                 {
                     IMEI = GetMacAddress();
                 }
-                isPC = true;
                 if (isPC && !isIPhone)
                 {
                     Screen.fullScreen = false;
@@ -364,6 +360,8 @@ namespace Game1
                 up++;
                 setsizeChange();
                 updateCount++;
+                Session_ME.update(MaxNetworkMessagesPerTick);
+                Session_ME2.update(MaxNetworkMessagesPerTick);
                 ipKeyboard.update();
                 if (GameMidlet.gameCanvas != null)
                 {
@@ -469,26 +467,18 @@ namespace Game1
         }
         private void OnApplicationPause(bool paused)
         {
+            isInBackground = paused;
             isResume = false;
-            if (paused)
-            {
-                if (GameCanvas.isWaiting())
-                {
-                    isQuitApp = true;
-                }
-            }
-            else
+            AudioListener.pause = paused;
+            if (!paused)
             {
                 isResume = true;
+                ApplyFramePacing(Rms.loadRMSInt("isHighFps") != 0);
             }
-            if (TouchScreenKeyboard.visible)
+            if (paused && TouchScreenKeyboard.visible)
             {
                 TField.kb.active = false;
                 TField.kb = null;
-            }
-            if (isQuitApp)
-            {
-                Application.Quit();
             }
         }
     

@@ -4,6 +4,7 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Sockets;
+using System.Collections.Concurrent;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -155,11 +156,7 @@ namespace Game1
     			int num = readKey(dis.ReadSByte()) + 128;
     			int num2 = readKey(dis.ReadSByte()) + 128;
     			int num4 = ((readKey(dis.ReadSByte()) + 128) * 256 + num2) * 256 + num;
-    			if (cmd == -28)
-    			{
-    				Debug.Log("data - length" + num4);
-    			}
-    			sbyte[] array = new sbyte[num4];
+			sbyte[] array = new sbyte[num4];
     			Buffer.BlockCopy(dis.ReadBytes(num4), 0, array, 0, num4);
     			recvByteCount += 5 + num4;
     			int num6 = recvByteCount + sendByteCount;
@@ -274,7 +271,7 @@ namespace Game1
     
     	public static int count;
     
-    	public static MyVector recieveMsg = new MyVector();
+	public static ConcurrentQueue<Message> recieveMsg = new ConcurrentQueue<Message>();
     
     	public void clearSendingMessage()
     	{
@@ -462,28 +459,24 @@ namespace Game1
     		}
     		else
     		{
-    			recieveMsg.addElement(msg);
+			recieveMsg.Enqueue(msg);
     		}
     	}
     
-    	public static void update()
-    	{
-    		while (recieveMsg.size() > 0)
-    		{
-    			Message message = (Message)recieveMsg.elementAt(0);
-    			if (!Controller.isStopReadMessage)
-    			{
-    				if (message == null)
-    				{
-    					recieveMsg.removeElementAt(0);
-    					break;
-    				}
-    				messageHandler.onMessage(message);
-    				recieveMsg.removeElementAt(0);
-    				continue;
-    			}
-    			break;
-    		}
+	public static void update(int maxMessages = 100)
+	{
+		int processed = 0;
+		while (processed < maxMessages && recieveMsg.TryDequeue(out Message message))
+		{
+			if (!Controller.isStopReadMessage)
+			{
+				messageHandler.onMessage(message);
+				processed++;
+				continue;
+			}
+			recieveMsg.Enqueue(message);
+			break;
+		}
     	}
     
     	public void close()
