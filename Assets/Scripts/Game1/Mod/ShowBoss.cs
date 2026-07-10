@@ -36,42 +36,68 @@ namespace Game1.Mod
 
 		public DateTime AppearTime;
 
+		public bool isValid;
+
 		public ShowBoss(string a)
 		{
-			if (a.Contains("tiêu diệt"))
+			if (string.IsNullOrEmpty(a))
 			{
-				a = a.Replace(" vừa tiêu diệt được", "|");
-				a = a.Replace(" mọi người đều ngưỡng mộ", "|");
-				a = a.Replace(" -> ", "|");
-				a = a.Replace("(Đạo Tôn)", "|");
-				a = a.Replace(" Kill Liên Sát ", "|");
-				string[] array = a.Split('|');
-				playerKill = array[0].Trim();
-				nameBoss = array[1].Trim();
+				return;
+			}
+
+			string text = a.Trim();
+			string lower = text.ToLower();
+			const string spawnMarker = " vừa xuất hiện tại ";
+			int spawnIndex = lower.IndexOf(spawnMarker);
+			if (lower.StartsWith("boss ") && spawnIndex > 5)
+			{
+				nameBoss = text.Substring(5, spawnIndex - 5).Trim();
+				mapName = text.Substring(spawnIndex + spawnMarker.Length).Trim();
+				const string zoneMarker = " khu vực";
+				int zoneIndex = mapName.ToLower().IndexOf(zoneMarker);
+				if (zoneIndex >= 0)
+				{
+					mapName = mapName.Substring(0, zoneIndex).Trim();
+				}
+				mapID = ModFunc.GI().GetMapID(mapName);
+				isValid = nameBoss.Length > 0 && mapName.Length > 0;
+			}
+			else
+			{
+				string[] killMarkers = { ": đã tiêu diệt được ", " vừa tiêu diệt được " };
+				int killIndex = -1;
+				string killMarker = null;
+				for (int i = 0; i < killMarkers.Length; i++)
+				{
+					killIndex = lower.IndexOf(killMarkers[i]);
+					if (killIndex > 0)
+					{
+						killMarker = killMarkers[i];
+						break;
+					}
+				}
+				if (killMarker == null)
+				{
+					return;
+				}
+				playerKill = text.Substring(0, killIndex).Trim();
+				nameBoss = text.Substring(killIndex + killMarker.Length).Trim();
+				string admirationMarker = " mọi người đều ngưỡng mộ";
+				int admirationIndex = nameBoss.ToLower().IndexOf(admirationMarker);
+				if (admirationIndex >= 0)
+				{
+					nameBoss = nameBoss.Substring(0, admirationIndex).Trim();
+				}
 				mapName = "";
 				mapID = -1;
-				AppearTime = DateTime.Now;
-				time = (long)(AppearTime - new DateTime(1970, 1, 1)).TotalSeconds;
 				startShowTime = mSystem.currentTimeMillis();
 				startX = -GameCanvas.w;
 				targetX = 100;
 				currentX = startX;
 				isShowing = true;
 				isDone = false;
-				lock (lockObject)
-				{
-					yPos = 65 + ModFunc.killedBossNotif.size() * VERTICAL_SPACING;
-					ModFunc.killedBossNotif.addElement(this);
-					return;
-				}
+				isValid = playerKill.Length > 0 && nameBoss.Length > 0;
 			}
-			a = a.Replace(a.Substring(0, 5), "|");
-			a = a.Replace(" vừa xuất hiện tại", "|");
-			a = a.Replace(" khu vực", "|");
-			string[] array2 = a.Split('|');
-			nameBoss = array2[1].Trim();
-			mapName = array2[2].Trim();
-			mapID = ModFunc.GI().GetMapID(mapName);
 			AppearTime = DateTime.Now;
 			time = (long)(AppearTime - new DateTime(1970, 1, 1)).TotalSeconds;
 		}
@@ -242,12 +268,34 @@ namespace Game1.Mod
 
 		public static void HandleChatVip(string chatVip)
 		{
+			if (string.IsNullOrEmpty(chatVip))
+			{
+				return;
+			}
 			string chatLower = chatVip.Trim().ToLower();
+			bool isSpawn = chatLower.StartsWith("boss ") && chatLower.Contains(" vừa xuất hiện tại ");
+			bool isKilled = chatLower.Contains(": đã tiêu diệt được ") || chatLower.Contains(" vừa tiêu diệt được ");
+			if (!isSpawn && !isKilled)
+			{
+				return;
+			}
 			ShowBoss notification = new ShowBoss(chatVip);
-			if (chatLower.Contains("boss") && chatLower.Contains("xuất hiện"))
+			if (!notification.isValid)
+			{
+				return;
+			}
+			if (isSpawn)
 			{
 				lock (lockObject)
 				{
+					for (int i = ModFunc.activeBossNotif.size() - 1; i >= 0; i--)
+					{
+						ShowBoss activeBoss = (ShowBoss)ModFunc.activeBossNotif.elementAt(i);
+						if (activeBoss.nameBoss == notification.nameBoss)
+						{
+							ModFunc.activeBossNotif.removeElementAt(i);
+						}
+					}
 					ModFunc.activeBossNotif.addElement(notification);
 					if (ModFunc.activeBossNotif.size() > 5)
 					{
@@ -256,12 +304,16 @@ namespace Game1.Mod
 					return;
 				}
 			}
-			if (!chatLower.Contains("tiêu diệt"))
-			{
-				return;
-			}
 			lock (lockObject)
 			{
+				for (int i = ModFunc.activeBossNotif.size() - 1; i >= 0; i--)
+				{
+					ShowBoss activeBoss = (ShowBoss)ModFunc.activeBossNotif.elementAt(i);
+					if (activeBoss.nameBoss == notification.nameBoss)
+					{
+						ModFunc.activeBossNotif.removeElementAt(i);
+					}
+				}
 				if (ModFunc.killedBossNotif.size() >= 5)
 				{
 					ModFunc.killedBossNotif.removeElementAt(0);

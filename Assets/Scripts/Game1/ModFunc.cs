@@ -482,6 +482,9 @@ namespace Game1
 		{
 			switch (key)
 			{
+				case 98:
+					Service.gI().requestAdminBossList();
+					break;
 				case 97:
 					MoveTo(Char.myCharz().cx - 100, Char.myCharz().cy);
 					break;

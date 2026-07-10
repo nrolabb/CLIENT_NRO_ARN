@@ -29,6 +29,27 @@ namespace Game1
 			return instance;
 		}
 
+		public void requestAdminBossList()
+		{
+			Message message = null;
+			try
+			{
+				message = new Message((sbyte)125);
+				session.sendMessage(message);
+			}
+			catch (Exception ex)
+			{
+				ex.StackTrace.ToString();
+			}
+			finally
+			{
+				if (message != null)
+				{
+					message.cleanup();
+				}
+			}
+		}
+
 		public void gotoPlayer(int id)
 		{
 			Message message = null;
