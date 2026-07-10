@@ -115,7 +115,8 @@ namespace Game1
 		}
 
 		public void onMessage(Message msg)
-		{
+	{
+		UnityEngine.Debug.Log(">>> RECEIVE CMD: " + msg.command);
 			GameCanvas.debugSession.removeAllElements();
 			GameCanvas.debug("SA1", 2);
 			try
@@ -2091,7 +2092,7 @@ namespace Game1
 							Char.myPetz().cMaxStamina = msg.reader().readShort();
 							Char.myPetz().cCriticalFull = msg.reader().readByte();
 							Char.myPetz().cDefull = msg.reader().DefShotToLong();
-							Char.myPetz().arrPetSkill = new Skill[msg.reader().readByte()];
+							Char.myPetz().arrPetSkill = new Skill[msg.reader().readUnsignedByte()];
 							for (int num154 = 0; num154 < Char.myPetz().arrPetSkill.Length; num154++)
 							{
 								short num155 = msg.reader().readShort();
@@ -2189,7 +2190,7 @@ namespace Game1
 							Char.MyPet2z().cMaxStamina = msg.reader().readShort();
 							Char.MyPet2z().cCriticalFull = msg.reader().readByte();
 							Char.MyPet2z().cDefull = msg.reader().readIntToLongDQT();
-							Char.MyPet2z().arrPetSkill = new Skill[msg.reader().readByte()];
+							Char.MyPet2z().arrPetSkill = new Skill[msg.reader().readUnsignedByte()];
 							for (int k = 0; k < Char.MyPet2z().arrPetSkill.Length; k++)
 							{
 								short num48 = msg.reader().readShort();
@@ -2453,7 +2454,7 @@ namespace Game1
 								try
 								{
 									typePaint2 = msg.reader().readByte();
-									targets = new Point[msg.reader().readByte()];
+									targets = new Point[msg.reader().readUnsignedByte()];
 									for (int num198 = 0; num198 < targets.Length; num198++)
 									{
 										targets[num198] = new Point
@@ -3378,7 +3379,7 @@ namespace Game1
 							str3 = Res.changeString(str3);
 							string str4 = msg.reader().readUTF();
 							str4 = Res.changeString(str4);
-							string[] array14 = new string[msg.reader().readByte()];
+							string[] array14 = new string[msg.reader().readUnsignedByte()];
 							string[] array15 = new string[array14.Length];
 							GameScr.tasks = new int[array14.Length];
 							GameScr.mapTasks = new int[array14.Length];
@@ -3731,7 +3732,7 @@ namespace Game1
 								if (npc.template.npcTemplateId == npcId && npc.Equals(Char.myCharz().npcFocus))
 								{
 									string chat = msg.reader().readUTF();
-									string[] menu = new string[msg.reader().readByte()];
+									string[] menu = new string[msg.reader().readUnsignedByte()];
 									for (int num183 = 0; num183 < menu.Length; num183++)
 									{
 										menu[num183] = msg.reader().readUTF();
@@ -3747,7 +3748,7 @@ namespace Game1
 							}
 							Npc npc2 = new Npc(npcId, 0, -100, 100, npcId, GameScr.info1.charId[Char.myCharz().cgender][2]);
 							string chat2 = msg.reader().readUTF();
-							string[] menu2 = new string[msg.reader().readByte()];
+							string[] menu2 = new string[msg.reader().readUnsignedByte()];
 							for (int num184 = 0; num184 < menu2.Length; num184++)
 							{
 								menu2[num184] = msg.reader().readUTF();
@@ -3871,7 +3872,7 @@ namespace Game1
 								@char.setSkillPaint(GameScr.sks[msg.reader().readUnsignedByte()], 1);
 							}
 							GameCanvas.debug("SA76v2", 2);
-							@char.attMobs = new Mob[msg.reader().readByte()];
+							@char.attMobs = new Mob[msg.reader().readUnsignedByte()];
 							for (int num156 = 0; num156 < @char.attMobs.Length; num156++)
 							{
 								Mob mob3 = (Mob)GameScr.vMob.elementAt(msg.reader().readByte());
@@ -4008,7 +4009,7 @@ namespace Game1
 								{
 									char2.setSkillPaint(GameScr.sks[num4], 1);
 								}
-								Char[] array = new Char[msg.reader().readByte()];
+								Char[] array = new Char[msg.reader().readUnsignedByte()];
 								for (num = 0; num < array.Length; num++)
 								{
 									num3 = msg.reader().readInt();
@@ -4339,7 +4340,10 @@ namespace Game1
 								if (char14.charID == num287)
 								{
 									GameCanvas.debug("SA8x2y" + num288, 2);
-									char14.moveTo(msg.reader().readShort(), msg.reader().readShort(), 0);
+									short moveX = msg.reader().readShort();
+																short moveY = msg.reader().readShort();
+																int moveType = (msg.reader().available() > 0) ? msg.reader().readByte() : 0;
+																char14.moveTo(moveX, moveY, moveType);
 									char14.lastUpdateTime = mSystem.currentTimeMillis();
 									break;
 								}
@@ -4666,7 +4670,17 @@ namespace Game1
 						{
 							int num280 = msg.reader().readInt();
 							string text8 = msg.reader().readUTF();
-							((Char.myCharz().charID != num280) ? GameScr.findCharInMap(num280) : Char.myCharz())?.addInfo(text8);
+							Char chatChar = (Char.myCharz().charID != num280) ? GameScr.findCharInMap(num280) : Char.myCharz();
+													int chatDuration = (msg.reader().available() >= 4) ? msg.reader().readInt() : 0;
+							if (chatDuration > 0)
+							{
+								text8 = text8.Replace("\u200B", string.Empty);
+								chatChar?.addInfoForDuration(text8, chatDuration);
+													}
+													else
+													{
+														chatChar?.addInfo(text8);
+													}
 							break;
 						}
 					case 18:
@@ -4746,20 +4760,20 @@ namespace Game1
 		private void createSkill(myReader d)
 		{
 			GameScr.vcSkill = d.readByte();
-			GameScr.gI().sOptionTemplates = new SkillOptionTemplate[d.readByte()];
+			GameScr.gI().sOptionTemplates = new SkillOptionTemplate[d.readUnsignedByte()];
 			for (int i = 0; i < GameScr.gI().sOptionTemplates.Length; i++)
 			{
 				GameScr.gI().sOptionTemplates[i] = new SkillOptionTemplate();
 				GameScr.gI().sOptionTemplates[i].id = i;
 				GameScr.gI().sOptionTemplates[i].name = d.readUTF();
 			}
-			GameScr.nClasss = new NClass[d.readByte()];
+			GameScr.nClasss = new NClass[d.readUnsignedByte()];
 			for (int j = 0; j < GameScr.nClasss.Length; j++)
 			{
 				GameScr.nClasss[j] = new NClass();
 				GameScr.nClasss[j].classId = j;
 				GameScr.nClasss[j].name = d.readUTF();
-				GameScr.nClasss[j].skillTemplates = new SkillTemplate[d.readByte()];
+				GameScr.nClasss[j].skillTemplates = new SkillTemplate[d.readUnsignedByte()];
 				for (int k = 0; k < GameScr.nClasss[j].skillTemplates.Length; k++)
 				{
 					GameScr.nClasss[j].skillTemplates[k] = new SkillTemplate();
@@ -4776,7 +4790,7 @@ namespace Game1
 						lineWidth = 100;
 					}
 					GameScr.nClasss[j].skillTemplates[k].description = mFont.tahoma_7_green2.splitFontArray(d.readUTF(), lineWidth);
-					GameScr.nClasss[j].skillTemplates[k].skills = new Skill[d.readByte()];
+					GameScr.nClasss[j].skillTemplates[k].skills = new Skill[d.readUnsignedByte()];
 					for (int l = 0; l < GameScr.nClasss[j].skillTemplates[k].skills.Length; l++)
 					{
 						GameScr.nClasss[j].skillTemplates[k].skills[l] = new Skill();
@@ -4806,7 +4820,7 @@ namespace Game1
 			{
 				TileMap.mapNames[i] = d.readUTF();
 			}
-			Npc.arrNpcTemplate = new NpcTemplate[d.readByte()];
+			Npc.arrNpcTemplate = new NpcTemplate[d.readUnsignedByte()];
 			for (sbyte b = 0; b < Npc.arrNpcTemplate.Length; b++)
 			{
 				Npc.arrNpcTemplate[b] = new NpcTemplate();
@@ -4815,17 +4829,17 @@ namespace Game1
 				Npc.arrNpcTemplate[b].headId = d.readShort();
 				Npc.arrNpcTemplate[b].bodyId = d.readShort();
 				Npc.arrNpcTemplate[b].legId = d.readShort();
-				Npc.arrNpcTemplate[b].menu = new string[d.readByte()][];
+				Npc.arrNpcTemplate[b].menu = new string[d.readUnsignedByte()][];
 				for (int j = 0; j < Npc.arrNpcTemplate[b].menu.Length; j++)
 				{
-					Npc.arrNpcTemplate[b].menu[j] = new string[d.readByte()];
+					Npc.arrNpcTemplate[b].menu[j] = new string[d.readUnsignedByte()];
 					for (int k = 0; k < Npc.arrNpcTemplate[b].menu[j].Length; k++)
 					{
 						Npc.arrNpcTemplate[b].menu[j][k] = d.readUTF();
 					}
 				}
 			}
-			Mob.arrMobTemplate = new MobTemplate[d.readByte()];
+			Mob.arrMobTemplate = new MobTemplate[d.readUnsignedByte()];
 			for (sbyte b2 = 0; b2 < Mob.arrMobTemplate.Length; b2++)
 			{
 				Mob.arrMobTemplate[b2] = new MobTemplate();
@@ -5868,7 +5882,7 @@ namespace Game1
 						}
 					case 1:
 						GameCanvas.debug("SA13", 2);
-						Char.myCharz().nClass = GameScr.nClasss[msg.reader().readByte()];
+						Char.myCharz().nClass = GameScr.nClasss[msg.reader().readUnsignedByte()];
 						Char.myCharz().cTiemNang = msg.reader().readLong();
 						Char.myCharz().vSkill.removeAllElements();
 						Char.myCharz().vSkillFight.removeAllElements();
@@ -5932,7 +5946,7 @@ namespace Game1
 							Char.myCharz().applyCharLevelPercent();
 							Char.myCharz().eff5BuffHp = msg.reader().readShort();
 							Char.myCharz().eff5BuffMp = msg.reader().readShort();
-							Char.myCharz().nClass = GameScr.nClasss[msg.reader().readByte()];
+							Char.myCharz().nClass = GameScr.nClasss[msg.reader().readUnsignedByte()];
 							Char.myCharz().vSkill.removeAllElements();
 							Char.myCharz().vSkillFight.removeAllElements();
 							GameScr.gI().dHP = Char.myCharz().cHP;
@@ -5951,7 +5965,7 @@ namespace Game1
 							Char.myCharz().xuStr = mSystem.numberTostring(Char.myCharz().xu);
 							Char.myCharz().luongStr = mSystem.numberTostring(Char.myCharz().luong);
 							Char.myCharz().luongKhoaStr = mSystem.numberTostring(Char.myCharz().luongKhoa);
-							Char.myCharz().arrItemBody = new Item[msg.reader().readByte()];
+							Char.myCharz().arrItemBody = new Item[msg.reader().readUnsignedByte()];
 							try
 							{
 								Char.myCharz().setDefaultPart();
@@ -6013,7 +6027,7 @@ namespace Game1
 							{
 								Debug.LogException(exception);
 							}
-							Char.myCharz().arrItemBag = new Item[msg.reader().readByte()];
+							Char.myCharz().arrItemBag = new Item[msg.reader().readUnsignedByte()];
 							GameScr.hpPotion = 0;
 							for (int m = 0; m < Char.myCharz().arrItemBag.Length; m++)
 							{
@@ -6063,7 +6077,7 @@ namespace Game1
 									GameScr.hpPotion += Char.myCharz().arrItemBag[m].quantity;
 								}
 							}
-							Char.myCharz().arrItemBox = new Item[msg.reader().readByte()];
+							Char.myCharz().arrItemBox = new Item[msg.reader().readUnsignedByte()];
 							GameCanvas.panel.hasUse = 0;
 							for (int num13 = 0; num13 < Char.myCharz().arrItemBox.Length; num13++)
 							{
@@ -6092,7 +6106,7 @@ namespace Game1
 								Char.myCharz().arrItemBox[num13].quantity = msg.reader().readInt();
 								Char.myCharz().arrItemBox[num13].info = msg.reader().readUTF();
 								Char.myCharz().arrItemBox[num13].content = msg.reader().readUTF();
-								Char.myCharz().arrItemBox[num13].itemOption = new ItemOption[msg.reader().readByte()];
+								Char.myCharz().arrItemBox[num13].itemOption = new ItemOption[msg.reader().readUnsignedByte()];
 								for (int num15 = 0; num15 < Char.myCharz().arrItemBox[num13].itemOption.Length; num15++)
 								{
 									int num16 = msg.reader().readShortOptionTemp();
@@ -6512,7 +6526,7 @@ namespace Game1
 				c.isInvisiblez = msg.reader().readBoolean();
 				c.cTypePk = msg.reader().readByte();
 				Res.outz("ADD TYPE PK= " + c.cTypePk + " to player " + c.charID + " @@ " + c.cName);
-				c.nClass = GameScr.nClasss[msg.reader().readByte()];
+				c.nClass = GameScr.nClasss[msg.reader().readUnsignedByte()];
 				c.cgender = msg.reader().readByte();
 				c.head = msg.reader().readShort();
 				c.cName = msg.reader().readUTF();
@@ -6975,3 +6989,4 @@ namespace Game1
 		}
 	}
 }
+

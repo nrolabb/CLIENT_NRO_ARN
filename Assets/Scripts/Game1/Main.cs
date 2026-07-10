@@ -17,6 +17,8 @@ namespace Game1
         public static string res = "res";
     
         public static string mainThreadName;
+
+        public static int mainThreadId;
     
         public static bool started;
     
@@ -76,6 +78,8 @@ namespace Game1
 
         private const int MaxNetworkMessagesPerTick = 100;
 
+        private static bool highFpsEnabled;
+
         public static bool isInBackground;
     
         public static int waitTick;
@@ -105,6 +109,7 @@ namespace Game1
                 Thread.CurrentThread.Name = "Main";
             }
             mainThreadName = Thread.CurrentThread.Name;
+            mainThreadId = Thread.CurrentThread.ManagedThreadId;
             isPC = Application.platform != RuntimePlatform.Android && Application.platform != RuntimePlatform.IPhonePlayer;
             isIPhone = (IphoneVersionApp = Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android);
             Application.runInBackground = true;
@@ -132,6 +137,7 @@ namespace Game1
 
         public static int ApplyFramePacing(bool highFps)
         {
+            highFpsEnabled = highFps;
             int targetFrameRate = ResolveTargetFrameRate(highFps);
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = targetFrameRate;
@@ -473,7 +479,7 @@ namespace Game1
             if (!paused)
             {
                 isResume = true;
-                ApplyFramePacing(Rms.loadRMSInt("isHighFps") != 0);
+                ApplyFramePacing(highFpsEnabled);
             }
             if (paused && TouchScreenKeyboard.visible)
             {

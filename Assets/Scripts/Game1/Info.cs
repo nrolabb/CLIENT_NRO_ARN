@@ -216,10 +216,24 @@ namespace Game1
     
     	public void update()
     	{
-    		if (infoWaitToShow.size() == 0 || info.timeCount != 0)
+		if (infoWaitToShow.size() == 0 || info.timeCount != 0)
     		{
     			return;
     		}
+		if (info.expireAt > 0)
+		{
+			if (mSystem.currentTimeMillis() < info.expireAt)
+			{
+				return;
+			}
+			infoWaitToShow.removeElementAt(0);
+			if (infoWaitToShow.size() != 0)
+			{
+				info = (InfoItem)infoWaitToShow.firstElement();
+				getInfo();
+			}
+			return;
+		}
     		time++;
     		if (time >= info.speed)
     		{
@@ -318,6 +332,17 @@ namespace Game1
     			GameScr.info2.cmdChat.y = 35;
     		}
     	}
+
+	public void addInfoForDuration(string s, int durationMs)
+	{
+		type = 0;
+		infoWaitToShow.removeAllElements();
+		InfoItem infoItem = new InfoItem(s);
+		infoItem.expireAt = mSystem.currentTimeMillis() + durationMs;
+		infoWaitToShow.addElement(infoItem);
+		info = infoItem;
+		getInfo();
+	}
     
     	public void perform(int idAction, object p)
     	{

@@ -1495,6 +1495,15 @@ namespace Game1
 			chatInfo.addInfo(info, 0, cInfo, isChatServer: false);
 		}
 
+		public void addInfoForDuration(string info, int durationMs)
+		{
+			if (chatInfo == null)
+			{
+				chatInfo = new Info();
+			}
+			chatInfo.addInfoForDuration(info, durationMs);
+		}
+
 		public static Char myCharz()
 		{
 			if (myChar == null)

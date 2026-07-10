@@ -22,6 +22,8 @@ namespace Game1
     	public long last;
     
     	public long curr;
+
+	public long expireAt;
     
     	public InfoItem(string s)
     	{

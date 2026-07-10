@@ -320,7 +320,7 @@ namespace Game1
     		}
     	}
              
-    	private async void NetworkInit()
+    	private void NetworkInit()
     	{
     		isCancel = false;
     		connecting = true;

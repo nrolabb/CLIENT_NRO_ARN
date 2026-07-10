@@ -13,10 +13,15 @@ namespace Game1
     	public static sbyte[] data;
     
     	public static string filename;
+
+        private static bool IsMainThread()
+        {
+            return Main.mainThreadId != 0 && Thread.CurrentThread.ManagedThreadId == Main.mainThreadId;
+        }
     
     	public static void saveRMS(string filename, sbyte[] data)
     	{
-    		if (Thread.CurrentThread.Name == Main.mainThreadName)
+    		if (IsMainThread())
     		{
     			__saveRMS(filename, data);
     		}
@@ -28,7 +33,7 @@ namespace Game1
     
     	public static sbyte[] loadRMS(string filename)
     	{
-    		if (Thread.CurrentThread.Name == Main.mainThreadName)
+    		if (IsMainThread())
     		{
     			return __loadRMS(filename);
     		}

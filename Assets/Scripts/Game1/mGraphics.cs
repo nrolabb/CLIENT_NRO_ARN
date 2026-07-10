@@ -1210,11 +1210,10 @@ namespace Game1
     	{
     		if (!lineMaterial)
     		{
-    			lineMaterial = new Material(Shader.Find("Lines/Colored Blended"))
+	    		lineMaterial = new Material(Shader.Find("NRO/Lines Colored Blended"))
     			{
     				hideFlags = HideFlags.HideAndDontSave
     			};
-    			lineMaterial.shader.hideFlags = HideFlags.HideAndDontSave;
     		}
     	}
     

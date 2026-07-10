@@ -1,4 +1,4 @@
-Shader "Lines/Colored Blended" {
+Shader "NRO/Lines Colored Blended" {
             SubShader { Pass {
                 Blend SrcAlpha OneMinusSrcAlpha
                 ZWrite Off Cull Off Fog { Mode Off }
