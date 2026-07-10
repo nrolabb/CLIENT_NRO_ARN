@@ -1022,11 +1022,7 @@ namespace Game1
 					}
 					Rms.saveRMSInt("svselect", ipSelect);
 					Rms.saveRMSInt("lastZoomlevel", mGraphics.zoomLevel);
-					LoadIP();
-					isAutoConect = true;
-					countDieConnect = 0;
-					testConnect = -1;
-					show2();
+					GameMidlet.instance.exit();
 					break;
 				case 16:
 					InfoDlg.hide();

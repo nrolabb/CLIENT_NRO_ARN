@@ -419,7 +419,6 @@
     <Compile Include="Assets\Scripts\Game2\SmallImage.cs" />
     <Compile Include="Assets\Scripts\Game1\Firework.cs" />
     <Compile Include="Assets\Scripts\Game1\ItemOption.cs" />
-    <Compile Include="Assets\VideoScript.cs" />
     <Compile Include="Assets\Scripts\Game1\Session_ME2.cs" />
     <Compile Include="Assets\Scripts\Game3\TabCommand.cs" />
     <Compile Include="Assets\Scripts\Game3\Member.cs" />
@@ -963,10 +962,6 @@
     </Reference>
     <Reference Include="UnityEngine.VFXModule">
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.3.10f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.VFXModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.VRModule">
-      <HintPath>C:\Program Files\Unity\Hub\Editor\6000.3.10f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.VRModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.VectorGraphicsModule">
