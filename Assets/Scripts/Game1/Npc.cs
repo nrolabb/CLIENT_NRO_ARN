@@ -413,47 +413,62 @@ namespace Game1
     			}
     			if (TileMap.mapID != 51)
     			{
-    				int num2 = 15;
-    				if (template.npcTemplateId == 47)
-    				{
-    					num2 = 47;
-    				}
-    				if (Char.myCharz().npcFocus != null && Char.myCharz().npcFocus.Equals(this))
-    				{
-    					if (TileMap.mapID != 113)
-    					{
-    						int num3 = 0;
-    						int num4 = 0;
-    						if (Char.myCharz().npcFocus.template.npcTemplateId == 28 || Char.myCharz().npcFocus.template.npcTemplateId == 41)
-    						{
-    							num3 = 3;
-    							num4 = -12;
-    						}
-    						mFont.tahoma_7_yellow.drawStringBorder(g, npcName, cx + num3, cy - ch - mFont.tahoma_7.getHeight() - num2 + num4, mFont.CENTER, mFont.tahoma_7_grey);
-    					}
-    				}
-    				else
-    				{
-    					num2 = 8;
-    					if (template.npcTemplateId == 47)
-    					{
-    						num2 = 40;
-    					}
-    					if (TileMap.mapID != 113)
-    					{
-    						int num5 = 0;
-    						int num6 = 0;
-    						if (template.npcTemplateId == 28 || template.npcTemplateId == 41)
-    						{
-    							num5 = 3;
-    							num6 = -12;
-    						}
-    						mFont.tahoma_7_yellow.drawStringBorder(g, npcName, cx + num5, cy - ch - num2 - mFont.tahoma_7.getHeight() + num6, mFont.CENTER, mFont.tahoma_7_grey);
-    					}
-    				}
-    			}
+					bool isNpcFocus = Char.myCharz().npcFocus != null && Char.myCharz().npcFocus.Equals(this);
+					if (TileMap.mapID != 113)
+					{
+						int nameX;
+						int headTopY;
+						getHeadNameAnchor(out nameX, out headTopY);
+						int gapAboveHead = isNpcFocus ? 10 : 2;
+						mFont.tahoma_7_yellow.drawStringBorder(g, npcName, nameX, headTopY - mFont.tahoma_7.getHeight() - gapAboveHead, mFont.CENTER, mFont.tahoma_7_grey);
+					}
+				}
     			dyEff = 65;
     		}
     	}
+
+		private void getHeadNameAnchor(out int nameX, out int headTopY)
+		{
+			nameX = cx;
+			headTopY = cy - ch;
+			if (template == null || GameScr.parts == null || template.headId < 0 || template.headId >= GameScr.parts.Length)
+			{
+				return;
+			}
+
+			Part headPart = GameScr.parts[template.headId];
+			int frame = Char.CharInfo[cf][0][0];
+			if (headPart == null || headPart.pi == null || frame < 0 || frame >= headPart.pi.Length || headPart.pi[frame] == null)
+			{
+				return;
+			}
+
+			PartImage headImage = headPart.pi[frame];
+			int imageWidth = getSmallImageWidth(headImage.id);
+			headTopY = cy - Char.CharInfo[cf][0][2] + headImage.dy;
+			if (cdir == 1)
+			{
+				nameX = cx + Char.CharInfo[cf][0][1] + headImage.dx + imageWidth / 2;
+			}
+			else
+			{
+				nameX = cx - Char.CharInfo[cf][0][1] - headImage.dx - imageWidth / 2;
+			}
+		}
+
+		private static int getSmallImageWidth(int imageId)
+		{
+			if (SmallImage.smallImg != null && imageId >= 0 && imageId < SmallImage.smallImg.Length && SmallImage.smallImg[imageId] != null
+				&& SmallImage.smallImg[imageId][1] < 256 && SmallImage.smallImg[imageId][2] < 256
+				&& SmallImage.smallImg[imageId][3] < 256 && SmallImage.smallImg[imageId][4] < 256)
+			{
+				return SmallImage.smallImg[imageId][3];
+			}
+			if (SmallImage.imgNew != null && imageId >= 0 && imageId < SmallImage.imgNew.Length && SmallImage.imgNew[imageId] != null && SmallImage.imgNew[imageId].img != null)
+			{
+				return mGraphics.getImageWidth(SmallImage.imgNew[imageId].img);
+			}
+			return 0;
+		}
     }
 }
