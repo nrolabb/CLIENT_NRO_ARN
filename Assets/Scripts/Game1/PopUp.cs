@@ -203,7 +203,15 @@ namespace Game1
     	{
     		if (isPaint && says != null && ChatPopup.currChatPopup == null && !isHide)
     		{
-    			paintClipPopUp(g, cx, cy - GameCanvas.transY, cw, ch, (timeDelay != 0) ? 1 : 0, isFocus: true);
+			if (isWayPoint)
+			{
+				g.setColor((timeDelay != 0) ? 16777215 : 0, 0.5f);
+				g.fillRect(cx, cy - GameCanvas.transY, cw, ch, 6);
+			}
+			else
+			{
+				paintClipPopUp(g, cx, cy - GameCanvas.transY, cw, ch, (timeDelay != 0) ? 1 : 0, isFocus: true);
+			}
     			for (int i = 0; i < says.Length; i++)
     			{
     				((timeDelay != 0) ? mFont.tahoma_7b_green2 : mFont.tahoma_7b_white).drawString(g, says[i], cx + cw / 2, cy + (ch / 2 - says.Length * 12 / 2) + i * 12 - GameCanvas.transY, 2);

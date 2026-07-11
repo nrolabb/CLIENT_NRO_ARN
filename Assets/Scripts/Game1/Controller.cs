@@ -115,8 +115,8 @@ namespace Game1
 		}
 
 		public void onMessage(Message msg)
-	{
-		UnityEngine.Debug.Log(">>> RECEIVE CMD: " + msg.command);
+		{
+			//UnityEngine.Debug.Log(">>> RECEIVE CMD: " + msg.command);
 			GameCanvas.debugSession.removeAllElements();
 			GameCanvas.debug("SA1", 2);
 			try
@@ -1269,7 +1269,11 @@ namespace Game1
 								int num89 = msg.reader().readInt();
 								string text3 = Rms.loadRMSString("ResVersion");
 								int num90 = ((text3 == null || !(text3 != string.Empty)) ? (-1) : int.Parse(text3));
-								if (Session_ME.gI().isCompareIPConnect())
+								if (GameCanvas.serverScreen == null)
+								{
+									GameCanvas.serverScreen = new ServerListScreen();
+								}
+								if (Session_ME.gI() != null && Session_ME.gI().isCompareIPConnect())
 								{
 									if (num90 == -1 || num90 != num89)
 									{
@@ -1287,7 +1291,10 @@ namespace Game1
 								}
 								else
 								{
-									Session_ME.gI().close();
+									if (Session_ME.gI() != null)
+									{
+										Session_ME.gI().close();
+									}
 									ServerListScreen.loadScreen = true;
 									ServerListScreen.isAutoConect = false;
 									ServerListScreen.countDieConnect = 1000;
@@ -1336,6 +1343,10 @@ namespace Game1
 								GameScr.gI().loadGameScr();
 								if (GameCanvas.currentScreen != GameCanvas.loginScr)
 								{
+									if (GameCanvas.serverScreen == null)
+									{
+										GameCanvas.serverScreen = new ServerListScreen();
+									}
 									GameCanvas.serverScreen.switchToMe();
 								}
 							}
@@ -4341,9 +4352,9 @@ namespace Game1
 								{
 									GameCanvas.debug("SA8x2y" + num288, 2);
 									short moveX = msg.reader().readShort();
-																short moveY = msg.reader().readShort();
-																int moveType = (msg.reader().available() > 0) ? msg.reader().readByte() : 0;
-																char14.moveTo(moveX, moveY, moveType);
+									short moveY = msg.reader().readShort();
+									int moveType = (msg.reader().available() > 0) ? msg.reader().readByte() : 0;
+									char14.moveTo(moveX, moveY, moveType);
 									char14.lastUpdateTime = mSystem.currentTimeMillis();
 									break;
 								}
@@ -4671,16 +4682,16 @@ namespace Game1
 							int num280 = msg.reader().readInt();
 							string text8 = msg.reader().readUTF();
 							Char chatChar = (Char.myCharz().charID != num280) ? GameScr.findCharInMap(num280) : Char.myCharz();
-													int chatDuration = (msg.reader().available() >= 4) ? msg.reader().readInt() : 0;
+							int chatDuration = (msg.reader().available() >= 4) ? msg.reader().readInt() : 0;
 							if (chatDuration > 0)
 							{
 								text8 = text8.Replace("\u200B", string.Empty);
 								chatChar?.addInfoForDuration(text8, chatDuration);
-													}
-													else
-													{
-														chatChar?.addInfo(text8);
-													}
+							}
+							else
+							{
+								chatChar?.addInfo(text8);
+							}
 							break;
 						}
 					case 18:
