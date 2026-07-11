@@ -2742,7 +2742,7 @@ namespace Game1
 											break;
 										case 3:
 											Char.myCharz().arrItemShop[num166][num167].isBuySpec = true;
-											Char.myCharz().arrItemShop[num166][num167].iconSpec = msg.reader().readShort();
+											Char.myCharz().arrItemShop[num166][num167].iconSpec = msg.reader().readUnsignedShort();
 											Char.myCharz().arrItemShop[num166][num167].buySpec = msg.reader().readInt();
 											break;
 									}

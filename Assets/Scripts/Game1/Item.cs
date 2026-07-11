@@ -161,7 +161,9 @@ namespace Game1
     
     	public int buyRuby;
     
-    	public short iconSpec = -1;
+	// Icon IDs are transmitted as an unsigned 16-bit value. Keep them in an int
+	// so IDs above 32767 do not become negative and get skipped by SmallImage.
+	public int iconSpec = -1;
     
     	public sbyte buyType = -1;
     
