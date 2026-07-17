@@ -1066,6 +1066,10 @@ namespace Game1
 					continue;
 				}
 				int colorSetKichHoat = getColorSetKichHoat(itemOption.optionTemplate.id);
+				if (colorSetKichHoat == -1 && itemOption.optionTemplate.name != null && itemOption.optionTemplate.name.StartsWith("Set ", StringComparison.OrdinalIgnoreCase))
+				{
+					colorSetKichHoat = getColorSetKichHoatByName(itemOption.optionTemplate.name);
+				}
 				if (colorSetKichHoat == -1)
 				{
 					continue;
@@ -1078,7 +1082,7 @@ namespace Game1
 					Image icon = SmallImage.imgNew[iconId].img;
 					iconWidth = mGraphics.getImageWidth(icon);
 					iconHeight = mGraphics.getImageHeight(icon);
-					Image outline = getSetKichHoatOutline(icon, iconId, colorSetKichHoat, 0, 0, iconWidth, iconHeight);
+					Image outline = getSetKichHoatOutline(icon, iconId, colorSetKichHoat, 0, 0, icon.texture.width, icon.texture.height);
 					if (outline != null)
 					{
 						g.drawImage(outline, centerX, centerY, 3);
@@ -1092,7 +1096,7 @@ namespace Game1
 					iconHeight = region[4];
 					if (region[0] >= 0 && region[0] < SmallImage.imgbig.Length && SmallImage.imgbig[region[0]] != null)
 					{
-						Image outline = getSetKichHoatOutline(SmallImage.imgbig[region[0]], iconId, colorSetKichHoat, region[1], region[2], iconWidth, iconHeight);
+						Image outline = getSetKichHoatOutline(SmallImage.imgbig[region[0]], iconId, colorSetKichHoat, region[1] * mGraphics.zoomLevel, region[2] * mGraphics.zoomLevel, iconWidth * mGraphics.zoomLevel, iconHeight * mGraphics.zoomLevel);
 						if (outline != null)
 						{
 							g.drawImage(outline, centerX, centerY, 3);
@@ -1104,14 +1108,25 @@ namespace Game1
 				int fallbackWidth = Math.min(27, Math.max(8, iconWidth + 2));
 				int fallbackHeight = Math.min(27, Math.max(8, iconHeight + 2));
 				g.setColor(colorSetKichHoat);
-				g.drawRoundRectBorder(centerX - fallbackWidth / 2, centerY - fallbackHeight / 2, fallbackWidth, fallbackHeight, 4, 3);
+				g.drawRoundRectBorder(centerX - fallbackWidth / 2, centerY - fallbackHeight / 2, fallbackWidth, fallbackHeight, 4, 2);
 				return;
 			}
 		}
 
+		private int getColorSetKichHoatByName(string setName)
+		{
+			int hash = 17;
+			for (int i = 0; i < setName.Length; i++)
+			{
+				hash = hash * 31 + char.ToLowerInvariant(setName[i]);
+			}
+			int[] colors = { 16776960, 65535, 16744192, 16738740, 10040012, 16711680, 65280, 8388352, 32768, 3407667, 16761035, 16711935, 3368703, 11141120, 16755200, 12632256 };
+			return colors[(hash & int.MaxValue) % colors.Length];
+		}
+
 		private Image getSetKichHoatOutline(Image source, int iconId, int color, int sourceX, int sourceY, int width, int height)
 		{
-			string key = iconId + "_" + color;
+			string key = "v4_" + iconId + "_" + color + "_x" + mGraphics.zoomLevel;
 			if (setKichHoatOutlines.TryGetValue(key, out Image cached))
 			{
 				return cached;
@@ -1139,10 +1154,13 @@ namespace Game1
 					RenderTexture.active = previous;
 					RenderTexture.ReleaseTemporary(temporary);
 				}
-				Texture2D texture = new Texture2D(width + 6, height + 6, TextureFormat.ARGB32, false);
-				Color[] pixels = new Color[(width + 6) * (height + 6)];
+				int outlineSize = 2 * mGraphics.zoomLevel;
+				int padding = outlineSize * 2;
+				Texture2D texture = new Texture2D(width + padding, height + padding, TextureFormat.ARGB32, false);
+				Color[] pixels = new Color[(width + padding) * (height + padding)];
 				Color outlineColor = Image.setColorFromRBG(color);
 				outlineColor.a = 1f;
+				int opaquePixelCount = 0;
 				for (int y = 0; y < height; y++)
 				{
 					for (int x = 0; x < width; x++)
@@ -1151,17 +1169,22 @@ namespace Game1
 						{
 							continue;
 						}
-						for (int oy = -3; oy <= 3; oy++)
+						opaquePixelCount++;
+						for (int oy = -outlineSize; oy <= outlineSize; oy++)
 						{
-							for (int ox = -3; ox <= 3; ox++)
+							for (int ox = -outlineSize; ox <= outlineSize; ox++)
 							{
-								if (ox * ox + oy * oy <= 9)
+								if (ox * ox + oy * oy <= outlineSize * outlineSize)
 								{
-									pixels[(y + oy + 3) * (width + 6) + x + ox + 3] = outlineColor;
+									pixels[(y + oy + outlineSize) * (width + padding) + x + ox + outlineSize] = outlineColor;
 								}
 							}
 						}
 					}
+				}
+				if (opaquePixelCount == 0)
+				{
+					return null;
 				}
 				for (int y = 0; y < height; y++)
 				{
@@ -1169,14 +1192,14 @@ namespace Game1
 					{
 						if (sourcePixels[y * width + x].a > 0.1f)
 						{
-							pixels[(y + 3) * (width + 6) + x + 3] = Color.clear;
+							pixels[(y + outlineSize) * (width + padding) + x + outlineSize] = Color.clear;
 						}
 					}
 				}
 				texture.SetPixels(pixels);
 				texture.filterMode = FilterMode.Point;
 				texture.Apply();
-				Image result = new Image { texture = texture, w = width + 6, h = height + 6 };
+				Image result = new Image { texture = texture, w = width + padding, h = height + padding };
 				setKichHoatOutlines[key] = result;
 				return result;
 			}
