@@ -2571,9 +2571,13 @@ namespace Game1
 									}
 								}
 							}
-							if (type3 == 1 && playerId != Char.myCharz().charID)
+							if (type3 == 1)
 							{
-								GameScr.findCharInMap(playerId).isCharge = true;
+								@char = ((Char.myCharz().charID != playerId) ? GameScr.findCharInMap(playerId) : Char.myCharz());
+								if (@char != null)
+								{
+									@char.isCharge = true;
+								}
 							}
 							if (type3 == 3)
 							{

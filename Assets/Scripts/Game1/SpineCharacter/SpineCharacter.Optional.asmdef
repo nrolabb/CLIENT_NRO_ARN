@@ -1,0 +1,17 @@
+{
+    "name": "NRO.Optional.SpineCharacter",
+    "references": [
+        "spine-unity"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "ENABLE_NRO_SPINE_CHARACTERS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

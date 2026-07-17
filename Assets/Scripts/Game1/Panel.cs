@@ -11,6 +11,7 @@ namespace Game1
 
 	public class Panel : IActionListener, IChatable
 	{
+		private static readonly Dictionary<string, Image> setKichHoatOutlines = new Dictionary<string, Image>();
 		public class PlayerChat
 		{
 			public string name;
@@ -1049,6 +1050,167 @@ namespace Game1
 			{
 				Debug.LogException(exception);
 			}
+		}
+
+		private void paintSetKichHoatBorder(mGraphics g, Item item, int centerX, int centerY)
+		{
+			if (item == null || item.template == null || item.itemOption == null)
+			{
+				return;
+			}
+			for (int i = 0; i < item.itemOption.Length; i++)
+			{
+				ItemOption itemOption = item.itemOption[i];
+				if (itemOption == null || itemOption.optionTemplate == null)
+				{
+					continue;
+				}
+				int colorSetKichHoat = getColorSetKichHoat(itemOption.optionTemplate.id);
+				if (colorSetKichHoat == -1)
+				{
+					continue;
+				}
+				int iconId = item.template.iconID;
+				int iconWidth = 18;
+				int iconHeight = 18;
+				if (SmallImage.imgNew != null && iconId >= 0 && iconId < SmallImage.imgNew.Length && SmallImage.imgNew[iconId] != null && SmallImage.imgNew[iconId].img != null && SmallImage.isRealImageLoaded(iconId))
+				{
+					Image icon = SmallImage.imgNew[iconId].img;
+					iconWidth = mGraphics.getImageWidth(icon);
+					iconHeight = mGraphics.getImageHeight(icon);
+					Image outline = getSetKichHoatOutline(icon, iconId, colorSetKichHoat, 0, 0, iconWidth, iconHeight);
+					if (outline != null)
+					{
+						g.drawImage(outline, centerX, centerY, 3);
+						return;
+					}
+				}
+				else if (SmallImage.imgbig != null && SmallImage.smallImg != null && iconId >= 0 && iconId < SmallImage.smallImg.Length && SmallImage.smallImg[iconId] != null)
+				{
+					int[] region = SmallImage.smallImg[iconId];
+					iconWidth = region[3];
+					iconHeight = region[4];
+					if (region[0] >= 0 && region[0] < SmallImage.imgbig.Length && SmallImage.imgbig[region[0]] != null)
+					{
+						Image outline = getSetKichHoatOutline(SmallImage.imgbig[region[0]], iconId, colorSetKichHoat, region[1], region[2], iconWidth, iconHeight);
+						if (outline != null)
+						{
+							g.drawImage(outline, centerX, centerY, 3);
+							return;
+						}
+					}
+				}
+				// Fallback cho icon atlas/texture chua tai xong: SKH van luon co vien.
+				int fallbackWidth = Math.min(27, Math.max(8, iconWidth + 2));
+				int fallbackHeight = Math.min(27, Math.max(8, iconHeight + 2));
+				g.setColor(colorSetKichHoat);
+				g.drawRoundRectBorder(centerX - fallbackWidth / 2, centerY - fallbackHeight / 2, fallbackWidth, fallbackHeight, 4, 3);
+				return;
+			}
+		}
+
+		private Image getSetKichHoatOutline(Image source, int iconId, int color, int sourceX, int sourceY, int width, int height)
+		{
+			string key = iconId + "_" + color;
+			if (setKichHoatOutlines.TryGetValue(key, out Image cached))
+			{
+				return cached;
+			}
+			try
+			{
+				Color[] sourcePixels;
+				try
+				{
+					sourcePixels = source.texture.GetPixels(sourceX, source.texture.height - sourceY - height, width, height);
+				}
+				catch (Exception)
+				{
+					int textureWidth = source.texture.width;
+					int textureHeight = source.texture.height;
+					RenderTexture temporary = RenderTexture.GetTemporary(textureWidth, textureHeight, 0, RenderTextureFormat.ARGB32);
+					RenderTexture previous = RenderTexture.active;
+					Graphics.Blit(source.texture, temporary);
+					RenderTexture.active = temporary;
+					Texture2D readable = new Texture2D(textureWidth, textureHeight, TextureFormat.ARGB32, false);
+					readable.ReadPixels(new Rect(0, 0, textureWidth, textureHeight), 0, 0);
+					readable.Apply();
+					sourcePixels = readable.GetPixels(sourceX, readable.height - sourceY - height, width, height);
+					UnityEngine.Object.Destroy(readable);
+					RenderTexture.active = previous;
+					RenderTexture.ReleaseTemporary(temporary);
+				}
+				Texture2D texture = new Texture2D(width + 6, height + 6, TextureFormat.ARGB32, false);
+				Color[] pixels = new Color[(width + 6) * (height + 6)];
+				Color outlineColor = Image.setColorFromRBG(color);
+				outlineColor.a = 1f;
+				for (int y = 0; y < height; y++)
+				{
+					for (int x = 0; x < width; x++)
+					{
+						if (sourcePixels[y * width + x].a <= 0.1f)
+						{
+							continue;
+						}
+						for (int oy = -3; oy <= 3; oy++)
+						{
+							for (int ox = -3; ox <= 3; ox++)
+							{
+								if (ox * ox + oy * oy <= 9)
+								{
+									pixels[(y + oy + 3) * (width + 6) + x + ox + 3] = outlineColor;
+								}
+							}
+						}
+					}
+				}
+				for (int y = 0; y < height; y++)
+				{
+					for (int x = 0; x < width; x++)
+					{
+						if (sourcePixels[y * width + x].a > 0.1f)
+						{
+							pixels[(y + 3) * (width + 6) + x + 3] = Color.clear;
+						}
+					}
+				}
+				texture.SetPixels(pixels);
+				texture.filterMode = FilterMode.Point;
+				texture.Apply();
+				Image result = new Image { texture = texture, w = width + 6, h = height + 6 };
+				setKichHoatOutlines[key] = result;
+				return result;
+			}
+			catch (Exception)
+			{
+				return null;
+			}
+		}
+
+		private int getColorSetKichHoat(int optionId)
+		{
+			return optionId switch
+			{
+				// Trai Dat
+				127 => 16776960, // Then Xin Hang - vang
+				128 => 65535,    // Kirin - cyan
+				129 => 16744192, // Songoku - cam
+				233 => 16738740, // Gohan - hong
+				245 => 10040012, // Than Vu Tru Kaio - tim
+				253 => 16711680, // Kaioken - do
+				// Namek
+				130 => 65280,    // Picolo - xanh la
+				131 => 8388352,  // Oc tieu - olive
+				132 => 32768,    // Pikkoro Daimao - xanh dam
+				237 => 3407667,  // Nail - xanh ngoc
+				251 => 16761035, // Lien Hoan - vang cam
+				// Xayda
+				133 => 16711935, // Kakarot - tim hong
+				134 => 3368703,  // Ca Dic - xanh duong
+				135 => 11141120, // Nappa - do dam
+				241 => 16755200, // Ca Dic M - cam dam
+				252 => 12632256, // Giam sat thuong - bac
+				_ => -1,
+			};
 		}
 
 		public void init()
@@ -2895,6 +3057,7 @@ namespace Game1
 					}
 					mFont3.drawString(g, text2, num + 5, num2 + 10, mFont.LEFT);
 				}
+				paintSetKichHoatBorder(g, item, num5 + num7 / 2, num6 + num8 / 2);
 				SmallImage.drawSmallImage(g, item.template.iconID, num5 + num7 / 2, num6 + num8 / 2, 0, 3);
 				if (item.itemOption != null)
 				{
@@ -5630,6 +5793,7 @@ namespace Game1
 								}
 							}
 						}
+						paintSetKichHoatBorder(g, item, num5 + num7 / 2, num6 + num8 / 2);
 						SmallImage.drawSmallImage(g, item.template.iconID, num5 + num7 / 2, num6 + num8 / 2, 0, 3);
 						if (item.quantity > 1)
 						{
@@ -5942,6 +6106,7 @@ namespace Game1
 					}
 					mFont3.drawString(g, text2, num3 + 5, num4 + 10, mFont.LEFT);
 				}
+				paintSetKichHoatBorder(g, item, num6 + num8 / 2, num7 + num9 / 2);
 				SmallImage.drawSmallImage(g, item.template.iconID, num6 + num8 / 2, num7 + num9 / 2, 0, 3);
 				if (item.itemOption != null)
 				{
@@ -6454,6 +6619,8 @@ namespace Game1
 						}
 						mFont3.drawString(g, text2, num2 + 5, num3 + 10, mFont.LEFT);
 					}
+					paintSetKichHoatBorder(g, item, num5 + num7 / 2, num6 + num8 / 2);
+					paintSetKichHoatBorder(g, item, num5 + num7 / 2, num6 + num8 / 2);
 					SmallImage.drawSmallImage(g, item.template.iconID, num5 + num7 / 2, num6 + num8 / 2, 0, 3);
 					if (item.itemOption != null)
 					{
@@ -6551,6 +6718,7 @@ namespace Game1
 						}
 					}
 					_ = string.Empty;
+					paintSetKichHoatBorder(g, item, num5 + num7 / 2, num6 + num8 / 2);
 					SmallImage.drawSmallImage(g, item.template.iconID, num5 + num7 / 2, num6 + num8 / 2, 0, 3);
 					if (item.itemOption != null)
 					{
@@ -6716,6 +6884,7 @@ namespace Game1
 						text += item.itemOption[0].getOptionString();
 					}
 					mFont.tahoma_7_blue.drawString(g, text, num + 5, num2 + 11, 0);
+					paintSetKichHoatBorder(g, item, num4 + num6 / 2, num5 + num7 / 2);
 					SmallImage.drawSmallImage(g, item.template.iconID, num4 + num6 / 2, num5 + num7 / 2, 0, 3);
 				}
 			}
@@ -6916,6 +7085,7 @@ namespace Game1
 				{
 					continue;
 				}
+				paintSetKichHoatBorder(g, item, slotX + WidthBoxNew / 2, slotY + slotHeight / 2);
 				SmallImage.drawSmallImage(g, item.template.iconID, slotX + WidthBoxNew / 2, slotY + slotHeight / 2, 0, 3);
 				if (item.itemOption != null)
 				{
@@ -7151,6 +7321,7 @@ namespace Game1
 						}
 						mFont3.drawString(g, text2, num6 + 5, num7 + 11, mFont.LEFT);
 					}
+					paintSetKichHoatBorder(g, item, num2 + num4 / 2, num3 + num5 / 2);
 					SmallImage.drawSmallImage(g, item.template.iconID, num2 + num4 / 2, num3 + num5 / 2, 0, 3);
 					if (item.itemOption != null)
 					{
@@ -7513,6 +7684,7 @@ namespace Game1
 					}
 					mFont3.drawString(g, text2, num + 5, num2 + 10, mFont.LEFT);
 				}
+				paintSetKichHoatBorder(g, item, num5 + num7 / 2, num6 + num8 / 2);
 				SmallImage.drawSmallImage(g, item.template.iconID, num5 + num7 / 2, num6 + num8 / 2, 0, 3);
 				if (item.itemOption != null)
 				{
@@ -7684,6 +7856,7 @@ namespace Game1
 						mFont5.drawString(g, text4, num23 + 5, num24 + 11, mFont.LEFT);
 					}
 					float iconOffset = (j == selected) ? ((float)System.Math.Sin(GameCanvas.gameTick * 0.2f) * 2f) : 0f;
+					paintSetKichHoatBorder(g, item3, num26 + num28 / 2, num27 + num29 / 2 + (int)iconOffset);
 					SmallImage.drawSmallImage(g, item3.template.iconID, num26 + num28 / 2, num27 + num29 / 2 + (int)iconOffset, 0, 3);
 					if (item3.itemOption != null)
 					{
@@ -7775,6 +7948,7 @@ namespace Game1
 						continue;
 					}
 					float iconOffset = (j == selected) ? ((float)System.Math.Sin(GameCanvas.gameTick * 0.2f) * 2f) : 0f;
+					paintSetKichHoatBorder(g, item, num7 + num9 / 2, num8 + num10 / 2 + (int)iconOffset);
 					SmallImage.drawSmallImage(g, item.template.iconID, num7 + num9 / 2, num8 + num10 / 2 + (int)iconOffset, 0, 3);
 					if (item.itemOption != null)
 					{
@@ -7830,6 +8004,7 @@ namespace Game1
 					}
 					g.setColor(6047789, 0.5f);
 					g.fillRect(x2, y2, num12, num15, 5);
+					paintEffectItem(g, item2, x2, y2);
 					if (item2 != null && item2.isSelect && GameCanvas.panel.type == 12)
 					{
 						g.setColor(isSelectedBagItem ? 7040779 : 6047789);
@@ -7870,6 +8045,7 @@ namespace Game1
 						}
 					}
 					float iconOffset = isSelectedBagItem ? ((float)System.Math.Sin(GameCanvas.gameTick * 0.2f) * 2f) : 0f;
+					paintSetKichHoatBorder(g, item2, x2 + num12 / 2, y2 + ITEM_HEIGHT / 2 + (int)iconOffset);
 					SmallImage.drawSmallImage(g, item2.template.iconID, x2 + num12 / 2, y2 + ITEM_HEIGHT / 2 + (int)iconOffset, 0, 3);
 					if (item2.itemOption != null)
 					{

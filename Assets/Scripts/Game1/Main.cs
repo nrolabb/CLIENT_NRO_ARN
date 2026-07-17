@@ -234,6 +234,7 @@ namespace Game1
                 {
                     GameMidlet.gameCanvas.paint(g);
                 }
+                RongThanSpineController.DrawOverlay();
                 paintCount++;
                 if (g != null)
                 {

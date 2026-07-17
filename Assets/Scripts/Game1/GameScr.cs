@@ -2366,12 +2366,12 @@ namespace Game1
     		base.keyPress(keyCode);
     	}
     
-    	public override void updateKey()
-    	{
-    		if (Controller.isStopReadMessage || Char.myCharz().isTeleport || Char.myCharz().isPaintNewSkill || InfoDlg.isLock)
-    		{
-    			return;
-    		}
+		public override void updateKey()
+		{
+			if (Controller.isStopReadMessage || Char.myCharz().isTeleport || Char.myCharz().isPaintNewSkill || InfoDlg.isLock)
+			{
+				return;
+			}
     		if (GameCanvas.isTouch && !ChatTextField.gI().isShow && !GameCanvas.menu.showMenu)
     		{
     			UpdateKeyTouchControl();
@@ -3587,17 +3587,26 @@ namespace Game1
     		mautroi = mGraphics.blendColor(0.4f, 0, GameCanvas.colorTop[GameCanvas.colorTop.Length - 1]);
     	}
     
-    	public void callRongThan(int x, int y)
-    	{
-    		Res.outz("VE RONG THAN O VI TRI x= " + x + " y=" + y);
-    		doiMauTroi();
-    		EffecMn.addEff(new Effect((!isRongNamek) ? 17 : 25, x, y - 77, 2, -1, 1));
-    	}
+	public void callRongThan(int x, int y)
+	{
+		Res.outz("VE RONG THAN O VI TRI x= " + x + " y=" + y);
+		doiMauTroi();
+		if (!isRongNamek && RongThanSpineController.IsAvailable())
+		{
+			EffecMn.removeEff(17);
+			RongThanSpineController.Show(x, y - 77);
+		}
+		else
+		{
+			EffecMn.addEff(new Effect((!isRongNamek) ? 17 : 25, x, y - 77, 2, -1, 1));
+		}
+	}
     
     	public void hideRongThan()
-    	{
-    		isRongThanXuatHien = false;
-    		EffecMn.removeEff(17);
+	{
+		isRongThanXuatHien = false;
+		RongThanSpineController.Hide();
+		EffecMn.removeEff(17);
     		if (isRongNamek)
     		{
     			isRongNamek = false;
@@ -4318,8 +4327,9 @@ namespace Game1
     		}
     	}
     
-    	public override void update()
-    	{
+	public override void update()
+	{
+		RongThanSpineController.Update();
     		if (ModFunc.activeBossNotif.size() > 0 || ModFunc.killedBossNotif.size() > 0)
     		{
     			ShowBoss.UpdateNotifications();
