@@ -328,7 +328,7 @@ namespace Game1
     		}
     		if (mainImage.img != null)
     		{
-    			int num = mainImage.img.getHeight() / mainImage.nFrame;
+    			int num = mainImage.img.getHeight() / ((mainImage.nFrame < 1) ? 1 : mainImage.nFrame);
     			if (num < 1)
     			{
     				num = 1;
