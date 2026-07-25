@@ -35,7 +35,7 @@ namespace Game1
         private static TabCommand firstCommand = new TabCommand("Tab", () => showTabSelect());
     
         private static TabCommand[] TransferTab = Enumerable.Range(0, 3)
-              .Select(i => new TabCommand((i + 1).ToString(), () => TransferTabIndex((sbyte)(i - 1))))
+              .Select(i => new TabCommand((i + 1).ToString(), () => TransferTabIndex((sbyte)i)))
               .ToArray();
     
         private static string[] SceneNames = new string[]
@@ -47,7 +47,8 @@ namespace Game1
         private static TabE[] tabTypes = new TabE[]
         {
                 TabE.Tab1,
-                TabE.Tab2
+                TabE.Tab2,
+                TabE.Tab3
         };
         private static void initCommand()
         {
@@ -88,11 +89,15 @@ namespace Game1
         }
         private static void TransferTabIndex(sbyte index)
         {
-            tabIndex = (sbyte)(index + 1);
-    
-            SceneManager.LoadScene(SceneNames[index + 1]);
-            TabMn.tab = tabTypes[index + 1];
+            if (index < 0 || index >= SceneNames.Length)
+                return;
+
+            tabIndex = index;
+            TabMn.tab = tabTypes[index];
             _selectTab = false;
+
+            if (SceneManager.GetActiveScene().name != SceneNames[index])
+                SceneManager.LoadScene(SceneNames[index]);
         }
         private static void showTabSelect()
         {

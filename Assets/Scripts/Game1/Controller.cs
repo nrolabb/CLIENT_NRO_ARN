@@ -1847,6 +1847,11 @@ namespace Game1
 							GameCanvas.panel.initTabClans();
 							break;
 						}
+					case -48:
+						{
+							SpineSkillBridge.HandleMessage(msg);
+							break;
+						}
 					case -47:
 						{
 							InfoDlg.hide();
@@ -2630,13 +2635,20 @@ namespace Game1
 							}
 							if (type3 == 6)
 							{
+								SkillPaint sp = (skillId >= 0 && skillId < GameScr.sks.Length) ? GameScr.sks[skillId] : null;
 								if (playerId == Char.myCharz().charID)
 								{
-									Char.myCharz().setAutoSkillPaint(GameScr.sks[skillId], 0);
+									if (sp != null)
+									{
+										Char.myCharz().setAutoSkillPaint(sp, 0);
+									}
 								}
 								else if (GameScr.findCharInMap(playerId) != null)
 								{
-									GameScr.findCharInMap(playerId).setAutoSkillPaint(GameScr.sks[skillId], 0);
+									if (sp != null)
+									{
+										GameScr.findCharInMap(playerId).setAutoSkillPaint(sp, 0);
+									}
 									SoundMn.gI().gong();
 								}
 							}
@@ -2658,7 +2670,11 @@ namespace Game1
 							}
 							if (type3 == 8 && playerId != Char.myCharz().charID && GameScr.findCharInMap(playerId) != null)
 							{
-								GameScr.findCharInMap(playerId).setAutoSkillPaint(GameScr.sks[skillId], 0);
+								SkillPaint sp = (skillId >= 0 && skillId < GameScr.sks.Length) ? GameScr.sks[skillId] : null;
+								if (sp != null)
+								{
+									GameScr.findCharInMap(playerId).setAutoSkillPaint(sp, 0);
+								}
 							}
 							break;
 						}

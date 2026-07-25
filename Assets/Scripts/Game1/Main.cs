@@ -124,7 +124,7 @@ namespace Game1
                 }
                 else
                 {
-                    Screen.SetResolution(1600, 900, fullscreen: false);
+                    Screen.SetResolution(1280, 750, fullscreen: false);
                 }
             }
             else if (isIPhone)
@@ -235,6 +235,7 @@ namespace Game1
                     GameMidlet.gameCanvas.paint(g);
                 }
                 RongThanSpineController.DrawOverlay();
+                SpineSkillBridge.DrawOverlay();
                 paintCount++;
                 if (g != null)
                 {

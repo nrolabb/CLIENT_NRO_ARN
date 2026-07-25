@@ -36,6 +36,14 @@ namespace Game1
 
 		public int rank;
 
+		public bool useSpine;
+
+		public bool isPreviewSpine;
+
+		public int spineId;
+
+		public int xSpinePreview, ySpinePreview;
+
 		public const sbyte A_STAND = 1;
 
 		public const sbyte A_RUN = 2;
@@ -1056,6 +1064,10 @@ namespace Game1
 		public bool isCopy;
 
 		public bool isWaitMonkey;
+
+		public bool isWaitBienHinh;
+
+		public long lastWaitBienHinh;
 
 		private bool isFeetEff;
 

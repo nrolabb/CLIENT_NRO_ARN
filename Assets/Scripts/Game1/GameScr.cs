@@ -4330,6 +4330,7 @@ namespace Game1
 	public override void update()
 	{
 		RongThanSpineController.Update();
+		SpineSkillBridge.Update();
     		if (ModFunc.activeBossNotif.size() > 0 || ModFunc.killedBossNotif.size() > 0)
     		{
     			ShowBoss.UpdateNotifications();

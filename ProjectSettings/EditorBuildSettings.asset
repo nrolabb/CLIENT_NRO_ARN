@@ -4,6 +4,15 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Nro1.unity
+    guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/NRO2.unity
+    guid: 9c2d00f4c6a78db4a89c112ce6b4a9b7
+  - enabled: 1
+    path: Assets/Scenes/NRO3.unity
+    guid: e2de609216d12a145af1aa31dbbcb2d4
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
