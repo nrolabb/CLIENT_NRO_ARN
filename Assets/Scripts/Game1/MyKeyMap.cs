@@ -64,6 +64,7 @@ namespace Game1
     		h.Add(KeyCode.Tab, -26);
     		h.Add(KeyCode.KeypadEnter, -5);
     		h.Add(KeyCode.Comma, 44);
+    		h.Add(KeyCode.Delete, 127);
     	}
     
     	public static int map(KeyCode k)

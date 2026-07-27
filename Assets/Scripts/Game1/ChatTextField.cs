@@ -146,6 +146,10 @@ namespace Game1
     		{
     			tfChat.keyPressed(keyCode);
     		}
+    		if (keyCode == -8 || keyCode == 127)
+    		{
+    			GameCanvas.keyPressed[14] = false;
+    		}
     		if (tfChat.getText().Equals(string.Empty))
     		{
     			right.caption = mResources.CLOSE;
@@ -239,7 +243,7 @@ namespace Game1
     		}
     		if (GameCanvas.keyPressed[14])
     		{
-    			if (right != null)
+    			if (right != null && GameCanvas.keyAsciiPress != -8 && GameCanvas.keyAsciiPress != 127)
     			{
     				right.performAction();
     			}

@@ -1887,7 +1887,7 @@ namespace Game1
 		public void keyPressedz(int keyCode)
 		{
 			lastTimePress = mSystem.currentTimeMillis();
-			if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 122) || keyCode == 10 || keyCode == 8 || keyCode == 13 || keyCode == 32 || keyCode == 31)
+			if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 122) || keyCode == 10 || keyCode == 8 || keyCode == 13 || keyCode == 32 || keyCode == 31 || keyCode == -8 || keyCode == 127)
 			{
 				keyAsciiPress = keyCode;
 			}

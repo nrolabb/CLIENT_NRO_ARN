@@ -224,13 +224,34 @@ namespace Game1
     
     	public void clearKeyWhenPutText(int keyCode)
     	{
-    		if (keyCode == -8 && timeDelayKyCode <= 0)
+    		if ((keyCode == -8 || keyCode == 127) && timeDelayKyCode <= 0)
     		{
     			if (timeDelayKyCode <= 0)
     			{
     				timeDelayKyCode = 1;
     			}
-    			clear();
+    			if (keyCode == -8)
+    			{
+    				clear();
+    			}
+    			else
+    			{
+    				clearForward();
+    			}
+    		}
+    	}
+
+    	public void clearForward()
+    	{
+    		if (caretPos < text.Length && text.Length > 0)
+    		{
+    			text = text.Substring(0, caretPos) + text.Substring(caretPos + 1);
+    			setOffset(0);
+    			setPasswordTest();
+    			if (kb != null)
+    			{
+    				kb.text = text;
+    			}
     		}
     	}
     
@@ -435,14 +456,19 @@ namespace Game1
     
     	public bool keyPressed(int keyCode)
     	{
-    		if (Main.isPC && keyCode == -8)
+    		if (Main.isPC && (keyCode == -8 || keyCode == 127))
     		{
-    			clearKeyWhenPutText(-8);
+    			clearKeyWhenPutText(keyCode);
     			return true;
     		}
     		if (keyCode == 8 || keyCode == -8 || keyCode == 204)
     		{
     			clear();
+    			return true;
+    		}
+    		if (keyCode == 127)
+    		{
+    			clearForward();
     			return true;
     		}
     		if (isQwerty && keyCode >= 32)
