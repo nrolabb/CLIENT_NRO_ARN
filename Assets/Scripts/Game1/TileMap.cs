@@ -270,7 +270,7 @@ namespace Game1
     
     	public static bool isDoubleMap()
     	{
-    		if (isMapDouble || mapID == 45 || mapID == 46 || mapID == 48 || mapID == 51 || mapID == 52 || mapID == 103 || mapID == 112 || mapID == 113 || mapID == 115 || mapID == 117 || mapID == 118 || mapID == 119 || mapID == 120 || mapID == 121 || mapID == 125 || mapID == 129 || mapID == 130)
+    		if (isMapDouble || mapID == 45 || mapID == 46 || mapID == 48 || mapID == 51 || mapID == 52 || mapID == 103 || mapID == 112 || mapID == 113 || mapID == 115 || mapID == 117 || mapID == 118 || mapID == 119 || mapID == 120 || mapID == 125 || mapID == 129 || mapID == 130)
     		{
     			return true;
     		}
