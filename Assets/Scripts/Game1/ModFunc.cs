@@ -695,18 +695,76 @@ namespace Game1
 
 		public void UsePorata()
 		{
-			int[] array = new int[4] { 454, 921, 2104, 1255 };
-			foreach (int num in array)
+			bool isWearingPorata = false;
+			if (Char.myCharz().arrItemBody != null && Char.myCharz().arrItemBody.Length > 10)
 			{
-				int index = FindItemIndex(num);
-				if (index != -1)
+				Item item10 = Char.myCharz().arrItemBody[10];
+				if (item10 != null && item10.template != null)
 				{
-					Service.gI().useItem(0, 1, (sbyte)index, -1);
-					Service.gI().petStatus(3);
-					return;
+					int id10 = item10.template.id;
+					if (id10 == 454 || id10 == 921 || id10 == 1819 || id10 == 1965)
+					{
+						isWearingPorata = true;
+					}
 				}
 			}
-			GameScr.info1.addInfo("Bạn không có bông tai", 0);
+
+			if (isWearingPorata)
+			{
+				bool hasEmptyBag = false;
+				if (Char.myCharz().arrItemBag != null)
+				{
+					for (int i = 0; i < Char.myCharz().arrItemBag.Length; i++)
+					{
+						if (Char.myCharz().arrItemBag[i] == null || Char.myCharz().arrItemBag[i].template == null)
+						{
+							hasEmptyBag = true;
+							break;
+						}
+					}
+				}
+				if (!hasEmptyBag)
+				{
+					GameScr.info1.addInfo("Hành trang đã đầy", 0);
+				}
+				else
+				{
+					Service.gI().getItem(5, 10);
+				}
+			}
+			else
+			{
+				int maxId = -1;
+				int maxIndex = -1;
+				if (Char.myCharz().arrItemBag != null)
+				{
+					for (int i = 0; i < Char.myCharz().arrItemBag.Length; i++)
+					{
+						Item item = Char.myCharz().arrItemBag[i];
+						if (item != null && item.template != null)
+						{
+							int id = item.template.id;
+							if (id == 454 || id == 921 || id == 1819 || id == 1965)
+							{
+								if (id > maxId)
+								{
+									maxId = id;
+									maxIndex = i;
+								}
+							}
+						}
+					}
+				}
+				if (maxIndex != -1)
+				{
+					Service.gI().useItem(0, 1, (sbyte)maxIndex, -1);
+					Service.gI().petStatus(3);
+				}
+				else
+				{
+					GameScr.info1.addInfo("Bạn không có bông tai", 0);
+				}
+			}
 		}
 
 		public void AutoFocusBoss()

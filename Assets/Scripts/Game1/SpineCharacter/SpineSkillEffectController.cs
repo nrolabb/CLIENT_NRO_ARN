@@ -74,6 +74,7 @@ public static class SpineSkillEffectController
 
         if (c != null)
         {
+            SoundMn.gI().gong();
             c.isWaitBienHinh = true;
             c.lastWaitBienHinh = mSystem.currentTimeMillis();
             c.isLockMove = true;

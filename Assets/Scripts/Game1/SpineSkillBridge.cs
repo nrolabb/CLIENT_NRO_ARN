@@ -176,6 +176,7 @@ namespace Game1
 
 			if (c != null)
 			{
+				SoundMn.gI().gong();
 				c.isWaitBienHinh = true;
 				c.lastWaitBienHinh = mSystem.currentTimeMillis();
 				c.isLockMove = true;
