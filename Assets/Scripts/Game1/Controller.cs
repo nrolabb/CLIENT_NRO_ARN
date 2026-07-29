@@ -429,7 +429,7 @@ namespace Game1
 										}
 										else
 										{
-											GameScr.startFlyText("-" + dame, mob.x, mob.y - mob.h, 0, -2, mFont.ORANGE);
+											GameScr.startFlyText("-" + NinjaUtil.getMoneysPower(dame), mob.x, mob.y - mob.h, 0, -2, mFont.ORANGE);
 										}
 									}
 								}
@@ -476,7 +476,7 @@ namespace Game1
 								}
 								else
 								{
-									GameScr.startFlyText("-" + num250, mob9.x, mob9.y - mob9.h, 0, -2, mFont.ORANGE);
+									GameScr.startFlyText("-" + NinjaUtil.getMoneysPower(num250), mob9.x, mob9.y - mob9.h, 0, -2, mFont.ORANGE);
 								}
 							}
 							if (type4 == 6)
@@ -3180,7 +3180,7 @@ namespace Game1
 									}
 									else
 									{
-										GameScr.startFlyText("-" + dameHit, @char.cx, @char.cy - @char.ch, 0, -3, flag9 ? mFont.FATAL : mFont.RED);
+										GameScr.startFlyText("-" + NinjaUtil.getMoneysPower(dameHit), @char.cx, @char.cy - @char.ch, 0, -3, flag9 ? mFont.FATAL : mFont.RED);
 									}
 								}
 								break;
@@ -3219,7 +3219,7 @@ namespace Game1
 								}
 								else
 								{
-									GameScr.startFlyText("-" + dameHit2, @char.cx, @char.cy - @char.ch, 0, -3, flag10 ? mFont.FATAL : mFont.ORANGE);
+									GameScr.startFlyText("-" + NinjaUtil.getMoneysPower(dameHit2), @char.cx, @char.cy - @char.ch, 0, -3, flag10 ? mFont.FATAL : mFont.ORANGE);
 								}
 							}
 							break;
@@ -3566,17 +3566,17 @@ namespace Game1
 								{
 									if (itemMap2.template.type == 9)
 									{
-										GameScr.startFlyText(((num >= 0) ? "+" : string.Empty) + num, Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch, 0, -2, mFont.YELLOW);
+										GameScr.startFlyText(((num >= 0) ? "+" : "-") + NinjaUtil.getMoneysPower(Res.abs(num)), Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch, 0, -2, mFont.YELLOW);
 										SoundMn.gI().getItem();
 									}
 									else if (itemMap2.template.type == 10)
 									{
-										GameScr.startFlyText(((num >= 0) ? "+" : string.Empty) + num, Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch, 0, -2, mFont.GREEN);
+										GameScr.startFlyText(((num >= 0) ? "+" : "-") + NinjaUtil.getMoneysPower(Res.abs(num)), Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch, 0, -2, mFont.GREEN);
 										SoundMn.gI().getItem();
 									}
 									else if (itemMap2.template.type == 34)
 									{
-										GameScr.startFlyText(((num >= 0) ? "+" : string.Empty) + num, Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch, 0, -2, mFont.RED);
+										GameScr.startFlyText(((num >= 0) ? "+" : "-") + NinjaUtil.getMoneysPower(Res.abs(num)), Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch, 0, -2, mFont.RED);
 										SoundMn.gI().getItem();
 									}
 									else
@@ -4147,7 +4147,7 @@ namespace Game1
 							GameCanvas.debug("SA77", 22);
 							int num282 = msg.reader().readInt();
 							Char.myCharz().yen += num282;
-							GameScr.startFlyText((num282 <= 0) ? (string.Empty + num282) : ("+" + num282), Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch - 10, 0, -2, mFont.YELLOW);
+							GameScr.startFlyText((num282 < 0) ? ("-" + NinjaUtil.getMoneysPower(-num282)) : ("+" + NinjaUtil.getMoneysPower(num282)), Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch - 10, 0, -2, mFont.YELLOW);
 							break;
 						}
 					case 95:
@@ -4156,7 +4156,7 @@ namespace Game1
 							int num296 = msg.reader().readInt();
 							Char.myCharz().xu += num296;
 							Char.myCharz().xuStr = mSystem.numberTostring(Char.myCharz().xu);
-							GameScr.startFlyText((num296 <= 0) ? (string.Empty + num296) : ("+" + num296), Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch - 10, 0, -2, mFont.YELLOW);
+							GameScr.startFlyText((num296 < 0) ? ("-" + NinjaUtil.getMoneysPower(-num296)) : ("+" + NinjaUtil.getMoneysPower(num296)), Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch - 10, 0, -2, mFont.YELLOW);
 							break;
 						}
 					case 96:
@@ -4184,7 +4184,7 @@ namespace Game1
 							Char.myCharz().xu += num286;
 							Char.myCharz().xuStr = mSystem.numberTostring(Char.myCharz().xu);
 							Char.myCharz().yen -= num286;
-							GameScr.startFlyText("+" + num286, Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch - 10, 0, -2, mFont.YELLOW);
+							GameScr.startFlyText("+" + NinjaUtil.getMoneysPower(num286), Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch - 10, 0, -2, mFont.YELLOW);
 							break;
 						}
 					case -3:
@@ -4207,7 +4207,7 @@ namespace Game1
 							Char.myCharz().applyCharLevelPercent();
 							if (Char.myCharz().cTypePk != 3)
 							{
-								GameScr.startFlyText(((param11 <= 0.0) ? string.Empty : "+") + param11, Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch, 0, -4, mFont.GREEN);
+								GameScr.startFlyText(((param11 < 0.0) ? "-" : "+") + NinjaUtil.getMoneysPower((param11 < 0.0) ? (-param11) : param11), Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch, 0, -4, mFont.GREEN);
 								if (param11 > 0.0 && Char.myCharz().petFollow != null && Char.myCharz().petFollow.smallID == 5002)
 								{
 									ServerEffect.addServerEffect(55, Char.myCharz().petFollow.cmx, Char.myCharz().petFollow.cmy, 1);
@@ -4489,7 +4489,7 @@ namespace Game1
 								}
 								if (flag14)
 								{
-									GameScr.startFlyText("-" + dame2, mob11.x, mob11.getY() - mob11.getH(), 0, -2, mFont.FATAL);
+									GameScr.startFlyText("-" + NinjaUtil.getMoneysPower(dame2), mob11.x, mob11.getY() - mob11.getH(), 0, -2, mFont.FATAL);
 								}
 								else if (dame2 == 0.0)
 								{
@@ -4499,7 +4499,7 @@ namespace Game1
 								}
 								else if (dame2 > 1.0)
 								{
-									GameScr.startFlyText("-" + dame2, mob11.x, mob11.getY() - mob11.getH(), 0, -2, mFont.ORANGE);
+									GameScr.startFlyText("-" + NinjaUtil.getMoneysPower(dame2), mob11.x, mob11.getY() - mob11.getH(), 0, -2, mFont.ORANGE);
 								}
 							}
 							break;
@@ -4542,11 +4542,11 @@ namespace Game1
 								double dameHit4 = msg.reader().readIntToLongDQT();
 								if (msg.reader().readBool())
 								{
-									GameScr.startFlyText("-" + dameHit4, mob16.x, mob16.y - mob16.h, 0, -2, mFont.FATAL);
+									GameScr.startFlyText("-" + NinjaUtil.getMoneysPower(dameHit4), mob16.x, mob16.y - mob16.h, 0, -2, mFont.FATAL);
 								}
 								else
 								{
-									GameScr.startFlyText("-" + dameHit4, mob16.x, mob16.y - mob16.h, 0, -2, mFont.ORANGE);
+									GameScr.startFlyText("-" + NinjaUtil.getMoneysPower(dameHit4), mob16.x, mob16.y - mob16.h, 0, -2, mFont.ORANGE);
 								}
 								sbyte b80 = msg.reader().readByte();
 								for (int num290 = 0; num290 < b80; num290++)
@@ -6213,7 +6213,7 @@ namespace Game1
 							Char.myCharz().cHP = msg.reader().readIntToLongDQT();
 							if (Char.myCharz().cHP > cHP && Char.myCharz().cTypePk != 4)
 							{
-								GameScr.startFlyText("+" + (Char.myCharz().cHP - cHP) + " " + mResources.HP, Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch - 20, 0, -1, mFont.HP);
+								GameScr.startFlyText("+" + NinjaUtil.getMoneysPower(Char.myCharz().cHP - cHP) + " " + mResources.HP, Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch - 20, 0, -1, mFont.HP);
 								SoundMn.gI().HP_MPup();
 								if (Char.myCharz().petFollow != null && Char.myCharz().petFollow.smallID == 5003)
 								{
@@ -6222,7 +6222,7 @@ namespace Game1
 							}
 							if (Char.myCharz().cHP < cHP)
 							{
-								GameScr.startFlyText("-" + (cHP - Char.myCharz().cHP) + " " + mResources.HP, Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch - 20, 0, -1, mFont.HP);
+								GameScr.startFlyText("-" + NinjaUtil.getMoneysPower(cHP - Char.myCharz().cHP) + " " + mResources.HP, Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch - 20, 0, -1, mFont.HP);
 							}
 							GameScr.gI().dHP = Char.myCharz().cHP;
 							if (!GameScr.isPaintInfoMe)
@@ -6240,7 +6240,7 @@ namespace Game1
 							Char.myCharz().cMP = msg.reader().readIntToLongDQT();
 							// if (Char.myCharz().cMP > cMP)
 							// {
-							// 	GameScr.startFlyText("+" + (Char.myCharz().cMP - cMP) + " " + mResources.KI, Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch - 23, 0, -2, mFont.MP);
+							// 	GameScr.startFlyText("+" + NinjaUtil.getMoneysPower(Char.myCharz().cMP - cMP) + " " + mResources.KI, Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch - 23, 0, -2, mFont.MP);
 							// 	SoundMn.gI().HP_MPup();
 							// 	if (Char.myCharz().petFollow != null && Char.myCharz().petFollow.smallID == 5001)
 							// 	{
@@ -6249,7 +6249,7 @@ namespace Game1
 							// }
 							if (Char.myCharz().cMP < cMP)
 							{
-								GameScr.startFlyText("-" + (cMP - Char.myCharz().cMP) + " " + mResources.KI, Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch - 23, 0, -2, mFont.MP);
+								GameScr.startFlyText("-" + NinjaUtil.getMoneysPower(cMP - Char.myCharz().cMP) + " " + mResources.KI, Char.myCharz().cx, Char.myCharz().cy - Char.myCharz().ch - 23, 0, -2, mFont.MP);
 							}
 							GameScr.gI().dMP = Char.myCharz().cMP;
 							if (!GameScr.isPaintInfoMe)

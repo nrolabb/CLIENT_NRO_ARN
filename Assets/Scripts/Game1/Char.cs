@@ -2825,11 +2825,11 @@ namespace Game1
 								cMP += cMPFull * (double)myskill.damage / 100.0;
 								if (cHP < cHPFull)
 								{
-									GameScr.startFlyText("+" + cHPFull * (double)myskill.damage / 100.0 + " " + mResources.HP, cx, cy - ch - 20, 0, -1, mFont.HP);
+									GameScr.startFlyText("+" + NinjaUtil.getMoneysPower(cHPFull * (double)myskill.damage / 100.0) + " " + mResources.HP, cx, cy - ch - 20, 0, -1, mFont.HP);
 								}
 								if (cMP < cMPFull)
 								{
-									GameScr.startFlyText("+" + cMPFull * (double)myskill.damage / 100.0 + " " + mResources.KI, cx, cy - ch - 20, 0, -2, mFont.MP);
+									GameScr.startFlyText("+" + NinjaUtil.getMoneysPower(cMPFull * (double)myskill.damage / 100.0) + " " + mResources.KI, cx, cy - ch - 20, 0, -2, mFont.MP);
 								}
 								Service.gI().skill_not_focus(2);
 							}
@@ -6861,7 +6861,7 @@ namespace Game1
 				}
 				else
 				{
-					GameScr.startFlyText("-" + HPShow, cx, cy - ch, 0, -2, isCrit ? mFont.FATAL : mFont.RED);
+					GameScr.startFlyText("-" + NinjaUtil.getMoneysPower(HPShow), cx, cy - ch, 0, -2, isCrit ? mFont.FATAL : mFont.RED);
 				}
 			}
 			if (HPShow > 0.0)
