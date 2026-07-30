@@ -172,7 +172,7 @@ namespace Game1
     	private static void __saveRMS(string filename, sbyte[] data)
     	{
     		string text = GetiPhoneDocumentsPath() + "/" + filename;
-    		FileStream fileStream = new FileStream(text, FileMode.Create);
+    		FileStream fileStream = new FileStream(text, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
     		fileStream.Write(ArrayCast.cast(data), 0, data.Length);
     		fileStream.Flush();
     		fileStream.Close();
@@ -183,7 +183,7 @@ namespace Game1
     	{
     		try
     		{
-    			FileStream fileStream = new FileStream(GetiPhoneDocumentsPath() + "/" + filename, FileMode.Open);
+    			FileStream fileStream = new FileStream(GetiPhoneDocumentsPath() + "/" + filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
     			byte[] array = new byte[fileStream.Length];
     			fileStream.Read(array, 0, array.Length);
     			fileStream.Close();

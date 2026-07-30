@@ -22,7 +22,7 @@ namespace Game1
             set => _selectTab = value;
         }
     
-        private static bool _isShow = true;
+        private static bool _isShow = false;
     
         public static bool isShow
         {
