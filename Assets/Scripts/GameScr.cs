@@ -333,6 +333,10 @@ namespace Game1
     
     	public static Image imgChat2;
     
+    	public static Image imgSoundOn;
+    
+    	public static Image imgSoundOff;
+    
     	public static Image imgMenu;
     
     	public static Image imgFocus;
@@ -894,6 +898,8 @@ namespace Game1
     			imgArrow2 = GameCanvas.loadImage("/mainImage/myTexture2darrow2.png");
     			imgChat = GameCanvas.loadImage("/mainImage/myTexture2dchat.png");
     			imgChat2 = GameCanvas.loadImage("/mainImage/myTexture2dchat2.png");
+    			imgSoundOn = GameCanvas.loadImage("/mainImage/mute.png");
+    			imgSoundOff = GameCanvas.loadImage("/mainImage/mute2.png");
     			imgFocus2 = GameCanvas.loadImage("/mainImage/myTexture2dfocus2.png");
     			imgHP1 = GameCanvas.loadImage("/mainImage/myTexture2dPea0.png");
     			imgHP2 = GameCanvas.loadImage("/mainImage/myTexture2dPea1.png");
@@ -4129,6 +4135,22 @@ namespace Game1
     			{
     				checkMouseChat();
     			}
+    			if (!TileMap.isOfflineMap() && GameCanvas.isPointerHoldIn(xC - 38, yC, 34, 34))
+    			{
+    				GameCanvas.isPointerJustDown = false;
+    				isPointerDowning = false;
+    				if (GameCanvas.isPointerClick && GameCanvas.isPointerJustRelease)
+    				{
+    					SoundMn.gI().soundToolOption();
+    					if (GameCanvas.isPlaySound)
+    					{
+    						SoundMn.gI().buttonClick();
+    					}
+    					Char.myCharz().currentMovePoint = null;
+    					GameCanvas.clearAllPointerEvent();
+    					return;
+    				}
+    			}
     			if (!TileMap.isOfflineMap() && GameCanvas.isPointerHoldIn(xC, yC, 34, 34))
     			{
     				mScreen.keyTouch = 15;
@@ -5444,6 +5466,11 @@ namespace Game1
     			else
     			{
     				g.drawImage(imgChat, xC + 17, yC + 17 + mGraphics.addYWhenOpenKeyBoard, mGraphics.HCENTER | mGraphics.VCENTER);
+    			}
+    			Image image = GameCanvas.isPlaySound ? imgSoundOn : imgSoundOff;
+    			if (image != null)
+    			{
+    				g.drawImage(image, xC - 21, yC + 17 + mGraphics.addYWhenOpenKeyBoard, mGraphics.HCENTER | mGraphics.VCENTER);
     			}
     		}
     		_ = isUseTouch;
