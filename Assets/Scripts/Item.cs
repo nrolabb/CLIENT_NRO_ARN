@@ -124,6 +124,15 @@ namespace Game1
     	public ItemOption[] itemOption;
     
     	public ItemTemplate template;
+    	public string getTemplateName() { 
+			if (isHaveOption(73)) 
+				return "[Đỏ] " + template.name;
+			if (isHaveOption(254)) 
+				return "[Vàng] " + template.name; 
+			if (isHaveOption(255)) 
+				return "[Xanh] " + template.name; 
+			return template.name; 
+		}	
     
     	public MyVector options;
     

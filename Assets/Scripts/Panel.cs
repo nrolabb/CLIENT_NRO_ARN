@@ -1232,6 +1232,9 @@ namespace Game1
 				135 => 11141120, // Nappa - do dam
 				241 => 16755200, // Ca Dic M - cam dam
 				252 => 12632256, // Giam sat thuong - bac
+				73 => 16711680,  // Đỏ (Hiếm)
+				254 => 16776960, // Vàng (Hiếm)
+				255 => 65280,    // Xanh (Hiếm)
 				_ => -1,
 			};
 		}
@@ -2090,15 +2093,15 @@ namespace Game1
 							}
 							if (item.itemOption[j].param >= 3 && item.itemOption[j].param <= 4)
 							{
-								text = text + "|2|1|" + itemName + text2;
+								text = text + "|2|1|[Đỏ] " + itemName + text2;
 							}
 							if (item.itemOption[j].param >= 5 && item.itemOption[j].param <= 6)
 							{
-								text = text + "|8|1|" + itemName + text2;
+								text = text + "|5|1|[Xanh] " + itemName + text2;
 							}
 							if (item.itemOption[j].param >= 7 && item.itemOption[j].param <= 10)
 							{
-								text = text + "|7|1|" + itemName + text2;
+								text = text + "|7|1|[Vàng] " + itemName + text2;
 							}
 						}
 						if (item.itemOption[j].optionTemplate.id == 72)
