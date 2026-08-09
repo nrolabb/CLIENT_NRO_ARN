@@ -125,7 +125,7 @@ namespace Game1
     
     	public ItemTemplate template;
     	public string getTemplateName() { 
-			if (isHaveOption(73)) 
+			if (isHaveOption(256)) 
 				return "[Đỏ] " + template.name;
 			if (isHaveOption(254)) 
 				return "[Vàng] " + template.name; 

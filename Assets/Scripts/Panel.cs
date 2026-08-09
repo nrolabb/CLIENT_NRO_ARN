@@ -1232,7 +1232,7 @@ namespace Game1
 				135 => 11141120, // Nappa - do dam
 				241 => 16755200, // Ca Dic M - cam dam
 				252 => 12632256, // Giam sat thuong - bac
-				73 => 16711680,  // Đỏ (Hiếm)
+				256 => 16711680,  // Đỏ (Hiếm)
 				254 => 16776960, // Vàng (Hiếm)
 				255 => 65280,    // Xanh (Hiếm)
 				_ => -1,
@@ -2066,7 +2066,7 @@ namespace Game1
 				string itemName = ModFunc.isShowID ? ("[" + item.template.id + "] " + item.getTemplateName()) : item.getTemplateName();
 				text = "|0|1|" + itemName + text;
 				
-				UnityEngine.Debug.Log("chieu.lq " + item.getTemplateName() + " " + item.isHaveOption(73) + " " + item.isHaveOption(254) + " " + item.isHaveOption(255));
+				UnityEngine.Debug.Log("chieu.lq " + item.getTemplateName() + " " + item.isHaveOption(256) + " " + item.isHaveOption(254) + " " + item.isHaveOption(255));
 
 				if (item.itemOption != null)
 				{
