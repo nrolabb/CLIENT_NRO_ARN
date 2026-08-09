@@ -98,7 +98,7 @@ namespace Game1
 			if (item != null)
 			{
 				SmallImage.drawSmallImage(g, item.template.iconID, x + 17, y + 18, 0, 3);
-				mFont.tahoma_7b_dark.drawString(g, item.template.name, x + 32, y + 7, mFont.LEFT);
+				mFont.tahoma_7b_dark.drawString(g, item.getTemplateName(), x + 32, y + 7, mFont.LEFT);
 				mFont.tahoma_7_blue.drawString(g, getTotalQuantity() + "/" + item.quantity, x + 32, y + 20, mFont.LEFT);
 			}
 			g.setClip(x, y + LIST_TOP, w, h - LIST_TOP - 8);

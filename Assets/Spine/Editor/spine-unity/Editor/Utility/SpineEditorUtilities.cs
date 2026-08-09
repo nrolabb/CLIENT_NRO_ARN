@@ -200,11 +200,11 @@ namespace Spine.Unity.Editor {
 #endif
 
 #if UNITY_2021_2_OR_NEWER
-			DragAndDrop.RemoveDropHandler(HierarchyHandler.HandleDragAndDrop);
-			DragAndDrop.AddDropHandler(HierarchyHandler.HandleDragAndDrop);
+			DragAndDrop.RemoveDropHandlerV2(HierarchyHandler.HandleDragAndDrop);
+			DragAndDrop.AddDropHandlerV2(HierarchyHandler.HandleDragAndDrop);
 #else
-			EditorApplication.hierarchyWindowItemOnGUI -= HierarchyHandler.HandleDragAndDrop;
-			EditorApplication.hierarchyWindowItemOnGUI += HierarchyHandler.HandleDragAndDrop;
+			EditorApplication.hierarchyWindowItemByEntityIdOnGUI -= HierarchyHandler.HandleDragAndDrop;
+			EditorApplication.hierarchyWindowItemByEntityIdOnGUI += HierarchyHandler.HandleDragAndDrop;
 #endif
 			// Hierarchy Icons
 #if NEWPLAYMODECALLBACKS
@@ -377,7 +377,7 @@ namespace Spine.Unity.Editor {
 #else
 				EditorApplication.hierarchyWindowChanged -= IconsOnChanged;
 #endif
-				EditorApplication.hierarchyWindowItemOnGUI -= IconsOnGUI;
+				EditorApplication.hierarchyWindowItemByEntityIdOnGUI -= IconsOnGUI;
 
 				if (!Application.isPlaying && Preferences.showHierarchyIcons) {
 #if NEWHIERARCHYWINDOWCALLBACKS
@@ -385,7 +385,7 @@ namespace Spine.Unity.Editor {
 #else
 					EditorApplication.hierarchyWindowChanged += IconsOnChanged;
 #endif
-					EditorApplication.hierarchyWindowItemOnGUI += IconsOnGUI;
+					EditorApplication.hierarchyWindowItemByEntityIdOnGUI += IconsOnGUI;
 					IconsOnChanged();
 				}
 			}
@@ -398,22 +398,23 @@ namespace Spine.Unity.Editor {
 
 				SkeletonRenderer[] arr = Object.FindObjectsOfType<SkeletonRenderer>();
 				foreach (SkeletonRenderer r in arr)
-					skeletonRendererTable[r.gameObject.GetInstanceID()] = r.gameObject;
+					skeletonRendererTable[r.gameObject.GetEntityId().GetHashCode()] = r.gameObject;
 
 				SkeletonUtilityBone[] boneArr = Object.FindObjectsOfType<SkeletonUtilityBone>();
 				foreach (SkeletonUtilityBone b in boneArr)
-					skeletonUtilityBoneTable[b.gameObject.GetInstanceID()] = b;
+					skeletonUtilityBoneTable[b.gameObject.GetEntityId().GetHashCode()] = b;
 
 				BoundingBoxFollower[] bbfArr = Object.FindObjectsOfType<BoundingBoxFollower>();
 				foreach (BoundingBoxFollower bbf in bbfArr)
-					boundingBoxFollowerTable[bbf.gameObject.GetInstanceID()] = bbf;
+					boundingBoxFollowerTable[bbf.gameObject.GetEntityId().GetHashCode()] = bbf;
 
 				BoundingBoxFollowerGraphic[] bbfgArr = Object.FindObjectsOfType<BoundingBoxFollowerGraphic>();
 				foreach (BoundingBoxFollowerGraphic bbf in bbfgArr)
-					boundingBoxFollowerGraphicTable[bbf.gameObject.GetInstanceID()] = bbf;
+					boundingBoxFollowerGraphicTable[bbf.gameObject.GetEntityId().GetHashCode()] = bbf;
 			}
 
-			internal static void IconsOnGUI (int instanceId, Rect selectionRect) {
+			internal static void IconsOnGUI (EntityId entityId, Rect selectionRect) {
+				int instanceId = entityId.GetHashCode();
 				Rect r = new Rect(selectionRect);
 				if (skeletonRendererTable.ContainsKey(instanceId)) {
 					r.x = r.width - 15;
@@ -456,7 +457,7 @@ namespace Spine.Unity.Editor {
 			}
 
 #if UNITY_2021_2_OR_NEWER
-			internal static DragAndDropVisualMode HandleDragAndDrop (int dropTargetInstanceID, HierarchyDropFlags dropMode, Transform parentForDraggedObjects, bool perform) {
+			internal static DragAndDropVisualMode HandleDragAndDrop (EntityId dropTargetInstanceID, HierarchyDropFlags dropMode, Transform parentForDraggedObjects, bool perform) {
 				SkeletonDataAsset skeletonDataAsset = DragAndDrop.objectReferences.Length == 0 ? null :
 					DragAndDrop.objectReferences[0] as SkeletonDataAsset;
 				if (skeletonDataAsset == null)
@@ -464,7 +465,7 @@ namespace Spine.Unity.Editor {
 				if (!perform)
 					return DragAndDropVisualMode.Copy;
 
-				GameObject dropTargetObject = UnityEditor.EditorUtility.InstanceIDToObject(dropTargetInstanceID) as GameObject;
+				GameObject dropTargetObject = UnityEditor.EditorUtility.EntityIdToObject(dropTargetInstanceID) as GameObject;
 				Transform dropTarget = dropTargetObject != null ? dropTargetObject.transform : null;
 				Transform parent = dropTarget;
 				int siblingIndex = 0;

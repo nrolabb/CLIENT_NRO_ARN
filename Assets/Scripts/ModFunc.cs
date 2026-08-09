@@ -276,7 +276,7 @@ namespace Game1
 
 		public static Image imgBg = null;
 
-		public static bool isShortOptionTemp = false;
+		public static bool isShortOptionTemp = true;
 
 		public static Image imgMenuChat = null;
 
@@ -1979,7 +1979,7 @@ namespace Game1
 			if (isAdd)
 			{
 				listItemAuto.Add(new ItemAuto(item.template.iconID, item.template.id));
-				GameScr.info1.addInfo("Đã thêm " + item.template.name + " vào Auto Item", 0);
+				GameScr.info1.addInfo("Đã thêm " + item.getTemplateName() + " vào Auto Item", 0);
 				return;
 			}
 			foreach (ItemAuto itemAuto in listItemAuto)
@@ -1987,7 +1987,7 @@ namespace Game1
 				if (itemAuto.iconID == item.template.iconID && itemAuto.id == item.template.id)
 				{
 					listItemAuto.Remove(itemAuto);
-					GameScr.info1.addInfo("Đã xóa " + item.template.name + " khỏi Auto Item", 0);
+					GameScr.info1.addInfo("Đã xóa " + item.getTemplateName() + " khỏi Auto Item", 0);
 					break;
 				}
 			}
@@ -2913,16 +2913,16 @@ namespace Game1
 		{
 			if (isAdd)
 			{
-				listFilterItems.Add(new ItemAutoFilter(item.template.iconID, item.template.id, item.template.name));
-				GameScr.info1.addInfo("Đã thêm " + item.template.name + " vào DS lọc đồ", 0);
+				listFilterItems.Add(new ItemAutoFilter(item.template.iconID, item.template.id, item.getTemplateName()));
+				GameScr.info1.addInfo("Đã thêm " + item.getTemplateName() + " vào DS lọc đồ", 0);
 				return;
 			}
 			foreach (ItemAutoFilter itemFilter in listFilterItems)
 			{
-				if (itemFilter.iconID == item.template.iconID && itemFilter.id == item.template.id && itemFilter.name == item.template.name)
+				if (itemFilter.iconID == item.template.iconID && itemFilter.id == item.template.id && itemFilter.name == item.getTemplateName())
 				{
 					listFilterItems.Remove(itemFilter);
-					GameScr.info1.addInfo("Đã xóa " + item.template.name + " khỏi DS lọc đồ", 0);
+					GameScr.info1.addInfo("Đã xóa " + item.getTemplateName() + " khỏi DS lọc đồ", 0);
 					break;
 				}
 			}

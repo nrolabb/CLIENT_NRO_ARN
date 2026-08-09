@@ -2063,69 +2063,11 @@ namespace Game1
 					}
 				}
 				_ = mFont.tahoma_7b_dark;
-				string text2 = string.Empty;
-				string itemName = ModFunc.isShowID ? ("[" + item.template.id + "] " + item.template.name) : item.template.name;
-				if (item.itemOption != null)
-				{
-					for (int i = 0; i < item.itemOption.Length; i++)
-					{
-						if (item.itemOption[i].optionTemplate.id == 72)
-						{
-							text2 = " [+" + item.itemOption[i].param + "]";
-						}
-						if (item.itemOption[i].optionTemplate.id == 225)
-						{
-							text2 = " [+" + item.itemOption[i].param + "]";
-						}
-					}
-				}
-				bool flag = false;
-				if (item.itemOption != null)
-				{
-					for (int j = 0; j < item.itemOption.Length; j++)
-					{
-						if (item.itemOption[j].optionTemplate.id == 225)
-						{
-							flag = true;
-							if (item.itemOption[j].param >= 1 && item.itemOption[j].param <= 2)
-							{
-								text = text + "|0|1|" + itemName + text2;
-							}
-							if (item.itemOption[j].param >= 3 && item.itemOption[j].param <= 4)
-							{
-								text = text + "|2|1|[Đỏ] " + itemName + text2;
-							}
-							if (item.itemOption[j].param >= 5 && item.itemOption[j].param <= 6)
-							{
-								text = text + "|5|1|[Xanh] " + itemName + text2;
-							}
-							if (item.itemOption[j].param >= 7 && item.itemOption[j].param <= 10)
-							{
-								text = text + "|7|1|[Vàng] " + itemName + text2;
-							}
-						}
-						if (item.itemOption[j].optionTemplate.id == 72)
-						{
-							flag = true;
-							if (item.itemOption[j].param >= 1 && item.itemOption[j].param <= 5)
-							{
-								text = text + "|2|1|" + itemName + text2;
-							}
-							if (item.itemOption[j].param >= 6 && item.itemOption[j].param <= 7)
-							{
-								text = text + "|8|1|" + itemName + text2;
-							}
-							if (item.itemOption[j].param >= 8 && item.itemOption[j].param <= 10)
-							{
-								text = text + "|7|1|" + itemName + text2;
-							}
-						}
-					}
-				}
-				if (!flag)
-				{
-					text = text + "|0|1|" + itemName + text2;
-				}
+				string itemName = ModFunc.isShowID ? ("[" + item.template.id + "] " + item.getTemplateName()) : item.getTemplateName();
+				text = "|0|1|" + itemName + text;
+				
+				UnityEngine.Debug.Log("chieu.lq " + item.getTemplateName() + " " + item.isHaveOption(73) + " " + item.isHaveOption(254) + " " + item.isHaveOption(255));
+
 				if (item.itemOption != null)
 				{
 					for (int k = 0; k < item.itemOption.Length; k++)
@@ -2144,6 +2086,7 @@ namespace Game1
 							continue;
 						}
 						empty = item.itemOption[k].getOptionString();
+						
 						if (!empty.Equals(string.Empty) && item.itemOption[k].optionTemplate.id != 72)
 						{
 							if (item.itemOption[k].optionTemplate.id == 102)
@@ -3053,11 +2996,11 @@ namespace Game1
 				}
 				if (ModFunc.isShowID)
 				{
-					mFont2.drawString(g, "[" + item.template.id + "] " + item.template.name + text, num + 5, num2 + 1, 0);
+					mFont2.drawString(g, "[" + item.template.id + "] " + item.getTemplateName() + text, num + 5, num2 + 1, 0);
 				}
 				else
 				{
-					mFont2.drawString(g, item.template.name + text, num + 5, num2 + 1, 0);
+					mFont2.drawString(g, item.getTemplateName() + text, num + 5, num2 + 1, 0);
 				}
 				string text2 = string.Empty;
 				if (item.itemOption != null)
@@ -5716,11 +5659,11 @@ namespace Game1
 						}
 						if (ModFunc.isShowID)
 						{
-							mFont2.drawString(g, "[" + item.template.id + "] " + item.template.name + text, num2 + 5, num3 + 1, 0);
+							mFont2.drawString(g, "[" + item.template.id + "] " + item.getTemplateName() + text, num2 + 5, num3 + 1, 0);
 						}
 						else
 						{
-							mFont2.drawString(g, item.template.name + text, num2 + 5, num3 + 1, 0);
+							mFont2.drawString(g, item.getTemplateName() + text, num2 + 5, num3 + 1, 0);
 						}
 						string text2 = string.Empty;
 						if (item.itemOption != null)
@@ -6102,11 +6045,11 @@ namespace Game1
 				}
 				if (ModFunc.isShowID)
 				{
-					mFont2.drawString(g, "[" + item.template.id + "] " + item.template.name + text, num3 + 5, num4 + 1, 0);
+					mFont2.drawString(g, "[" + item.template.id + "] " + item.getTemplateName() + text, num3 + 5, num4 + 1, 0);
 				}
 				else
 				{
-					mFont2.drawString(g, item.template.name + text, num3 + 5, num4 + 1, 0);
+					mFont2.drawString(g, item.getTemplateName() + text, num3 + 5, num4 + 1, 0);
 				}
 				string text2 = string.Empty;
 				if (item.itemOption != null)
@@ -6615,11 +6558,11 @@ namespace Game1
 					}
 					if (ModFunc.isShowID)
 					{
-						mFont2.drawString(g, "[" + item.template.id + "] " + item.template.name + text, num2 + 5, num3 + 1, 0);
+						mFont2.drawString(g, "[" + item.template.id + "] " + item.getTemplateName() + text, num2 + 5, num3 + 1, 0);
 					}
 					else
 					{
-						mFont2.drawString(g, item.template.name + text, num2 + 5, num3 + 1, 0);
+						mFont2.drawString(g, item.getTemplateName() + text, num2 + 5, num3 + 1, 0);
 					}
 					string text2 = string.Empty;
 					if (item.itemOption != null)
@@ -6901,7 +6844,7 @@ namespace Game1
 				{
 					continue;
 				}
-				mFont.tahoma_7_green2.drawString(g, item.template.name, num + 5, num2 + 1, 0);
+				mFont.tahoma_7_green2.drawString(g, item.getTemplateName(), num + 5, num2 + 1, 0);
 				string text = string.Empty;
 				if (item.itemOption != null && item.itemOption.Length >= 1)
 				{
@@ -7321,11 +7264,11 @@ namespace Game1
 					}
 					if (ModFunc.isShowID)
 					{
-						mFont2.drawString(g, "[" + item.template.id + "] " + item.template.name + text, num6 + 5, num7 + 1, 0);
+						mFont2.drawString(g, "[" + item.template.id + "] " + item.getTemplateName() + text, num6 + 5, num7 + 1, 0);
 					}
 					else
 					{
-						mFont2.drawString(g, item.template.name + text, num6 + 5, num7 + 1, 0);
+						mFont2.drawString(g, item.getTemplateName() + text, num6 + 5, num7 + 1, 0);
 					}
 					string text2 = string.Empty;
 					if (item.itemOption != null)
@@ -7680,11 +7623,11 @@ namespace Game1
 				}
 				if (ModFunc.isShowID)
 				{
-					mFont2.drawString(g, "[" + item.template.id + "] " + item.template.name + text, num + 5, num2 + 1, 0);
+					mFont2.drawString(g, "[" + item.template.id + "] " + item.getTemplateName() + text, num + 5, num2 + 1, 0);
 				}
 				else
 				{
-					mFont2.drawString(g, item.template.name + text, num + 5, num2 + 1, 0);
+					mFont2.drawString(g, item.getTemplateName() + text, num + 5, num2 + 1, 0);
 				}
 				string text2 = string.Empty;
 				if (item.itemOption != null)
@@ -7851,11 +7794,11 @@ namespace Game1
 					}
 					if (ModFunc.isShowID)
 					{
-						mFont4.drawString(g, "[" + item3.template.id + "] " + item3.template.name + text3, num23 + 5, num24 + 1, 0);
+						mFont4.drawString(g, "[" + item3.template.id + "] " + item3.getTemplateName() + text3, num23 + 5, num24 + 1, 0);
 					}
 					else
 					{
-						mFont4.drawString(g, item3.template.name + text3, num23 + 5, num24 + 1, 0);
+						mFont4.drawString(g, item3.getTemplateName() + text3, num23 + 5, num24 + 1, 0);
 					}
 					string text4 = string.Empty;
 					if (item3.itemOption != null)
@@ -8642,7 +8585,7 @@ namespace Game1
 					{
 						mFont.tahoma_7b_white.drawString(g, mResources.page + " " + (currPageShop[currentTabIndex] + 1) + "/" + maxPageShop[currentTabIndex], X + 55, 4, 0);
 					}
-					mFont.tahoma_7b_white.drawString(g, item.template.name, X + 55, 24, 0);
+					mFont.tahoma_7b_white.drawString(g, item.getTemplateName(), X + 55, 24, 0);
 					string st = mResources.pow_request + " " + Res.formatNumber(item.template.strRequire);
 					if (item.template.strRequire > Char.myCharz().cPower)
 					{
@@ -11916,7 +11859,7 @@ namespace Game1
 				sbyte indexItemDiscard = (sbyte)GetItemIndexInClanBox(itemToDiscard);
 				if (indexItemDiscard != -1)
 				{
-					GameCanvas.startYesNoDlg("Bạn có chắc chắn muốn vứt bỏ " + itemToDiscard.template.name + "?",
+					GameCanvas.startYesNoDlg("Bạn có chắc chắn muốn vứt bỏ " + itemToDiscard.getTemplateName() + "?",
 						new Command("Đồng ý", this, 2014, (int)indexItemDiscard),
 						new Command("Hủy", this, 4005, null));
 				}

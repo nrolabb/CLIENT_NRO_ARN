@@ -84,7 +84,7 @@ namespace Spine.Unity.Editor {
 					SkeletonDataAsset skeletonDataAsset = skeletonGraphic.skeletonDataAsset;
 					if (skeletonDataAsset != null) {
 						string assetPath = AssetDatabase.GetAssetPath(skeletonDataAsset);
-						int sgID = skeletonGraphic.GetInstanceID();
+						int sgID = skeletonGraphic.GetEntityId().GetHashCode();
 						savedSkeletonDataAssetAtSKeletonGraphicID[sgID] = assetPath;
 						skeletonDataAssetsToReload.Add(skeletonDataAsset);
 					}
