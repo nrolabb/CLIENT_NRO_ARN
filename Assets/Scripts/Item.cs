@@ -125,13 +125,22 @@ namespace Game1
     
     	public ItemTemplate template;
     	public string getTemplateName() { 
+			string text = "";
+			if (itemOption != null) {
+				for (int i = 0; i < itemOption.Length; i++) {
+					if (itemOption[i].optionTemplate.id == 72) {
+						text = " [+" + itemOption[i].param + "]";
+						break;
+					}
+				}
+			}
 			if (isHaveOption(256)) 
-				return "[Đỏ] " + template.name;
+				return "[Đỏ] " + template.name + text;
 			if (isHaveOption(254)) 
-				return "[Vàng] " + template.name; 
+				return "[Vàng] " + template.name + text; 
 			if (isHaveOption(255)) 
-				return "[Xanh] " + template.name; 
-			return template.name; 
+				return "[Xanh] " + template.name + text; 
+			return template.name + text; 
 		}	
     
     	public MyVector options;
