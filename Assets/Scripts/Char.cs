@@ -280,15 +280,15 @@ namespace Game1
 
 		public Archivement[] arrArchive;
 
-		public Item[] arrItemBag;
+		public Item[] arrItemBag = new Item[0];
 
-		public Item[] arrItemBox;
+		public Item[] arrItemBox = new Item[0];
 
-		public Item[] arrItemClanBox;
+		public Item[] arrItemClanBox = new Item[0];
 
 		public ClanIntrinsicInfo[] arrClanIntrinsic;
 
-		public Item[] arrItemBody;
+		public Item[] arrItemBody = new Item[0];
 
 		public Skill[] arrPetSkill;
 

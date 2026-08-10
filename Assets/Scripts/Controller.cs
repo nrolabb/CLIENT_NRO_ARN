@@ -1576,7 +1576,7 @@ namespace Game1
 											Char.myCharz().arrItemClanBox[i].itemOption = new ItemOption[optionsSize];
 											for (int j = 0; j < Char.myCharz().arrItemClanBox[i].itemOption.Length; j++)
 											{
-												int optId = msg.reader().readUnsignedByte();
+												int optId = msg.reader().readUnsignedShort();
 												int optParam = msg.reader().readUnsignedShort();
 												if (optId != 213)
 												{
