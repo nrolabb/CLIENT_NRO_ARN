@@ -4984,7 +4984,7 @@ namespace Game1
 			{
 				currentListLength = GetNewInventoryRowCount();
 				ITEM_HEIGHT = 29;
-				cmyLim = currentListLength * ITEM_HEIGHT - hScroll + 8;
+				cmyLim = currentListLength * ITEM_HEIGHT + GetInventoryBodyBagGap() - hScroll + 8;
 				cmy = (cmtoY = cmyLast[currentTabIndex]);
 				if (cmyLim < 0)
 				{

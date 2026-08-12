@@ -211,9 +211,8 @@ namespace Game1
     				}
     				return new Message(b, array);
     			}
-    			catch (Exception ex)
+    			catch (Exception)
     			{
-    				Debug.Log(ex.StackTrace);
     			}
     			return null;
     		}
