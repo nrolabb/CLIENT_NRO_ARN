@@ -140,6 +140,11 @@ namespace Game1
     		}
     		return angle;
     	}
+
+		public static void log(string s)
+    	{
+    		Debug.Log(s);
+    	}
     
     	public static void outz(string s)
     	{

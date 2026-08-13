@@ -3259,6 +3259,17 @@ namespace Game1
     			mapObject.stopMoving();
     			return false;
     		}
+    		else
+    		{
+    			if (TileMap.mapID == 39 || TileMap.mapID == 40 || TileMap.mapID == 41)
+    			{
+    				if (CloudGarden.GI().OnClick(num, num2))
+    				{
+    					checkClickMoveTo(num, num2, 1);
+    					return true;
+    				}
+    			}
+    		}
     		return false;
     	}
     
@@ -4353,6 +4364,7 @@ namespace Game1
 	{
 		RongThanSpineController.Update();
 		SpineSkillBridge.Update();
+		CloudGarden.GI().Update();
     		if (ModFunc.activeBossNotif.size() > 0 || ModFunc.killedBossNotif.size() > 0)
     		{
     			ShowBoss.UpdateNotifications();
@@ -4804,6 +4816,7 @@ namespace Game1
     		{
     			((Npc)vNpc.elementAt(m)).paint(g);
     		}
+    		CloudGarden.GI().Paint(g);
     		g.translate(0, GameCanvas.transY);
     		GameCanvas.debug("PA7", 1);
     		GameCanvas.debug("PA8", 1);

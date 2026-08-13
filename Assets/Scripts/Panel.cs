@@ -234,7 +234,7 @@ namespace Game1
 
 		private static string[][] boxPet = mResources.petMainTab;
 
-		public string[][][] tabName = new string[29][][]
+		public string[][][] tabName = new string[30][][]
 		{
 			null,
 			null,
@@ -264,7 +264,8 @@ namespace Game1
 			new string[1][] { new string[1] { string.Empty } },
 			boxMod,
 			new string[1][] { new string[1] { string.Empty } },
-			boxPet
+			boxPet,
+			new string[1][] { new string[2] { "Kho Hạt", string.Empty } }
 		};
 
 		private static readonly string[][] boxMod = new string[4][]
@@ -513,6 +514,33 @@ namespace Game1
 		public const int TYPE_GAMEINFOSUB = 24;
 
 		public const int TYPE_SPEACIALSKILL = 25;
+
+		public const int TYPE_FARM_SEED = 29;
+		private const int FARM_SEED_COLS = 5;
+		private const int FARM_SEED_MIN_SLOT_COUNT = 60;
+		private const int FARM_SEED_SLOT_W = 34;
+		private const int FARM_SEED_SLOT_H = 24;
+		private const int FARM_SEED_CELL_GAP = 2;
+		private const int FARM_SEED_ROW_W = FARM_SEED_SLOT_W + FARM_SEED_CELL_GAP;
+		private const int FARM_SEED_ROW_H = 25;
+
+		// Panel bón phân & thuốc trừ sâu
+		public const int TYPE_FARM_FERTILIZE = 30;
+		private const int FARM_FERT_COLS = 3;          // 4 loại phân + 1 thuốc = tối đa 5, xếp 3 cột
+		private const int FARM_FERT_SLOT_W = 50;
+		private const int FARM_FERT_SLOT_H = 50;
+		private const int FARM_FERT_CELL_GAP = 4;
+		private const int FARM_FERT_ROW_W = FARM_FERT_SLOT_W + FARM_FERT_CELL_GAP;
+		private const int FARM_FERT_ROW_H = FARM_FERT_SLOT_H + FARM_FERT_CELL_GAP;
+
+		public MyVector vFarmFertItems = new MyVector();  // Danh sách item phân/thuốc trong túi
+		private bool farmFertDragged;
+
+		public int currentFarmPlotId = -1;
+		public MyVector vFarmSeeds = new MyVector();
+		private bool farmSeedDragged;
+		private int pointerDownFirstY;
+		private int pointerDownLastY;
 
 		private int pointerDownTime;
 
@@ -974,6 +1002,78 @@ namespace Game1
 			}
 		}
 
+private void paintEffectItem(mGraphics g, Item item, int x, int y, int w, int h)
+    {
+        try
+        {
+            if (item != null && item.itemOption != null)
+            {
+                foreach (ItemOption option in item.itemOption)
+                {
+                    if (option != null && option.optionTemplate.id == 72 && option.param > 0)
+                    {
+                        Image[] bg = null;
+                        Image[] eff = null;
+                        /*switch (option.param)
+                        {
+                            case 1:
+                                bg = Panel.bgcam;
+                                eff = Panel.effcam;
+                                break;
+                            case 2:
+                                bg = Panel.bgdo;
+                                eff = Panel.effdo;
+                                break;
+                            case 3:
+                                bg = Panel.bghong;
+                                eff = Panel.effhong;
+                                break;
+                            case 4:
+                                bg = Panel.bgtim;
+                                eff = Panel.efftim;
+                                break;
+                            case 5:
+                                bg = Panel.bgxanhdam;
+                                eff = Panel.effxanhdam;
+                                break;
+                            case 6:
+                                bg = Panel.bgxanhla;
+                                eff = Panel.effxanhla;
+                                break;
+                            case 7:
+                                bg = Panel.bgxanhduong;
+                                eff = Panel.effxanhduong;
+                                break;
+                            case 8:
+                                bg = Panel.bgxanhnhat;
+                                eff = Panel.effxanhnhat;
+                                break;
+                            default:
+                                bg = Panel.bgdo;
+                                eff = Panel.effdo;
+                                break;
+                        }*/
+
+                        if (bg != null && bg[GameCanvas.gameTick / 5 % 8] != null)
+                        {
+                            g.drawImageScale(bg[GameCanvas.gameTick / 5 % 8], x - 1, y - 1, w + 3, h + 2, 0);
+                        }
+
+                        if (eff != null && eff[GameCanvas.gameTick / 6 % 8] != null)
+                        {
+                            g.drawImageScale(eff[GameCanvas.gameTick / 6 % 8], x + 2, y + 2, w - 4, h - 4, 0);
+                        }
+
+                    }
+                }
+            }
+        }
+        catch (Exception exception)
+        {
+            Debug.LogException(exception);
+        }
+    }
+
 		private void paintEffectItem(mGraphics g, Item item, int x, int y)
 		{
 			if (ModFunc.isEffectInven)
@@ -1220,13 +1320,13 @@ namespace Game1
 				233 => 16738740, // Gohan - hong
 				245 => 10040012, // Than Vu Tru Kaio - tim
 				253 => 16711680, // Kaioken - do
-				// Namek
+								 // Namek
 				130 => 65280,    // Picolo - xanh la
 				131 => 8388352,  // Oc tieu - olive
 				132 => 32768,    // Pikkoro Daimao - xanh dam
 				237 => 3407667,  // Nail - xanh ngoc
 				251 => 16761035, // Lien Hoan - vang cam
-				// Xayda
+								 // Xayda
 				133 => 16711935, // Kakarot - tim hong
 				134 => 3368703,  // Ca Dic - xanh duong
 				135 => 11141120, // Nappa - do dam
@@ -2065,7 +2165,7 @@ namespace Game1
 				_ = mFont.tahoma_7b_dark;
 				string itemName = ModFunc.isShowID ? ("[" + item.template.id + "] " + item.getTemplateName()) : item.getTemplateName();
 				text = "|0|1|" + itemName + text;
-				
+
 				UnityEngine.Debug.Log("chieu.lq " + item.getTemplateName() + " " + item.isHaveOption(256) + " " + item.isHaveOption(254) + " " + item.isHaveOption(255));
 
 				if (item.itemOption != null)
@@ -2086,7 +2186,7 @@ namespace Game1
 							continue;
 						}
 						empty = item.itemOption[k].getOptionString();
-						
+
 						if (!empty.Equals(string.Empty) && item.itemOption[k].optionTemplate.id != 72)
 						{
 							if (item.itemOption[k].optionTemplate.id == 102)
@@ -2369,6 +2469,7 @@ namespace Game1
 			isShow = true;
 			isClose = false;
 			SoundMn.gI().panelOpen();
+			GameCanvas.clearAllPointerEvent();
 			if (isTypeShop())
 			{
 				Char.myCharz().setPartOld();
@@ -2660,6 +2761,12 @@ namespace Game1
 						break;
 					case 19:
 						updateKeyOption();
+						break;
+					case TYPE_FARM_SEED:
+						updateKeyFarmSeed();
+						break;
+					case TYPE_FARM_FERTILIZE:
+						updateKeyFarmFertilize();
 						break;
 					case 20:
 						updateKeyOption();
@@ -5321,6 +5428,12 @@ namespace Game1
 				case 9:
 					paintArchivement(g);
 					break;
+				case TYPE_FARM_SEED:
+					paintFarmSeed(g);
+					break;
+				case TYPE_FARM_FERTILIZE:
+					paintFarmFertilize(g);
+					break;
 				case 21:
 				case 28:
 					if (currentTabIndex == 0)
@@ -5524,7 +5637,7 @@ namespace Game1
 			mFont.tahoma_7b_white.drawString(g, "OK", xOk + btnW / 2, yBtn + 3, mFont.CENTER);
 			g.fillRect(xClose, yBtn, btnW, btnH);
 			mFont.tahoma_7b_white.drawString(g, "Đóng", xClose + btnW / 2, yBtn + 3, mFont.CENTER);
-			
+
 			g.translate(-g.getTranslateX(), -g.getTranslateY());
 			g.translate(X - cmx, Y);
 		}
@@ -7176,7 +7289,7 @@ namespace Game1
 			{
 				currentListLength = ClanMessage.vMessage.size() + 2;
 			}
-			
+
 			for (int k = 0; k < clansOption.Length; k++)
 			{
 				g.setColor((k != cSelected || 0 != selected) ? 15723751 : 16383818);
@@ -7186,7 +7299,7 @@ namespace Game1
 					mFont.tahoma_7_grey.drawString(g, clansOption[k][l], num + k * TAB_W + TAB_W / 2, yScroll + l * 11, mFont.CENTER);
 				}
 			}
-			
+
 			int num7_title = yScroll + ITEM_HEIGHT;
 			g.setColor((1 != selected) ? 15196114 : 16383818);
 			g.fillRect(xScroll, num7_title, wScroll, ITEM_HEIGHT - 1);
@@ -8618,10 +8731,10 @@ namespace Game1
 			int used = 0;
 			for (int i = 0; i < items.Length; i++)
 			{
-					if (items[i] != null && items[i].template != null)
-					{
-						used++;
-					}
+				if (items[i] != null && items[i].template != null)
+				{
+					used++;
+				}
 			}
 			return used;
 		}
@@ -8864,6 +8977,18 @@ namespace Game1
 				case 22:
 					SmallImage.drawSmallImage(g, Char.myCharz().avatarz(), X + 25, 50, 0, 33);
 					paintToolInfo(g);
+					break;
+				case TYPE_FARM_SEED:
+					SmallImage.drawSmallImage(g, Char.myCharz().avatarz(), X + 25, 50, 0, 33);
+					mFont.tahoma_7b_white.drawString(g, "Kho Hạt Giống", X + 60, 4, mFont.LEFT, mFont.tahoma_7b_dark);
+					mFont.tahoma_7_yellow.drawString(g, "Ô đất: " + this.currentFarmPlotId, X + 60, 16, mFont.LEFT, mFont.tahoma_7_grey);
+					mFont.tahoma_7_yellow.drawString(g, "Số hạt: " + this.vFarmSeeds.size(), X + 60, 27, mFont.LEFT, mFont.tahoma_7_grey);
+					break;
+				case TYPE_FARM_FERTILIZE:
+					SmallImage.drawSmallImage(g, Char.myCharz().avatarz(), X + 25, 50, 0, 33);
+					mFont.tahoma_7b_white.drawString(g, "Bón phân / Thuốc", X + 60, 4, mFont.LEFT, mFont.tahoma_7b_dark);
+					mFont.tahoma_7_yellow.drawString(g, "Ô đất: " + this.currentFarmPlotId, X + 60, 16, mFont.LEFT, mFont.tahoma_7_grey);
+					mFont.tahoma_7_yellow.drawString(g, "Số vật phẩm: " + this.vFarmFertItems.size(), X + 60, 27, mFont.LEFT, mFont.tahoma_7_grey);
 					break;
 				case 5:
 				case 6:
@@ -9463,6 +9588,12 @@ namespace Game1
 					{
 						case 23:
 							doFireGameInfo();
+							break;
+						case TYPE_FARM_SEED:
+							doFireFarmSeed();
+							break;
+						case TYPE_FARM_FERTILIZE:
+							doFireFarmFertilize();
 							break;
 						case 21:
 							doFirePetMain();
@@ -11606,6 +11737,31 @@ namespace Game1
 		{
 			switch (idAction)
 			{
+				case 14001:
+					if (p != null && p is Item farmSeedItem)
+					{
+						Service.gI().farmPlantSeed(this.currentFarmPlotId, farmSeedItem.template.id);
+						GameCanvas.panel.hide();
+					}
+					break;
+				case FarmConstants.ACTION_FARM_FERTILIZE: // 14002 - Bón phân
+					if (p != null && p is Item fertItem)
+					{
+						FarmPlot fertPlot = CloudGarden.GI().GetPlot(this.currentFarmPlotId);
+						if (fertPlot != null) fertPlot.MarkFertilized();
+						Service.gI().farmFertilize(this.currentFarmPlotId, fertItem.template.id);
+						GameCanvas.panel.hide();
+					}
+					break;
+				case FarmConstants.ACTION_FARM_PESTICIDE: // 14003 - Phun thuốc trừ sâu
+					if (p != null && p is Item pestiItem)
+					{
+						FarmPlot pestiPlot = CloudGarden.GI().GetPlot(this.currentFarmPlotId);
+						if (pestiPlot != null) pestiPlot.MarkPesticide();
+						Service.gI().farmPesticide(this.currentFarmPlotId);
+						GameCanvas.panel.hide();
+					}
+					break;
 				case 8010:
 					if (chatTField == null)
 					{
@@ -14324,6 +14480,499 @@ namespace Game1
 				newSelected = 0;
 			}
 			setTabInventory(resetSelect);
+		}
+
+		    public void setTypeFarmSeed(int plotId)
+    {
+        this.type = TYPE_FARM_SEED;
+        this.setType(0);
+        this.currentFarmPlotId = plotId;
+        this.vFarmSeeds.removeAllElements();
+        Item[] bag = Char.myCharz().arrItemBag;
+        for (int i = 0; i < bag.Length; i++)
+        {
+            if (bag[i] != null && FarmConstants.IsSeedItem(bag[i].template.id))
+            {
+                this.vFarmSeeds.addElement(bag[i]);
+            }
+        }
+        if (this.vFarmSeeds.size() == 0)
+        {
+            GameScr.info1.addInfo("Bạn không có hạt giống nào!", 0);
+        }
+        // Vẽ đủ 60 ô như kho item, kể cả ô trống; nếu nhiều hơn thì mở rộng thêm hàng.
+        int minRows = FARM_SEED_MIN_SLOT_COUNT / FARM_SEED_COLS;
+        int calculatedRows = this.vFarmSeeds.size() / FARM_SEED_COLS + ((this.vFarmSeeds.size() % FARM_SEED_COLS > 0) ? 1 : 0);
+        this.currentListLength = (calculatedRows > minRows) ? calculatedRows : minRows;
+        this.ITEM_HEIGHT = FARM_SEED_ROW_H;
+        this.selected = -1;
+        this.currItem = null;
+        this.pointerIsDowning = false;
+        this.farmSeedDragged = false;
+        Debug.Log("setTypeFarmSeed: selected reset to -1");
+        if (this.lastSelect != null)
+        {
+            for (int j = 0; j < this.lastSelect.Length; j++)
+            {
+                this.lastSelect[j] = -1;
+            }
+        }
+        this.cmyLim = this.currentListLength * FARM_SEED_ROW_H - this.hScroll;
+        if (this.cmyLim < 0) this.cmyLim = 0;
+        this.cmy = (this.cmtoY = 0);
+    }
+
+		// chieu.lq Kho hạt giống
+		private void paintFarmSeed(mGraphics g)
+		{
+			Res.log("chieu.lq paintFarmSeed");
+			g.setClip(this.xScroll, this.yScroll, this.wScroll, this.hScroll);
+			g.translate(0, -this.cmy);
+
+			int slotW = FARM_SEED_SLOT_W;
+			int slotH = FARM_SEED_SLOT_H;
+			int cellW = FARM_SEED_ROW_W;
+			int cellH = FARM_SEED_ROW_H;
+
+			int col = FARM_SEED_COLS;
+			// Tính số ô cần vẽ dựa trên số lượng hạt giống thực tế (làm tròn lên để đủ hàng)
+			int rows = this.currentListLength; // Đã được tính trong setTypeFarmSeed()
+			int maxSlot = rows * col; // Số ô động dựa trên số hàng thực tế
+
+			for (int i = 0; i < maxSlot; i++)
+			{
+				int row = i / col;
+				int c = i % col;
+
+				int x = this.xScroll + c * cellW;
+				int y = this.yScroll + row * cellH;
+
+				// ===== Vẽ nền ô =====
+				if (i == this.selected)
+				{
+					g.setColor(16383818);
+					g.fillRect(x - 1, y - 1, slotW + 2, slotH + 2, 5);
+				}
+
+				Item item = (i < this.vFarmSeeds.size()) ? (Item)this.vFarmSeeds.elementAt(i) : null;
+				int itemColor = 6047789;
+				float itemAlpha = 0.2f;
+				if (item != null && item.itemOption != null)
+				{
+					for (int opt = 0; opt < item.itemOption.Length; opt++)
+					{
+						if (item.itemOption[opt].optionTemplate.id == 72 && item.itemOption[opt].param > 0)
+						{
+							byte id = (byte)Panel.GetColor_Item_Upgrade(item.itemOption[opt].param);
+							if (Panel.GetColor_ItemBg((int)id) != -1)
+							{
+								itemColor = Panel.GetColor_ItemBg((int)id);
+								itemAlpha = 0.3f;
+							}
+						}
+					}
+				}
+				g.setColor(itemColor, itemAlpha);
+				g.fillRect(x, y, slotW, slotH, 5);
+				this.paintEffectItem(g, item, x, y, slotW, slotH);
+
+				// ===== Nếu có item =====
+				if (item != null)
+				{
+					float offset = (i == this.selected) ?
+						((float)System.Math.Sin((float)GameCanvas.gameTick * 0.2f) * 2f) : 0f;
+
+					// ✅ Vẽ icon chính giữa ô
+					SmallImage.drawSmallImage(g, (int)item.template.iconID,
+						x + slotW / 2,
+						y + slotH / 2 + (int)offset,
+						0, 3);
+
+					// ===== Vẽ số lượng =====
+					if (item.quantity > 1)
+					{
+						mFont.tahoma_7_yellow.drawString(g, "" + item.quantity,
+							x + slotW - 1,
+							y + slotH - mFont.tahoma_7_yellow.getHeight(),
+							mFont.RIGHT);
+					}
+				}
+			}
+		}
+
+
+
+
+		private void updateKeyFarmSeed()
+		{
+
+			// Xử lý pointer down - bắt đầu kéo
+			if (GameCanvas.isPointerDown && !this.pointerIsDowning)
+			{
+				if (GameCanvas.isPointer(this.xScroll, this.yScroll, this.wScroll, this.hScroll))
+				{
+					this.pointerDownFirstY = GameCanvas.py;
+					this.pointerDownLastY = GameCanvas.py;
+					this.pointerIsDowning = true;
+					this.farmSeedDragged = false;
+					this.cmRun = 0;
+				}
+			}
+
+			if (GameCanvas.isPointerDown && this.pointerIsDowning)
+			{
+				int dy = GameCanvas.py - this.pointerDownLastY;
+				if (dy != 0)
+				{
+					if (Res.abs(GameCanvas.py - this.pointerDownFirstY) > 5)
+					{
+						this.farmSeedDragged = true;
+						this.selected = -1;
+					}
+					this.cmy -= dy;
+					if (this.cmy < 0) this.cmy = 0;
+					if (this.cmy > this.cmyLim) this.cmy = this.cmyLim;
+					this.cmtoY = this.cmy;
+					this.pointerDownLastY = GameCanvas.py;
+				}
+			}
+
+			// Xử lý pointer release - kiểm tra click
+			if (GameCanvas.isPointerJustRelease && this.pointerIsDowning)
+			{
+				// Nếu không kéo nhiều thì coi như click
+				if (!this.farmSeedDragged && Res.abs(GameCanvas.py - this.pointerDownFirstY) < 20)
+				{
+					int x = GameCanvas.px - this.xScroll;
+					int y = GameCanvas.py - this.yScroll + this.cmy;
+
+					int slotW = FARM_SEED_SLOT_W;
+					int slotH = FARM_SEED_SLOT_H;
+					int cellW = FARM_SEED_ROW_W;
+					int cellH = FARM_SEED_ROW_H;
+
+					int col = x / cellW;
+					int row = y / cellH;
+
+					if (col >= 0 && col < FARM_SEED_COLS && row >= 0)
+					{
+						int localX = x - col * cellW;
+						int localY = y - row * cellH;
+						if (localX < 0 || localX >= slotW || localY < 0 || localY >= slotH)
+						{
+							this.pointerIsDowning = false;
+							GameCanvas.isPointerJustRelease = false;
+							this.moveCamera();
+							return;
+						}
+
+						int index = row * FARM_SEED_COLS + col;
+						// Tính maxSlot dựa trên số hàng thực tế (giống paintFarmSeed)
+						int maxRows = this.currentListLength;
+						int maxSlot = maxRows * FARM_SEED_COLS;
+						// Cho phép chọn bất kỳ ô nào trong grid động, kể cả ô trống
+						if (index >= 0 && index < maxSlot)
+						{
+							this.selected = index;
+							this.lastSelect[this.currentTabIndex] = this.selected;
+							Debug.Log("updateKeyFarmSeed CLICK: index=" + index + ", selected=" + this.selected);
+							SoundMn.gI().buttonClick();
+							this.waitToPerform = 2;
+						}
+					}
+				}
+				this.pointerIsDowning = false;
+				this.farmSeedDragged = false;
+				GameCanvas.isPointerJustRelease = false;
+			}
+
+			// Di chuyển camera khi scroll
+			this.moveCamera();
+		}
+
+
+		private void doFireFarmSeed()
+		{
+			// Tính maxSlot dựa trên số hàng thực tế
+			int maxRows = this.currentListLength;
+			int maxSlot = maxRows * FARM_SEED_COLS;
+			if (this.selected < 0 || this.selected >= maxSlot) return;
+
+			if (this.selected >= this.vFarmSeeds.size())
+			{
+				this.cp = null;
+				return;
+			}
+
+			Item item = (Item)this.vFarmSeeds.elementAt(this.selected);
+			if (item == null)
+			{
+				this.cp = null;
+				return;
+			}
+
+			this.currItem = item;
+
+			MyVector myVector = new MyVector();
+			myVector.addElement(new Command("Gieo", this, 14001, item));
+			myVector.addElement(new Command("Vứt", this, 2003, item));
+
+			// Tính vị trí menu giống inventory: dựa trên row của item
+			int row = this.selected / FARM_SEED_COLS;
+			int menuY = (row + 1) * FARM_SEED_ROW_H - this.cmy + this.yScroll;
+
+			GameCanvas.menu.startAt(myVector, this.X, menuY);
+
+			// Hiện info item SAU khi gọi startAt (giống inventory)
+			this.addItemDetail(item);
+		}
+
+		// ===================== FARM FERTILIZE PANEL =====================
+
+		/// <summary>
+		/// Mở panel bón phân / thuốc trừ sâu cho ô đất plotId.
+		/// Quét túi đồ lấy tất cả phân bón (2148-2151) và thuốc trừ sâu (2152),
+		/// phân loại theo trạng thái ô: nếu cây héo chỉ hiện thuốc, nếu đang trồng chỉ hiện phân.
+		/// </summary>
+		public void setTypeFarmFertilize(int plotId)
+		{
+			this.type = TYPE_FARM_FERTILIZE;
+			this.setType(0);
+			this.currentFarmPlotId = plotId;
+			this.vFarmFertItems.removeAllElements();
+
+			FarmPlot plot = CloudGarden.GI().GetPlot(plotId);
+			bool isWithered = (plot != null && plot.IsWithered());
+			bool canFertilize = (plot != null && plot.CanFertilize());
+
+			Item[] bag = Char.myCharz().arrItemBag;
+			for (int i = 0; i < bag.Length; i++)
+			{
+				if (bag[i] == null) continue;
+				short id = bag[i].template.id;
+				// Cây héo: chỉ lấy thuốc trừ sâu
+				if (isWithered && FarmConstants.IsPesticideItem(id))
+				{
+					this.vFarmFertItems.addElement(bag[i]);
+				}
+				// Đang trồng: chỉ lấy phân bón
+				else if (canFertilize && FarmConstants.IsFertilizerItem(id))
+				{
+					this.vFarmFertItems.addElement(bag[i]);
+				}
+			}
+
+			if (this.vFarmFertItems.size() == 0)
+			{
+				string msg = isWithered ? "Bạn không có thuốc trừ sâu!" : "Bạn không có phân bón!";
+				GameScr.info1.addInfo(msg, 0);
+			}
+
+			// Tính số hàng cần vẽ (tối thiểu 2 hàng)
+			int cols = FARM_FERT_COLS;
+			int itemCount = this.vFarmFertItems.size();
+			int calcRows = itemCount / cols + ((itemCount % cols > 0) ? 1 : 0);
+			this.currentListLength = (calcRows < 2) ? 2 : calcRows;
+			this.ITEM_HEIGHT = FARM_FERT_ROW_H;
+			this.selected = -1;
+			this.currItem = null;
+			this.pointerIsDowning = false;
+			this.farmFertDragged = false;
+			this.cmyLim = this.currentListLength * FARM_FERT_ROW_H - this.hScroll;
+			if (this.cmyLim < 0) this.cmyLim = 0;
+			this.cmy = (this.cmtoY = 0);
+		}
+
+		/// <summary>
+		/// Vẽ lưới vật phẩm bón phân / thuốc trừ sâu
+		/// </summary>
+		private void paintFarmFertilize(mGraphics g)
+		{
+			g.setClip(this.xScroll, this.yScroll, this.wScroll, this.hScroll);
+			g.translate(0, -this.cmy);
+
+			int slotW = FARM_FERT_SLOT_W;
+			int slotH = FARM_FERT_SLOT_H;
+			int cellW = FARM_FERT_ROW_W;
+			int cellH = FARM_FERT_ROW_H;
+			int cols = FARM_FERT_COLS;
+			int rows = this.currentListLength;
+			int maxSlot = rows * cols;
+
+			for (int i = 0; i < maxSlot; i++)
+			{
+				int row = i / cols;
+				int c = i % cols;
+
+				int x = this.xScroll + c * cellW;
+				int y = this.yScroll + row * cellH;
+
+				// Nền ô được chọn
+				if (i == this.selected)
+				{
+					g.setColor(16383818);
+					g.fillRect(x - 1, y - 1, slotW + 2, slotH + 2, 5);
+				}
+
+				Item item = (i < this.vFarmFertItems.size()) ? (Item)this.vFarmFertItems.elementAt(i) : null;
+
+				// Nền ô
+				g.setColor(6047789, 0.2f);
+				g.fillRect(x, y, slotW, slotH, 5);
+				this.paintEffectItem(g, item, x, y, slotW, slotH);
+
+				if (item != null)
+				{
+					float anim = (i == this.selected) ? ((float)System.Math.Sin((float)GameCanvas.gameTick * 0.2f) * 2f) : 0f;
+
+					// Icon item ở giữa ô
+					SmallImage.drawSmallImage(g, (int)item.template.iconID,
+						x + slotW / 2,
+						y + slotH / 2 + (int)anim,
+						0, 3);
+
+					// Tên rút gọn phía trên icon
+					string shortName = FarmConstants.GetFarmConsumableName(item.template.id);
+					mFont.tahoma_7_yellow.drawString(g, shortName,
+						x + slotW / 2, y + 4, mFont.CENTER);
+
+					// Số lượng góc phải dưới
+					if (item.quantity > 1)
+					{
+						mFont.tahoma_7_yellow.drawString(g, "x" + item.quantity,
+							x + slotW - 2,
+							y + slotH - mFont.tahoma_7_yellow.getHeight(),
+							mFont.RIGHT);
+					}
+
+					// Hiển thị số giây giảm cho phân bón
+					int reduceSecs = FarmConstants.GetFertilizerSeconds(item.template.id);
+					if (reduceSecs > 0)
+					{
+						string reduceStr = "-" + (reduceSecs / 60) + "p";
+						mFont.tahoma_7b_white.drawString(g, reduceStr,
+							x + slotW / 2, y + slotH - 9, mFont.CENTER, mFont.tahoma_7_green);
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Xử lý input cho panel bón phân / thuốc trừ sâu
+		/// </summary>
+		private void updateKeyFarmFertilize()
+		{
+			if (GameCanvas.isPointerDown && !this.pointerIsDowning)
+			{
+				if (GameCanvas.isPointer(this.xScroll, this.yScroll, this.wScroll, this.hScroll))
+				{
+					this.pointerDownFirstY = GameCanvas.py;
+					this.pointerDownLastY = GameCanvas.py;
+					this.pointerIsDowning = true;
+					this.farmFertDragged = false;
+					this.cmRun = 0;
+				}
+			}
+
+			if (GameCanvas.isPointerDown && this.pointerIsDowning)
+			{
+				int dy = GameCanvas.py - this.pointerDownLastY;
+				if (dy != 0)
+				{
+					if (Res.abs(GameCanvas.py - this.pointerDownFirstY) > 5)
+					{
+						this.farmFertDragged = true;
+						this.selected = -1;
+					}
+					this.cmy -= dy;
+					if (this.cmy < 0) this.cmy = 0;
+					if (this.cmy > this.cmyLim) this.cmy = this.cmyLim;
+					this.cmtoY = this.cmy;
+					this.pointerDownLastY = GameCanvas.py;
+				}
+			}
+
+			if (GameCanvas.isPointerJustRelease && this.pointerIsDowning)
+			{
+				if (!this.farmFertDragged && Res.abs(GameCanvas.py - this.pointerDownFirstY) < 20)
+				{
+					int x = GameCanvas.px - this.xScroll;
+					int y = GameCanvas.py - this.yScroll + this.cmy;
+
+					int col = x / FARM_FERT_ROW_W;
+					int row = y / FARM_FERT_ROW_H;
+
+					if (col >= 0 && col < FARM_FERT_COLS && row >= 0)
+					{
+						int localX = x - col * FARM_FERT_ROW_W;
+						if (localX < 0 || localX > FARM_FERT_SLOT_W)
+						{
+							// click vào gap — bỏ qua
+						}
+						else
+						{
+							int index = row * FARM_FERT_COLS + col;
+							int maxSlot = this.currentListLength * FARM_FERT_COLS;
+							if (index >= 0 && index < maxSlot)
+							{
+								this.selected = index;
+								this.lastSelect[this.currentTabIndex] = this.selected;
+								SoundMn.gI().buttonClick();
+								this.waitToPerform = 2;
+							}
+						}
+					}
+				}
+				this.pointerIsDowning = false;
+				this.farmFertDragged = false;
+				GameCanvas.isPointerJustRelease = false;
+			}
+		}
+
+		/// <summary>
+		/// Xử lý khi người dùng chọn vật phẩm bón phân / thuốc → hiện menu xác nhận
+		/// </summary>
+		private void doFireFarmFertilize()
+		{
+			int maxSlot = this.currentListLength * FARM_FERT_COLS;
+			if (this.selected < 0 || this.selected >= maxSlot) return;
+
+			if (this.selected >= this.vFarmFertItems.size())
+			{
+				this.cp = null;
+				return;
+			}
+
+			Item item = (Item)this.vFarmFertItems.elementAt(this.selected);
+			if (item == null)
+			{
+				this.cp = null;
+				return;
+			}
+
+			this.currItem = item;
+
+			// Xây menu xác nhận dựa theo loại item
+			MyVector myVector = new MyVector();
+			bool isPesticide = FarmConstants.IsPesticideItem(item.template.id);
+			if (isPesticide)
+			{
+				myVector.addElement(new Command("Phun thuốc", this, FarmConstants.ACTION_FARM_PESTICIDE, item));
+			}
+			else
+			{
+				int secs = FarmConstants.GetFertilizerSeconds(item.template.id);
+				string label = "Bón (-" + (secs / 60) + "p)";
+				myVector.addElement(new Command(label, this, FarmConstants.ACTION_FARM_FERTILIZE, item));
+			}
+			myVector.addElement(new Command("Vứt", this, 2003, item));
+
+			// Vị trí menu dưới ô được chọn
+			int rowSel = this.selected / FARM_FERT_COLS;
+			int menuY = (rowSel + 1) * FARM_FERT_ROW_H - this.cmy + this.yScroll;
+			GameCanvas.menu.startAt(myVector, this.X, menuY);
+
+			this.addItemDetail(item);
 		}
 	}
 }

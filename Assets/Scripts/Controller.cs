@@ -1368,6 +1368,16 @@ namespace Game1
 									Rms.saveRMS("music_" + name, data2);
 								}
 							}
+							if (b38 == 5)
+							{
+								string filename = msg.reader().readUTF();
+								filename = filename.Replace("/", "_"); // e.g. "farm/icon_hoe.png" -> "farm_icon_hoe.png"
+								int num91 = msg.reader().readInt();
+								sbyte[] data = new sbyte[num91];
+								msg.reader().read(ref data, 0, num91);
+								Rms.saveRMS(filename, data);
+								Res.outz("Saved farm asset to RMS: " + filename);
+							}
 							break;
 						}
 					case -43:
@@ -1555,6 +1565,13 @@ namespace Game1
 					case -58:
 						{
 							sbyte action = msg.reader().readByte();
+							// Farm asset sub-types: 10=FarmAsset, 11=CropAsset, 12=FarmIcon, 13=CropTemplate
+							// Clan Box actions: 0=box list, 1=box refresh, 3=intrinsic list, 4=intrinsic detail
+							if (action == 10 || action == 11 || action == 12 || action == 13)
+							{
+								FarmMessageHandler.GI().HandleFarmAssetMessage(msg, action);
+								break;
+							}
 							if (action == 0 || action == 1)
 							{
 								sbyte size = msg.reader().readByte();
@@ -2924,6 +2941,10 @@ namespace Game1
 								GameScr.gI().magicTree.last = (GameScr.gI().magicTree.cur = mSystem.currentTimeMillis());
 								GameScr.gI().magicTree.isUpdateTree = true;
 								GameScr.gI().magicTree.isPeasEffect = true;
+							}
+							if (b12 == 10)
+							{
+								FarmMessageHandler.GI().HandleFarmDataDirect(msg);
 							}
 							break;
 						}

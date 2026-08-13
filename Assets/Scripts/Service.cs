@@ -4,7 +4,7 @@ using Game1.Assets.src.g;
 namespace Game1
 {
 
-	public class Service
+	public partial class Service
 	{
 		private ISession session = Session_ME.gI();
 
