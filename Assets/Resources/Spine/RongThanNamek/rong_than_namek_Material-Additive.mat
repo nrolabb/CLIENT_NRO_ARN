@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: rong_than_namek_Material-Additive
-  m_Shader: {fileID: 4800000, guid: e0f08a7466e9aa44bad92a153eeb4235, type: 3}
+  m_Shader: {fileID: 4800000, guid: 53efa1d97f5d9f74285d4330cda14e36, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []

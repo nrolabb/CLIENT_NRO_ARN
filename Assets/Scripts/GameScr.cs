@@ -3608,10 +3608,10 @@ namespace Game1
 	{
 		Res.outz("VE RONG THAN O VI TRI x= " + x + " y=" + y);
 		doiMauTroi();
-		if (!isRongNamek && RongThanSpineController.IsAvailable())
+		if (RongThanSpineController.IsAvailable(isRongNamek))
 		{
-			EffecMn.removeEff(17);
-			RongThanSpineController.Show(x, y - 77);
+			EffecMn.removeEff(isRongNamek ? 25 : 17);
+			RongThanSpineController.Show(x, y - 77, isRongNamek);
 		}
 		else
 		{

@@ -4,7 +4,6 @@ using Game1;
 
 public static class RongThanSpineController
 {
-    private const string AssetPath = "Spine/RongThanTraiDat/rong_than_traidat";
     private const int OverlayLayer = 31;
     private const float SkeletonScale = 0.385f;
 
@@ -16,30 +15,62 @@ public static class RongThanSpineController
     private static int textureHeight;
     private static int mapX;
     private static int mapY;
-    private static bool loaded;
-    private static bool failed;
-    private static bool hiding;
 
-    public static bool IsAvailable()
+    private static SkeletonDataAsset dataTraiDat;
+    private static SkeletonDataAsset dataNamek;
+
+    private static bool loadedTraiDat;
+    private static bool loadedNamek;
+    private static bool failedTraiDat;
+    private static bool failedNamek;
+
+    private static bool hiding;
+    private static bool isCurrentNamek;
+
+    public static bool IsAvailable(bool isNamek = false)
     {
-        EnsureLoaded();
-        return loaded && !failed;
+        EnsureLoaded(isNamek);
+        return isNamek ? (loadedNamek && !failedNamek) : (loadedTraiDat && !failedTraiDat);
     }
 
-    public static void Show(int x, int y)
+    public static void Show(int x, int y, bool isNamek = false)
     {
         mapX = x;
         mapY = y;
         hiding = false;
-        if (!IsAvailable()) return;
-        if (instance == null) CreateInstance();
-        if (instance == null || animation == null) return;
+        
+        if (!IsAvailable(isNamek)) return;
+        
+        EnsureOverlayCamera();
+        
+        if (instance == null)
+        {
+            instance = new GameObject("RongThanSpine");
+            Object.DontDestroyOnLoad(instance);
+            instance.layer = OverlayLayer;
+            animation = instance.AddComponent<SkeletonAnimation>();
+            MeshRenderer renderer = instance.GetComponent<MeshRenderer>();
+            if (renderer != null) renderer.sortingOrder = 100;
+        }
+
+        if (animation == null) return;
+
+        SkeletonDataAsset targetData = isNamek ? dataNamek : dataTraiDat;
+        if (animation.skeletonDataAsset != targetData || isCurrentNamek != isNamek || !animation.valid)
+        {
+            animation.skeletonDataAsset = targetData;
+            animation.Initialize(true);
+            isCurrentNamek = isNamek;
+        }
 
         instance.SetActive(true);
         UpdatePosition();
         animation.AnimationState.ClearTracks();
         var entry = animation.AnimationState.SetAnimation(0, "rong_than_start", false);
-        entry.TimeScale = 0.7f;
+        if (entry != null)
+        {
+            entry.TimeScale = 0.7f;
+        }
         animation.AnimationState.AddAnimation(0, "rong_than_loop", true, 0f);
     }
 
@@ -49,19 +80,24 @@ public static class RongThanSpineController
         hiding = true;
         animation.AnimationState.ClearTracks();
         var entry = animation.AnimationState.SetAnimation(0, "rong_end", false);
-        entry.TimeScale = 0.7f;
-        entry.Complete += delegate
+        if (entry != null)
         {
-            if (hiding && instance != null) instance.SetActive(false);
-        };
+            entry.TimeScale = 0.7f;
+            entry.Complete += delegate
+            {
+                if (hiding && instance != null) instance.SetActive(false);
+            };
+        }
+        else
+        {
+            if (instance != null) instance.SetActive(false);
+        }
     }
 
     public static void Update()
     {
         if (instance != null && instance.activeSelf) UpdatePosition();
     }
-
-    private static Material drawMaterial;
 
     public static void DrawOverlay()
     {
@@ -71,54 +107,36 @@ public static class RongThanSpineController
         
         if (Event.current.type == EventType.Repaint)
         {
-            if (drawMaterial == null)
+            GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), overlayTexture, ScaleMode.StretchToFill, true);
+        }
+    }
+
+    private static void EnsureLoaded(bool isNamek)
+    {
+        if (isNamek)
+        {
+            if (loadedNamek || failedNamek) return;
+            dataNamek = Resources.Load<SkeletonDataAsset>("Spine/RongThanNamek/rong_than_namek_SkeletonData");
+            if (dataNamek == null || dataNamek.GetSkeletonData(true) == null)
             {
-                Shader shader = Shader.Find("Spine/Skeleton");
-                if (shader == null) shader = Shader.Find("Sprites/Default");
-                drawMaterial = new Material(shader);
+                Debug.LogWarning("[RongThanSpine] Khong tim thay asset Spine Namek; dung hieu ung rong cu.");
+                failedNamek = true;
+                return;
             }
-            Graphics.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), overlayTexture, new Rect(0, 0, 1, 1), 0, 0, 0, 0, GUI.color, drawMaterial);
+            loadedNamek = true;
         }
-    }
-
-    private static void EnsureLoaded()
-    {
-        if (loaded || failed) return;
-        TextAsset skel = Resources.Load<TextAsset>(AssetPath + ".skel");
-        TextAsset atlas = Resources.Load<TextAsset>(AssetPath + ".atlas");
-        Texture2D texture = Resources.Load<Texture2D>(AssetPath);
-        if (skel == null || atlas == null || texture == null)
+        else
         {
-            Debug.LogWarning("[RongThanSpine] Khong tim thay asset Spine; dung hieu ung rong cu.");
-            failed = true;
-            return;
+            if (loadedTraiDat || failedTraiDat) return;
+            dataTraiDat = Resources.Load<SkeletonDataAsset>("Spine/RongThanTraiDat/rong_than_traidat_SkeletonData");
+            if (dataTraiDat == null || dataTraiDat.GetSkeletonData(true) == null)
+            {
+                Debug.LogWarning("[RongThanSpine] Khong tim thay asset Spine Trai Dat; dung hieu ung rong cu.");
+                failedTraiDat = true;
+                return;
+            }
+            loadedTraiDat = true;
         }
-
-        Shader shader = Shader.Find("Spine/Skeleton") ?? Shader.Find("Sprites/Default");
-        Material material = new Material(shader) { mainTexture = texture };
-        SpineAtlasAsset atlasAsset = SpineAtlasAsset.CreateRuntimeInstance(atlas, new Texture2D[] { texture }, material, true);
-        SkeletonDataAsset data = SkeletonDataAsset.CreateRuntimeInstance(skel, atlasAsset, true, SkeletonScale);
-        if (data == null || data.GetSkeletonData(true) == null)
-        {
-            failed = true;
-            return;
-        }
-
-        loaded = true;
-        EnsureOverlayCamera();
-        instance = new GameObject("RongThanTraiDatSpine");
-        Object.DontDestroyOnLoad(instance);
-        instance.layer = OverlayLayer;
-        animation = SkeletonAnimation.AddToGameObject(instance, data);
-        animation.Initialize(true);
-        MeshRenderer renderer = instance.GetComponent<MeshRenderer>();
-        if (renderer != null) renderer.sortingOrder = 100;
-        instance.SetActive(false);
-    }
-
-    private static void CreateInstance()
-    {
-        EnsureLoaded();
     }
 
     private static void EnsureOverlayCamera()
