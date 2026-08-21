@@ -61,12 +61,24 @@ public static class RongThanSpineController
         if (instance != null && instance.activeSelf) UpdatePosition();
     }
 
+    private static Material drawMaterial;
+
     public static void DrawOverlay()
     {
         if (instance == null || !instance.activeSelf || overlayCamera == null) return;
         EnsureOverlayTexture();
         overlayCamera.Render();
-        GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), overlayTexture, ScaleMode.StretchToFill, true);
+        
+        if (Event.current.type == EventType.Repaint)
+        {
+            if (drawMaterial == null)
+            {
+                Shader shader = Shader.Find("Spine/Skeleton");
+                if (shader == null) shader = Shader.Find("Sprites/Default");
+                drawMaterial = new Material(shader);
+            }
+            Graphics.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), overlayTexture, new Rect(0, 0, 1, 1), 0, 0, 0, 0, GUI.color, drawMaterial);
+        }
     }
 
     private static void EnsureLoaded()
@@ -139,15 +151,20 @@ public static class RongThanSpineController
         textureWidth = width;
         textureHeight = height;
         overlayTexture = new RenderTexture(width, height, 16, RenderTextureFormat.ARGB32);
+        overlayTexture.filterMode = FilterMode.Point;
         overlayTexture.Create();
         overlayCamera.targetTexture = overlayTexture;
         overlayCamera.orthographicSize = height * 0.5f;
+        overlayCamera.allowMSAA = false;
     }
 
     private static void UpdatePosition()
     {
-        float x = (mapX - GameScr.cmx) * mGraphics.zoomLevel - Screen.width * 0.5f;
-        float y = Screen.height * 0.5f - (mapY - GameScr.cmy) * mGraphics.zoomLevel;
+        float zoom = mGraphics.zoomLevel;
+        int cx = mapX;
+        int cy = mapY;
+        float x = Mathf.Round((cx - GameScr.cmx) * zoom - Screen.width * 0.5f);
+        float y = Mathf.Round(Screen.height * 0.5f - (cy - GameScr.cmy + GameCanvas.transY) * zoom);
         instance.transform.position = new Vector3(x, y, 0f);
     }
 }

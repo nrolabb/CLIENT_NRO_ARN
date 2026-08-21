@@ -1,0 +1,2003 @@
+Hero_2.png
+size:2048,2048
+filter:Linear,Linear
+pma:true
+2/yanwuaa_0000
+bounds:844,8,102,31
+offsets:169,59,271,198
+2/yanwuaa_0002
+bounds:844,41,184,67
+offsets:85,43,271,198
+2/yanwuaa_0003
+bounds:223,20,218,94
+offsets:49,41,271,198
+2/yanwuaa_0004
+bounds:2,14,219,100
+offsets:43,41,271,198
+2/yanwuaa_0005
+bounds:464,8,221,111
+offsets:34,39,271,198
+2/yanwuaa_0006
+bounds:1922,467,223,117
+offsets:31,37,271,198
+rotate:90
+tay T1
+bounds:1030,3,105,151
+rotate:90
+toc V1/2/baocik_0000
+bounds:1872,110,287,149
+offsets:71,111,432,422
+rotate:90
+toc V2/2/baocik_0000
+bounds:1872,110,287,149
+offsets:71,111,432,422
+rotate:90
+toc V3/2/baocik_0000
+bounds:1872,110,287,149
+offsets:71,111,432,422
+rotate:90
+toc V4/2/baocik_0000
+bounds:1872,110,287,149
+offsets:71,111,432,422
+rotate:90
+toc V1/attack/21huozhuzc/huozhuzc_33
+bounds:495,412,277,491
+offsets:566,149,1136,640
+rotate:90
+toc V2/attack/21huozhuzc/huozhuzc_33
+bounds:495,412,277,491
+offsets:566,149,1136,640
+rotate:90
+toc V3/attack/21huozhuzc/huozhuzc_33
+bounds:495,412,277,491
+offsets:566,149,1136,640
+rotate:90
+toc V4/attack/21huozhuzc/huozhuzc_33
+bounds:495,412,277,491
+offsets:566,149,1136,640
+rotate:90
+toc V1/attack/21huozhuzc/huozhuzc_35
+bounds:500,753,285,496
+offsets:561,144,1136,640
+toc V2/attack/21huozhuzc/huozhuzc_35
+bounds:500,753,285,496
+offsets:561,144,1136,640
+toc V3/attack/21huozhuzc/huozhuzc_35
+bounds:500,753,285,496
+offsets:561,144,1136,640
+toc V4/attack/21huozhuzc/huozhuzc_35
+bounds:500,753,285,496
+offsets:561,144,1136,640
+toc V1/attack/21huozhuzc/huozhuzc_36
+bounds:1389,1256,287,497
+offsets:560,143,1136,640
+rotate:90
+toc V2/attack/21huozhuzc/huozhuzc_36
+bounds:1389,1256,287,497
+offsets:560,143,1136,640
+rotate:90
+toc V3/attack/21huozhuzc/huozhuzc_36
+bounds:1389,1256,287,497
+offsets:560,143,1136,640
+rotate:90
+toc V4/attack/21huozhuzc/huozhuzc_36
+bounds:1389,1256,287,497
+offsets:560,143,1136,640
+rotate:90
+toc V1/attack/21huozhuzc/huozhuzc_37
+bounds:977,1545,292,499
+offsets:557,141,1136,640
+toc V2/attack/21huozhuzc/huozhuzc_37
+bounds:977,1545,292,499
+offsets:557,141,1136,640
+toc V3/attack/21huozhuzc/huozhuzc_37
+bounds:977,1545,292,499
+offsets:557,141,1136,640
+toc V4/attack/21huozhuzc/huozhuzc_37
+bounds:977,1545,292,499
+offsets:557,141,1136,640
+toc V1/attack/21huozhuzc/huozhuzc_44
+bounds:469,121,289,465
+offsets:559,175,1136,640
+rotate:90
+toc V2/attack/21huozhuzc/huozhuzc_44
+bounds:469,121,289,465
+offsets:559,175,1136,640
+rotate:90
+toc V3/attack/21huozhuzc/huozhuzc_44
+bounds:469,121,289,465
+offsets:559,175,1136,640
+rotate:90
+toc V4/attack/21huozhuzc/huozhuzc_44
+bounds:469,121,289,465
+offsets:559,175,1136,640
+rotate:90
+toc V3/toc
+bounds:2,1404,385,640
+toc V5/1/bianshen_0002
+bounds:1922,406,112,59
+offsets:232,381,720,880
+toc V5/2/baocik_0000
+bounds:1888,1380,287,149
+offsets:71,111,432,422
+rotate:90
+toc V5/2/shandiana_0001
+bounds:787,974,59,73
+offsets:0,33,106,106
+rotate:90
+toc V5/attack/21huozhuzc/huozhuzc_33
+bounds:2,686,277,491
+offsets:566,149,1136,640
+rotate:90
+toc V5/attack/21huozhuzc/huozhuzc_35
+bounds:2,965,285,496
+offsets:561,144,1136,640
+rotate:90
+toc V5/attack/21huozhuzc/huozhuzc_36
+bounds:1560,1547,287,497
+offsets:560,143,1136,640
+toc V5/attack/21huozhuzc/huozhuzc_37
+bounds:389,1251,292,499
+offsets:557,141,1136,640
+rotate:90
+toc V5/attack/21huozhuzc/huozhuzc_44
+bounds:1455,399,289,465
+offsets:559,175,1136,640
+rotate:90
+toc V6/1/bianshen_0002
+bounds:609,692,112,59
+offsets:232,381,720,880
+toc V6/1/bianshen_0004
+bounds:687,8,155,111
+offsets:194,371,720,880
+toc V6/2/baocik_0000
+bounds:1887,969,287,149
+offsets:71,111,432,422
+rotate:90
+toc V6/2/shandiana_0001
+bounds:291,1256,59,73
+offsets:0,33,106,106
+rotate:90
+toc V6/2/shandiana_0007
+bounds:1939,2,106,106
+toc V6/2/shandiana_0010
+bounds:1831,2,106,106
+toc V6/2/shandiana_0013
+bounds:1723,2,106,106
+toc V6/2/shandiana_0014
+bounds:787,1035,99,106
+offsets:0,0,106,106
+toc V6/attack/21huozhuzc/huozhuzc_33
+bounds:1280,690,277,491
+offsets:566,149,1136,640
+rotate:90
+toc V6/attack/21huozhuzc/huozhuzc_35
+bounds:1388,969,285,496
+offsets:561,144,1136,640
+rotate:90
+toc V6/attack/21huozhuzc/huozhuzc_36
+bounds:1271,1545,287,497
+offsets:560,143,1136,640
+toc V6/attack/21huozhuzc/huozhuzc_37
+bounds:683,1545,292,499
+offsets:557,141,1136,640
+toc V6/attack/21huozhuzc/huozhuzc_43
+bounds:1404,110,287,466
+offsets:560,174,1136,640
+rotate:90
+toc V6/attack/21huozhuzc/huozhuzc_44
+bounds:2,395,289,465
+offsets:559,175,1136,640
+rotate:90
+toc V7/1/bianshen_0002
+bounds:495,692,112,59
+offsets:232,381,720,880
+toc V7/1/bianshen_0004
+bounds:1888,1267,155,111
+offsets:194,371,720,880
+toc V7/1/bianshen_0034
+bounds:1773,692,275,237
+offsets:138,394,720,880
+rotate:90
+toc V7/2/baocik_0000
+bounds:2,1253,287,149
+offsets:71,111,432,422
+toc V7/2/baocik_0004
+bounds:1849,1669,375,183
+offsets:37,85,432,422
+rotate:90
+toc V7/2/shandiana_0001
+bounds:2,1420,59,73
+offsets:0,33,106,106
+toc V7/2/shandiana_0003
+bounds:1615,2,106,106
+toc V7/2/shandiana_0004
+bounds:1507,2,106,106
+toc V7/2/shandiana_0007
+bounds:1399,2,106,106
+toc V7/2/shandiana_0008
+bounds:291,1317,94,106
+offsets:2,0,106,106
+toc V7/2/shandiana_0010
+bounds:1291,2,106,106
+toc V7/2/shandiana_0013
+bounds:1183,2,106,106
+toc V7/2/shandiana_0014
+bounds:787,1143,99,106
+offsets:0,0,106,106
+toc V7/2/shandiana_0015
+bounds:723,696,57,55
+offsets:0,0,106,106
+toc V7/attack/21huozhuzc/huozhuzc_33
+bounds:787,690,277,491
+offsets:566,149,1136,640
+rotate:90
+toc V7/attack/21huozhuzc/huozhuzc_35
+bounds:890,969,285,496
+offsets:561,144,1136,640
+rotate:90
+toc V7/attack/21huozhuzc/huozhuzc_36
+bounds:890,1256,287,497
+offsets:560,143,1136,640
+rotate:90
+toc V7/attack/21huozhuzc/huozhuzc_37
+bounds:389,1545,292,499
+offsets:557,141,1136,640
+toc V7/attack/21huozhuzc/huozhuzc_43
+bounds:936,110,287,466
+offsets:560,174,1136,640
+rotate:90
+toc V7/attack/21huozhuzc/huozhuzc_44
+bounds:988,399,289,465
+offsets:559,175,1136,640
+rotate:90
+toc V7/attack/21huozhuzc/huozhuzc_48
+bounds:2,116,277,460
+offsets:566,180,1136,640
+rotate:90
+
+Hero_2_2.png
+size:2048,2048
+filter:Linear,Linear
+pma:true
+2/yanwuaa_0001
+bounds:1989,1915,128,47
+offsets:143,50,271,198
+rotate:90
+2/yanwuaa_0013
+bounds:1871,1029,174,141
+offsets:5,24,271,198
+toc V1/1/bianshen_0002
+bounds:978,733,112,59
+offsets:232,381,720,880
+toc V2/1/bianshen_0002
+bounds:978,733,112,59
+offsets:232,381,720,880
+toc V3/1/bianshen_0002
+bounds:978,733,112,59
+offsets:232,381,720,880
+toc V4/1/bianshen_0002
+bounds:978,733,112,59
+offsets:232,381,720,880
+toc V1/1/bianshen_0004
+bounds:1313,31,155,111
+offsets:194,371,720,880
+rotate:90
+toc V2/1/bianshen_0004
+bounds:1313,31,155,111
+offsets:194,371,720,880
+rotate:90
+toc V3/1/bianshen_0004
+bounds:1313,31,155,111
+offsets:194,371,720,880
+rotate:90
+toc V4/1/bianshen_0004
+bounds:1313,31,155,111
+offsets:194,371,720,880
+rotate:90
+toc V1/2/shandiana_0001
+bounds:868,796,59,73
+offsets:0,33,106,106
+toc V2/2/shandiana_0001
+bounds:868,796,59,73
+offsets:0,33,106,106
+toc V3/2/shandiana_0001
+bounds:868,796,59,73
+offsets:0,33,106,106
+toc V4/2/shandiana_0001
+bounds:868,796,59,73
+offsets:0,33,106,106
+toc V1/2/shandiana_0002
+bounds:1092,729,56,63
+offsets:0,43,106,106
+toc V2/2/shandiana_0002
+bounds:1092,729,56,63
+offsets:0,43,106,106
+toc V3/2/shandiana_0002
+bounds:1092,729,56,63
+offsets:0,43,106,106
+toc V4/2/shandiana_0002
+bounds:1092,729,56,63
+offsets:0,43,106,106
+toc V1/2/shandiana_0005
+bounds:1964,601,105,72
+offsets:0,0,106,106
+rotate:90
+toc V2/2/shandiana_0005
+bounds:1964,601,105,72
+offsets:0,0,106,106
+rotate:90
+toc V3/2/shandiana_0005
+bounds:1964,601,105,72
+offsets:0,0,106,106
+rotate:90
+toc V4/2/shandiana_0005
+bounds:1964,601,105,72
+offsets:0,0,106,106
+rotate:90
+toc V1/attack/21huozhuzc/huozhuzc_29
+bounds:1423,1567,279,476
+offsets:564,164,1136,640
+toc V2/attack/21huozhuzc/huozhuzc_29
+bounds:1423,1567,279,476
+offsets:564,164,1136,640
+toc V3/attack/21huozhuzc/huozhuzc_29
+bounds:1423,1567,279,476
+offsets:564,164,1136,640
+toc V4/attack/21huozhuzc/huozhuzc_29
+bounds:1423,1567,279,476
+offsets:564,164,1136,640
+toc V1/attack/21huozhuzc/huozhuzc_31
+bounds:488,257,264,484
+offsets:574,156,1136,640
+rotate:90
+toc V2/attack/21huozhuzc/huozhuzc_31
+bounds:488,257,264,484
+offsets:574,156,1136,640
+rotate:90
+toc V3/attack/21huozhuzc/huozhuzc_31
+bounds:488,257,264,484
+offsets:574,156,1136,640
+rotate:90
+toc V4/attack/21huozhuzc/huozhuzc_31
+bounds:488,257,264,484
+offsets:574,156,1136,640
+rotate:90
+toc V1/attack/21huozhuzc/huozhuzc_32
+bounds:490,523,270,486
+offsets:571,154,1136,640
+rotate:90
+toc V2/attack/21huozhuzc/huozhuzc_32
+bounds:490,523,270,486
+offsets:571,154,1136,640
+rotate:90
+toc V3/attack/21huozhuzc/huozhuzc_32
+bounds:490,523,270,486
+offsets:571,154,1136,640
+rotate:90
+toc V4/attack/21huozhuzc/huozhuzc_32
+bounds:490,523,270,486
+offsets:571,154,1136,640
+rotate:90
+toc V1/attack/21huozhuzc/huozhuzc_41
+bounds:470,998,282,466
+offsets:563,174,1136,640
+rotate:90
+toc V2/attack/21huozhuzc/huozhuzc_41
+bounds:470,998,282,466
+offsets:563,174,1136,640
+rotate:90
+toc V3/attack/21huozhuzc/huozhuzc_41
+bounds:470,998,282,466
+offsets:563,174,1136,640
+rotate:90
+toc V4/attack/21huozhuzc/huozhuzc_41
+bounds:470,998,282,466
+offsets:563,174,1136,640
+rotate:90
+toc V1/attack/21huozhuzc/huozhuzc_43
+bounds:291,1577,287,466
+offsets:560,174,1136,640
+toc V2/attack/21huozhuzc/huozhuzc_43
+bounds:291,1577,287,466
+offsets:560,174,1136,640
+toc V3/attack/21huozhuzc/huozhuzc_43
+bounds:291,1577,287,466
+offsets:560,174,1136,640
+toc V4/attack/21huozhuzc/huozhuzc_43
+bounds:291,1577,287,466
+offsets:560,174,1136,640
+toc V1/attack/21huozhuzc/huozhuzc_49
+bounds:936,1282,283,465
+offsets:562,175,1136,640
+rotate:90
+toc V2/attack/21huozhuzc/huozhuzc_49
+bounds:936,1282,283,465
+offsets:562,175,1136,640
+rotate:90
+toc V3/attack/21huozhuzc/huozhuzc_49
+bounds:936,1282,283,465
+offsets:562,175,1136,640
+rotate:90
+toc V4/attack/21huozhuzc/huozhuzc_49
+bounds:936,1282,283,465
+offsets:562,175,1136,640
+rotate:90
+toc V1/tay P1.2
+bounds:1989,1835,56,78
+offsets:0,0,57,78
+toc V2/tay P1.2
+bounds:1989,1835,56,78
+offsets:0,0,57,78
+toc V3/tay P1.2
+bounds:1989,1835,56,78
+offsets:0,0,57,78
+toc V4/tay P1.2
+bounds:1989,1835,56,78
+offsets:0,0,57,78
+toc V5/tay P1.2
+bounds:1989,1835,56,78
+offsets:0,0,57,78
+toc V6/tay P1.2
+bounds:1989,1835,56,78
+offsets:0,0,57,78
+toc V7/tay P1.2
+bounds:1989,1835,56,78
+offsets:0,0,57,78
+toc V4/tay P1
+bounds:868,870,68,126
+toc V5/1/bianshen_0004
+bounds:1935,356,155,111
+offsets:194,371,720,880
+rotate:90
+toc V5/2/baocik_0004
+bounds:2,2,375,183
+offsets:37,85,432,422
+toc V5/2/shandiana_0002
+bounds:1989,1640,56,63
+offsets:0,43,106,106
+toc V5/2/shandiana_0005
+bounds:1964,708,105,72
+offsets:0,0,106,106
+rotate:90
+toc V5/2/shandiana_0009
+bounds:379,19,78,82
+offsets:0,0,106,106
+toc V5/2/shandiana_0015
+bounds:1150,737,57,55
+offsets:0,0,106,106
+toc V5/attack/21huozhuzc/huozhuzc_28
+bounds:2,187,272,469
+offsets:568,171,1136,640
+rotate:90
+toc V5/attack/21huozhuzc/huozhuzc_29
+bounds:1142,1567,279,476
+offsets:564,164,1136,640
+toc V5/attack/21huozhuzc/huozhuzc_31
+bounds:2,461,264,484
+offsets:574,156,1136,640
+rotate:90
+toc V5/attack/21huozhuzc/huozhuzc_32
+bounds:2,727,270,486
+offsets:571,154,1136,640
+rotate:90
+toc V5/attack/21huozhuzc/huozhuzc_41
+bounds:2,999,282,466
+offsets:563,174,1136,640
+rotate:90
+toc V5/attack/21huozhuzc/huozhuzc_43
+bounds:2,1577,287,466
+offsets:560,174,1136,640
+toc V5/attack/21huozhuzc/huozhuzc_49
+bounds:469,1282,283,465
+offsets:562,175,1136,640
+rotate:90
+toc V6/1/bianshen_0006
+bounds:1871,1172,201,169
+offsets:174,370,720,880
+rotate:90
+toc V6/2/baocik_0003
+bounds:1445,40,376,198
+offsets:32,86,432,422
+toc V6/2/baocik_0004
+bounds:936,3,375,183
+offsets:37,85,432,422
+toc V6/2/shandiana_0002
+bounds:1989,1705,56,63
+offsets:0,43,106,106
+toc V6/2/shandiana_0004
+bounds:1935,248,106,106
+toc V6/2/shandiana_0005
+bounds:1964,815,105,72
+offsets:0,0,106,106
+rotate:90
+toc V6/2/shandiana_0009
+bounds:379,103,78,82
+offsets:0,0,106,106
+toc V6/2/shandiana_0015
+bounds:1989,1583,57,55
+offsets:0,0,106,106
+toc V6/attack/21huozhuzc/huozhuzc_28
+bounds:974,188,272,469
+offsets:568,171,1136,640
+rotate:90
+toc V6/attack/21huozhuzc/huozhuzc_29
+bounds:861,1567,279,476
+offsets:564,164,1136,640
+toc V6/attack/21huozhuzc/huozhuzc_31
+bounds:978,462,264,484
+offsets:574,156,1136,640
+rotate:90
+toc V6/attack/21huozhuzc/huozhuzc_32
+bounds:1210,728,270,486
+offsets:571,154,1136,640
+rotate:90
+toc V6/attack/21huozhuzc/huozhuzc_41
+bounds:1403,999,282,466
+offsets:563,174,1136,640
+rotate:90
+toc V6/attack/21huozhuzc/huozhuzc_49
+bounds:2,1292,283,465
+offsets:562,175,1136,640
+rotate:90
+toc V7/1/bianshen_0006
+bounds:1871,1375,201,169
+offsets:174,370,720,880
+rotate:90
+toc V7/1/bianshen_0012
+bounds:1464,521,221,205
+offsets:167,372,720,880
+toc V7/1/bianshen_0014
+bounds:1823,19,217,219
+offsets:171,377,720,880
+toc V7/2/baocik_0003
+bounds:490,798,376,198
+offsets:32,86,432,422
+toc V7/2/shandiana_0002
+bounds:1989,1770,56,63
+offsets:0,43,106,106
+toc V7/2/shandiana_0005
+bounds:1964,922,105,72
+offsets:0,0,106,106
+rotate:90
+toc V7/2/shandiana_0009
+bounds:1964,517,78,82
+offsets:0,0,106,106
+toc V7/attack/21huozhuzc/huozhuzc_21
+bounds:1210,1028,184,252
+offsets:612,160,1136,640
+toc V7/attack/21huozhuzc/huozhuzc_25
+bounds:473,2,253,461
+offsets:579,179,1136,640
+rotate:90
+toc V7/attack/21huozhuzc/huozhuzc_28
+bounds:1464,240,272,469
+offsets:568,171,1136,640
+rotate:90
+toc V7/attack/21huozhuzc/huozhuzc_29
+bounds:580,1567,279,476
+offsets:564,164,1136,640
+toc V7/attack/21huozhuzc/huozhuzc_31
+bounds:1698,513,264,484
+offsets:574,156,1136,640
+toc V7/attack/21huozhuzc/huozhuzc_32
+bounds:938,794,270,486
+offsets:571,154,1136,640
+toc V7/attack/21huozhuzc/huozhuzc_41
+bounds:1403,1283,282,466
+offsets:563,174,1136,640
+rotate:90
+toc V7/attack/21huozhuzc/huozhuzc_49
+bounds:1704,1578,283,465
+offsets:562,175,1136,640
+
+Hero_2_3.png
+size:2048,2048
+filter:Linear,Linear
+pma:true
+1/shizia_0000
+bounds:830,1627,416,305
+offsets:158,201,720,720
+rotate:90
+2/yanwuaa_0007
+bounds:1911,1604,205,125
+offsets:23,35,271,198
+rotate:90
+2/yanwuaa_0008
+bounds:1911,1811,232,127
+offsets:22,34,271,198
+rotate:90
+2/yanwuaa_0009
+bounds:1137,1645,239,129
+offsets:20,34,271,198
+2/yanwuaa_0010
+bounds:1645,705,242,135
+offsets:15,29,271,198
+2/yanwuaa_0011
+bounds:1379,1169,242,138
+offsets:13,27,271,198
+chan P1
+bounds:1912,451,134,225
+offsets:0,4,134,229
+chan P2
+bounds:459,9,93,54
+offsets:16,0,114,60
+dau3
+bounds:1913,1198,131,121
+offsets:182,9,365,362
+toc V1/2/baocik_0003
+bounds:1213,31,376,198
+offsets:32,86,432,422
+toc V2/2/baocik_0003
+bounds:1213,31,376,198
+offsets:32,86,432,422
+toc V3/2/baocik_0003
+bounds:1213,31,376,198
+offsets:32,86,432,422
+toc V4/2/baocik_0003
+bounds:1213,31,376,198
+offsets:32,86,432,422
+toc V1/2/shandiana_0009
+bounds:1967,1520,78,82
+offsets:0,0,106,106
+toc V2/2/shandiana_0009
+bounds:1967,1520,78,82
+offsets:0,0,106,106
+toc V3/2/shandiana_0009
+bounds:1967,1520,78,82
+offsets:0,0,106,106
+toc V4/2/shandiana_0009
+bounds:1967,1520,78,82
+offsets:0,0,106,106
+toc V1/2/shandiana_0012
+bounds:1961,54,69,89
+offsets:37,17,106,106
+toc V2/2/shandiana_0012
+bounds:1961,54,69,89
+offsets:37,17,106,106
+toc V3/2/shandiana_0012
+bounds:1961,54,69,89
+offsets:37,17,106,106
+toc V4/2/shandiana_0012
+bounds:1961,54,69,89
+offsets:37,17,106,106
+toc V1/attack/21huozhuzc/huozhuzc_27
+bounds:1376,698,267,464
+offsets:571,176,1136,640
+toc V2/attack/21huozhuzc/huozhuzc_27
+bounds:1376,698,267,464
+offsets:571,176,1136,640
+toc V3/attack/21huozhuzc/huozhuzc_27
+bounds:1376,698,267,464
+offsets:571,176,1136,640
+toc V4/attack/21huozhuzc/huozhuzc_27
+bounds:1376,698,267,464
+offsets:571,176,1136,640
+toc V1/attack/21huozhuzc/huozhuzc_28
+bounds:2,1574,272,469
+offsets:568,171,1136,640
+toc V2/attack/21huozhuzc/huozhuzc_28
+bounds:2,1574,272,469
+offsets:568,171,1136,640
+toc V3/attack/21huozhuzc/huozhuzc_28
+bounds:2,1574,272,469
+offsets:568,171,1136,640
+toc V4/attack/21huozhuzc/huozhuzc_28
+bounds:2,1574,272,469
+offsets:568,171,1136,640
+toc V1/attack/21huozhuzc/huozhuzc_39
+bounds:1107,1164,270,461
+offsets:571,179,1136,640
+toc V2/attack/21huozhuzc/huozhuzc_39
+bounds:1107,1164,270,461
+offsets:571,179,1136,640
+toc V3/attack/21huozhuzc/huozhuzc_39
+bounds:1107,1164,270,461
+offsets:571,179,1136,640
+toc V4/attack/21huozhuzc/huozhuzc_39
+bounds:1107,1164,270,461
+offsets:571,179,1136,640
+toc V1/attack/21huozhuzc/huozhuzc_40
+bounds:281,173,273,466
+offsets:569,174,1136,640
+toc V2/attack/21huozhuzc/huozhuzc_40
+bounds:281,173,273,466
+offsets:569,174,1136,640
+toc V3/attack/21huozhuzc/huozhuzc_40
+bounds:281,173,273,466
+offsets:569,174,1136,640
+toc V4/attack/21huozhuzc/huozhuzc_40
+bounds:281,173,273,466
+offsets:569,174,1136,640
+toc V1/attack/21huozhuzc/huozhuzc_45
+bounds:1645,842,266,465
+offsets:573,175,1136,640
+toc V2/attack/21huozhuzc/huozhuzc_45
+bounds:1645,842,266,465
+offsets:573,175,1136,640
+toc V3/attack/21huozhuzc/huozhuzc_45
+bounds:1645,842,266,465
+offsets:573,175,1136,640
+toc V4/attack/21huozhuzc/huozhuzc_45
+bounds:1645,842,266,465
+offsets:573,175,1136,640
+toc V1/attack/21huozhuzc/huozhuzc_47
+bounds:556,201,277,459
+offsets:565,181,1136,640
+toc V2/attack/21huozhuzc/huozhuzc_47
+bounds:556,201,277,459
+offsets:565,181,1136,640
+toc V3/attack/21huozhuzc/huozhuzc_47
+bounds:556,201,277,459
+offsets:565,181,1136,640
+toc V4/attack/21huozhuzc/huozhuzc_47
+bounds:556,201,277,459
+offsets:565,181,1136,640
+toc V1/attack/21huozhuzc/huozhuzc_48
+bounds:2,188,277,460
+offsets:566,180,1136,640
+toc V2/attack/21huozhuzc/huozhuzc_48
+bounds:2,188,277,460
+offsets:566,180,1136,640
+toc V3/attack/21huozhuzc/huozhuzc_48
+bounds:2,188,277,460
+offsets:566,180,1136,640
+toc V4/attack/21huozhuzc/huozhuzc_48
+bounds:2,188,277,460
+offsets:566,180,1136,640
+toc V3/dau4
+bounds:1889,675,220,156
+offsets:146,0,405,347
+rotate:90
+toc V5/1/bianshen_0006
+bounds:256,2,201,169
+offsets:174,370,720,880
+toc V5/2/baocik_0003
+bounds:835,32,376,198
+offsets:32,86,432,422
+toc V5/2/shandiana_0007
+bounds:1912,236,106,106
+toc V5/2/shandiana_0010
+bounds:1912,344,106,106
+toc V5/2/shandiana_0012
+bounds:1961,145,69,89
+offsets:37,17,106,106
+toc V5/2/shandiana_0013
+bounds:1913,982,106,106
+toc V5/attack/21huozhuzc/huozhuzc_21
+bounds:555,15,184,252
+offsets:612,160,1136,640
+rotate:90
+toc V5/attack/21huozhuzc/huozhuzc_27
+bounds:1137,1776,267,464
+offsets:571,176,1136,640
+rotate:90
+toc V5/attack/21huozhuzc/huozhuzc_39
+bounds:835,238,270,461
+offsets:571,179,1136,640
+toc V5/attack/21huozhuzc/huozhuzc_40
+bounds:281,641,273,466
+offsets:569,174,1136,640
+toc V5/attack/21huozhuzc/huozhuzc_45
+bounds:1644,231,266,465
+offsets:573,175,1136,640
+toc V5/attack/21huozhuzc/huozhuzc_47
+bounds:556,662,277,459
+offsets:565,181,1136,640
+toc V5/attack/21huozhuzc/huozhuzc_48
+bounds:2,650,277,460
+offsets:566,180,1136,640
+toc V6/2/shandiana_0003
+bounds:1913,1090,106,106
+toc V6/2/shandiana_0008
+bounds:459,65,94,106
+offsets:2,0,106,106
+toc V6/2/shandiana_0012
+bounds:1967,1338,69,89
+offsets:37,17,106,106
+toc V6/attack/21huozhuzc/huozhuzc_21
+bounds:2,2,184,252
+offsets:612,160,1136,640
+rotate:90
+toc V6/attack/21huozhuzc/huozhuzc_27
+bounds:1107,232,267,464
+offsets:571,176,1136,640
+toc V6/attack/21huozhuzc/huozhuzc_39
+bounds:835,701,270,461
+offsets:571,179,1136,640
+toc V6/attack/21huozhuzc/huozhuzc_40
+bounds:281,1109,273,466
+offsets:569,174,1136,640
+toc V6/attack/21huozhuzc/huozhuzc_45
+bounds:1379,1309,266,465
+offsets:573,175,1136,640
+toc V6/attack/21huozhuzc/huozhuzc_47
+bounds:556,1123,277,459
+offsets:565,181,1136,640
+toc V6/attack/21huozhuzc/huozhuzc_48
+bounds:2,1112,277,460
+offsets:566,180,1136,640
+toc V7/1/bianshen_0018
+bounds:1647,1321,318,269
+offsets:116,379,720,880
+toc V7/2/baocik_0002
+bounds:1591,31,368,198
+offsets:33,87,432,422
+toc V7/2/shandiana_0000
+bounds:1964,896,68,84
+offsets:0,22,106,106
+toc V7/2/shandiana_0012
+bounds:1967,1429,69,89
+offsets:37,17,106,106
+toc V7/attack/21huozhuzc/huozhuzc_23
+bounds:1647,1592,262,451
+offsets:572,189,1136,640
+toc V7/attack/21huozhuzc/huozhuzc_27
+bounds:1107,698,267,464
+offsets:571,176,1136,640
+toc V7/attack/21huozhuzc/huozhuzc_39
+bounds:835,1164,270,461
+offsets:571,179,1136,640
+toc V7/attack/21huozhuzc/huozhuzc_40
+bounds:276,1577,273,466
+offsets:569,174,1136,640
+toc V7/attack/21huozhuzc/huozhuzc_45
+bounds:1376,231,266,465
+offsets:573,175,1136,640
+toc V7/attack/21huozhuzc/huozhuzc_47
+bounds:551,1584,277,459
+offsets:565,181,1136,640
+
+Hero_2_4.png
+size:2048,2040
+filter:Linear,Linear
+pma:true
+2/yanwuaa_0012
+bounds:1459,30,176,141
+offsets:7,25,271,198
+2/yanwuaa_0014
+bounds:1908,24,165,138
+offsets:4,23,271,198
+rotate:90
+chan T1
+bounds:1849,209,186,218
+offsets:0,2,186,233
+rotate:180
+chan T2
+bounds:1207,751,93,78
+offsets:0,0,100,86
+dau
+bounds:1602,742,325,347
+rotate:90
+tay P1.1
+bounds:1571,1001,65,66
+toc V1/tay P1.1
+bounds:1571,1001,65,66
+toc V2/tay P1.1
+bounds:1571,1001,65,66
+toc V3/tay P1.1
+bounds:1571,1001,65,66
+toc V5/tay P1.1
+bounds:1571,1001,65,66
+toc V6/tay P1.1
+bounds:1571,1001,65,66
+toc V7/tay P1.1
+bounds:1571,1001,65,66
+toc V1/1/bianshen_0006
+bounds:1256,5,201,169
+offsets:174,370,720,880
+toc V2/1/bianshen_0006
+bounds:1256,5,201,169
+offsets:174,370,720,880
+toc V3/1/bianshen_0006
+bounds:1256,5,201,169
+offsets:174,370,720,880
+toc V4/1/bianshen_0006
+bounds:1256,5,201,169
+offsets:174,370,720,880
+toc V1/1/bianshen_0016
+bounds:2,796,314,272
+offsets:113,380,720,880
+toc V2/1/bianshen_0016
+bounds:2,796,314,272
+offsets:113,380,720,880
+toc V3/1/bianshen_0016
+bounds:2,796,314,272
+offsets:113,380,720,880
+toc V4/1/bianshen_0016
+bounds:2,796,314,272
+offsets:113,380,720,880
+toc V1/1/bianshen_0018
+bounds:1635,1069,318,269
+offsets:116,379,720,880
+toc V2/1/bianshen_0018
+bounds:1635,1069,318,269
+offsets:116,379,720,880
+toc V3/1/bianshen_0018
+bounds:1635,1069,318,269
+offsets:116,379,720,880
+toc V4/1/bianshen_0018
+bounds:1635,1069,318,269
+offsets:116,379,720,880
+toc V1/1/bianshen_0020
+bounds:2,529,309,265
+offsets:126,380,720,880
+toc V2/1/bianshen_0020
+bounds:2,529,309,265
+offsets:126,380,720,880
+toc V3/1/bianshen_0020
+bounds:2,529,309,265
+offsets:126,380,720,880
+toc V4/1/bianshen_0020
+bounds:2,529,309,265
+offsets:126,380,720,880
+toc V1/1/bianshen_0022
+bounds:1753,429,311,258
+offsets:122,381,720,880
+rotate:90
+toc V2/1/bianshen_0022
+bounds:1753,429,311,258
+offsets:122,381,720,880
+rotate:90
+toc V3/1/bianshen_0022
+bounds:1753,429,311,258
+offsets:122,381,720,880
+rotate:90
+toc V4/1/bianshen_0022
+bounds:1753,429,311,258
+offsets:122,381,720,880
+rotate:90
+toc V1/1/bianshen_0028
+bounds:2,277,304,250
+offsets:124,394,720,880
+toc V2/1/bianshen_0028
+bounds:2,277,304,250
+offsets:124,394,720,880
+toc V3/1/bianshen_0028
+bounds:2,277,304,250
+offsets:124,394,720,880
+toc V4/1/bianshen_0028
+bounds:2,277,304,250
+offsets:124,394,720,880
+toc V1/2/shandiana_0000
+bounds:1955,1168,68,84
+offsets:0,22,106,106
+toc V2/2/shandiana_0000
+bounds:1955,1168,68,84
+offsets:0,22,106,106
+toc V3/2/shandiana_0000
+bounds:1955,1168,68,84
+offsets:0,22,106,106
+toc V4/2/shandiana_0000
+bounds:1955,1168,68,84
+offsets:0,22,106,106
+toc V1/2/shandiana_0006
+bounds:1955,1093,77,73
+offsets:6,0,106,106
+toc V2/2/shandiana_0006
+bounds:1955,1093,77,73
+offsets:6,0,106,106
+toc V3/2/shandiana_0006
+bounds:1955,1093,77,73
+offsets:6,0,106,106
+toc V4/2/shandiana_0006
+bounds:1955,1093,77,73
+offsets:6,0,106,106
+toc V1/2/shandiana_0015
+bounds:1245,450,57,55
+offsets:0,0,106,106
+toc V2/2/shandiana_0015
+bounds:1245,450,57,55
+offsets:0,0,106,106
+toc V3/2/shandiana_0015
+bounds:1245,450,57,55
+offsets:0,0,106,106
+toc V4/2/shandiana_0015
+bounds:1245,450,57,55
+offsets:0,0,106,106
+toc V1/Group 3
+bounds:1963,986,70,105
+offsets:9,0,83,105
+toc V2/Group 3
+bounds:1963,986,70,105
+offsets:9,0,83,105
+toc V3/Group 3
+bounds:1963,986,70,105
+offsets:9,0,83,105
+toc V4/Group 3
+bounds:1963,986,70,105
+offsets:9,0,83,105
+toc V5/Group 3
+bounds:1963,986,70,105
+offsets:9,0,83,105
+toc V6/Group 3
+bounds:1963,986,70,105
+offsets:9,0,83,105
+toc V7/Group 3
+bounds:1963,986,70,105
+offsets:9,0,83,105
+toc V1/attack/21huozhuzc/huozhuzc_23
+bounds:530,1587,262,451
+offsets:572,189,1136,640
+toc V2/attack/21huozhuzc/huozhuzc_23
+bounds:530,1587,262,451
+offsets:572,189,1136,640
+toc V3/attack/21huozhuzc/huozhuzc_23
+bounds:530,1587,262,451
+offsets:572,189,1136,640
+toc V4/attack/21huozhuzc/huozhuzc_23
+bounds:530,1587,262,451
+offsets:572,189,1136,640
+toc V1/attack/21huozhuzc/huozhuzc_24
+bounds:456,1332,244,452
+offsets:584,188,1136,640
+rotate:90
+toc V2/attack/21huozhuzc/huozhuzc_24
+bounds:456,1332,244,452
+offsets:584,188,1136,640
+rotate:90
+toc V3/attack/21huozhuzc/huozhuzc_24
+bounds:456,1332,244,452
+offsets:584,188,1136,640
+rotate:90
+toc V4/attack/21huozhuzc/huozhuzc_24
+bounds:456,1332,244,452
+offsets:584,188,1136,640
+rotate:90
+toc V1/attack/21huozhuzc/huozhuzc_25
+bounds:1304,1577,253,461
+offsets:579,179,1136,640
+toc V2/attack/21huozhuzc/huozhuzc_25
+bounds:1304,1577,253,461
+offsets:579,179,1136,640
+toc V3/attack/21huozhuzc/huozhuzc_25
+bounds:1304,1577,253,461
+offsets:579,179,1136,640
+toc V4/attack/21huozhuzc/huozhuzc_25
+bounds:1304,1577,253,461
+offsets:579,179,1136,640
+toc V1/tay P2
+bounds:1549,749,102,99
+toc V2/tay P2
+bounds:1549,749,102,99
+toc V3/tay P2
+bounds:1549,749,102,99
+toc V4/tay P2
+bounds:1549,749,102,99
+toc V5/tay P2
+bounds:1549,749,102,99
+toc V6/tay P2
+bounds:1549,749,102,99
+toc V7/tay P2
+bounds:1549,749,102,99
+toc V1/tay T1
+bounds:1522,386,94,147
+offsets:5,4,105,151
+rotate:90
+toc V2/tay T1
+bounds:1522,386,94,147
+offsets:5,4,105,151
+rotate:90
+toc V3/tay T1
+bounds:1522,386,94,147
+offsets:5,4,105,151
+rotate:90
+toc V5/tay T1
+bounds:1522,386,94,147
+offsets:5,4,105,151
+rotate:90
+toc V6/tay T1
+bounds:1522,386,94,147
+offsets:5,4,105,151
+rotate:90
+toc V7/tay T1
+bounds:1522,386,94,147
+offsets:5,4,105,151
+rotate:90
+toc V2/dau4
+bounds:1246,726,358,341
+offsets:25,0,405,347
+toc V4/dau4
+bounds:910,1229,346,427
+offsets:16,17,405,549
+rotate:90
+toc V4/duoi
+bounds:1895,763,304,145
+rotate:90
+toc V4/tay T1
+bounds:908,17,94,147
+offsets:5,4,105,151
+toc V5/1/bianshen_0016
+bounds:954,957,314,272
+offsets:113,380,720,880
+toc V5/1/bianshen_0018
+bounds:1315,1069,318,269
+offsets:116,379,720,880
+toc V5/1/bianshen_0020
+bounds:940,646,309,265
+offsets:126,380,720,880
+rotate:90
+toc V5/1/bianshen_0022
+bounds:1440,482,311,258
+offsets:122,381,720,880
+toc V5/1/bianshen_0024
+bounds:2,25,298,250
+offsets:126,391,720,880
+toc V5/1/bianshen_0028
+bounds:619,279,304,250
+offsets:124,394,720,880
+toc V5/2/shandiana_0000
+bounds:1955,1254,68,84
+offsets:0,22,106,106
+toc V5/2/shandiana_0003
+bounds:1745,2,106,106
+toc V5/2/shandiana_0004
+bounds:1637,10,106,106
+toc V5/2/shandiana_0006
+bounds:1963,1595,77,73
+offsets:6,0,106,106
+toc V5/attack/21huozhuzc/huozhuzc_23
+bounds:266,1587,262,451
+offsets:572,189,1136,640
+toc V5/attack/21huozhuzc/huozhuzc_24
+bounds:1559,1340,244,452
+offsets:584,188,1136,640
+rotate:90
+toc V5/attack/21huozhuzc/huozhuzc_25
+bounds:1049,1577,253,461
+offsets:579,179,1136,640
+toc V5/dau4
+bounds:921,60,332,334
+offsets:27,0,405,347
+rotate:90
+toc V6/1/bianshen_0014
+bounds:1338,1356,217,219
+offsets:171,377,720,880
+toc V6/1/bianshen_0016
+bounds:638,1058,314,272
+offsets:113,380,720,880
+toc V6/1/bianshen_0018
+bounds:2,1070,318,269
+offsets:116,379,720,880
+toc V6/1/bianshen_0020
+bounds:629,791,309,265
+offsets:126,380,720,880
+toc V6/1/bianshen_0022
+bounds:626,531,311,258
+offsets:122,381,720,880
+toc V6/1/bianshen_0024
+bounds:608,27,298,250
+offsets:126,391,720,880
+toc V6/1/bianshen_0028
+bounds:313,279,304,250
+offsets:124,394,720,880
+toc V6/2/baocik_0002
+bounds:1805,1670,368,198
+offsets:33,87,432,422
+rotate:90
+toc V6/2/shandiana_0000
+bounds:910,1491,68,84
+offsets:0,22,106,106
+toc V6/2/shandiana_0006
+bounds:1884,1595,77,73
+offsets:6,0,106,106
+toc V6/attack/21huozhuzc/huozhuzc_23
+bounds:2,1587,262,451
+offsets:572,189,1136,640
+toc V6/attack/21huozhuzc/huozhuzc_24
+bounds:2,1341,244,452
+offsets:584,188,1136,640
+rotate:90
+toc V6/attack/21huozhuzc/huozhuzc_25
+bounds:794,1577,253,461
+offsets:579,179,1136,640
+toc V6/dau4
+bounds:1576,109,332,334
+offsets:27,0,405,347
+rotate:90
+toc V7/1/bianshen_0008
+bounds:1245,507,217,190
+offsets:168,363,720,880
+rotate:90
+toc V7/1/bianshen_0016
+bounds:322,1058,314,272
+offsets:113,380,720,880
+toc V7/1/bianshen_0020
+bounds:318,791,309,265
+offsets:126,380,720,880
+toc V7/1/bianshen_0022
+bounds:313,531,311,258
+offsets:122,381,720,880
+toc V7/1/bianshen_0024
+bounds:308,27,298,250
+offsets:126,391,720,880
+toc V7/1/bianshen_0028
+bounds:939,394,304,250
+offsets:124,394,720,880
+toc V7/2/shandiana_0006
+bounds:1805,1595,77,73
+offsets:6,0,106,106
+toc V7/attack/21huozhuzc/huozhuzc_24
+bounds:1559,1586,244,452
+offsets:584,188,1136,640
+toc V7/dau4
+bounds:1241,172,332,334
+offsets:27,0,405,347
+rotate:90
+
+Hero_2_5.png
+size:2032,2048
+filter:Linear,Linear
+pma:true
+1/huoxing_0001
+bounds:1412,1820,199,224
+offsets:239,148,720,720
+toc V1/1/huoxing_0001
+bounds:1412,1820,199,224
+offsets:239,148,720,720
+toc V2/1/huoxing_0001
+bounds:1412,1820,199,224
+offsets:239,148,720,720
+toc V3/1/huoxing_0001
+bounds:1412,1820,199,224
+offsets:239,148,720,720
+toc V4/1/huoxing_0001
+bounds:1412,1820,199,224
+offsets:239,148,720,720
+1/huoxing_0003
+bounds:1530,1376,200,220
+offsets:240,156,720,720
+toc V1/1/huoxing_0003
+bounds:1530,1376,200,220
+offsets:240,156,720,720
+toc V2/1/huoxing_0003
+bounds:1530,1376,200,220
+offsets:240,156,720,720
+toc V3/1/huoxing_0003
+bounds:1530,1376,200,220
+offsets:240,156,720,720
+toc V4/1/huoxing_0003
+bounds:1530,1376,200,220
+offsets:240,156,720,720
+1/huoxing_0005
+bounds:1730,932,199,216
+offsets:241,165,720,720
+toc V1/1/huoxing_0005
+bounds:1730,932,199,216
+offsets:241,165,720,720
+toc V2/1/huoxing_0005
+bounds:1730,932,199,216
+offsets:241,165,720,720
+toc V3/1/huoxing_0005
+bounds:1730,932,199,216
+offsets:241,165,720,720
+toc V4/1/huoxing_0005
+bounds:1730,932,199,216
+offsets:241,165,720,720
+1/huoxing_0007
+bounds:1782,718,201,212
+offsets:242,173,720,720
+toc V1/1/huoxing_0007
+bounds:1782,718,201,212
+offsets:242,173,720,720
+toc V2/1/huoxing_0007
+bounds:1782,718,201,212
+offsets:242,173,720,720
+toc V3/1/huoxing_0007
+bounds:1782,718,201,212
+offsets:242,173,720,720
+toc V4/1/huoxing_0007
+bounds:1782,718,201,212
+offsets:242,173,720,720
+1/huoxing_0019
+bounds:950,2,146,205
+offsets:243,222,720,720
+rotate:90
+toc V1/1/huoxing_0019
+bounds:950,2,146,205
+offsets:243,222,720,720
+rotate:90
+toc V2/1/huoxing_0019
+bounds:950,2,146,205
+offsets:243,222,720,720
+rotate:90
+toc V3/1/huoxing_0019
+bounds:950,2,146,205
+offsets:243,222,720,720
+rotate:90
+toc V4/1/huoxing_0019
+bounds:950,2,146,205
+offsets:243,222,720,720
+rotate:90
+toc V1/1/bianshen_0010
+bounds:1624,348,224,193
+offsets:164,364,720,880
+rotate:90
+toc V2/1/bianshen_0010
+bounds:1624,348,224,193
+offsets:164,364,720,880
+rotate:90
+toc V3/1/bianshen_0010
+bounds:1624,348,224,193
+offsets:164,364,720,880
+rotate:90
+toc V4/1/bianshen_0010
+bounds:1624,348,224,193
+offsets:164,364,720,880
+rotate:90
+toc V1/1/bianshen_0012
+bounds:1328,792,221,205
+offsets:167,372,720,880
+rotate:90
+toc V2/1/bianshen_0012
+bounds:1328,792,221,205
+offsets:167,372,720,880
+rotate:90
+toc V3/1/bianshen_0012
+bounds:1328,792,221,205
+offsets:167,372,720,880
+rotate:90
+toc V4/1/bianshen_0012
+bounds:1328,792,221,205
+offsets:167,372,720,880
+rotate:90
+toc V1/1/bianshen_0014
+bounds:1203,228,217,219
+offsets:171,377,720,880
+toc V2/1/bianshen_0014
+bounds:1203,228,217,219
+offsets:171,377,720,880
+toc V3/1/bianshen_0014
+bounds:1203,228,217,219
+offsets:171,377,720,880
+toc V4/1/bianshen_0014
+bounds:1203,228,217,219
+offsets:171,377,720,880
+toc V1/1/bianshen_0024
+bounds:2,1459,298,250
+offsets:126,391,720,880
+toc V2/1/bianshen_0024
+bounds:2,1459,298,250
+offsets:126,391,720,880
+toc V3/1/bianshen_0024
+bounds:2,1459,298,250
+offsets:126,391,720,880
+toc V4/1/bianshen_0024
+bounds:2,1459,298,250
+offsets:126,391,720,880
+toc V1/1/bianshen_0030
+bounds:2,107,291,236
+offsets:130,394,720,880
+toc V2/1/bianshen_0030
+bounds:2,107,291,236
+offsets:130,394,720,880
+toc V3/1/bianshen_0030
+bounds:2,107,291,236
+offsets:130,394,720,880
+toc V4/1/bianshen_0030
+bounds:2,107,291,236
+offsets:130,394,720,880
+toc V1/1/bianshen_0032
+bounds:1026,1478,282,235
+offsets:134,394,720,880
+rotate:90
+toc V2/1/bianshen_0032
+bounds:1026,1478,282,235
+offsets:134,394,720,880
+rotate:90
+toc V3/1/bianshen_0032
+bounds:1026,1478,282,235
+offsets:134,394,720,880
+rotate:90
+toc V4/1/bianshen_0032
+bounds:1026,1478,282,235
+offsets:134,394,720,880
+rotate:90
+toc V1/1/bianshen_0034
+bounds:1147,449,275,237
+offsets:138,394,720,880
+rotate:90
+toc V2/1/bianshen_0034
+bounds:1147,449,275,237
+offsets:138,394,720,880
+rotate:90
+toc V3/1/bianshen_0034
+bounds:1147,449,275,237
+offsets:138,394,720,880
+rotate:90
+toc V4/1/bianshen_0034
+bounds:1147,449,275,237
+offsets:138,394,720,880
+rotate:90
+toc V1/1/bianshen_0036
+bounds:372,1209,287,239
+offsets:133,394,720,880
+rotate:90
+toc V2/1/bianshen_0036
+bounds:372,1209,287,239
+offsets:133,394,720,880
+rotate:90
+toc V3/1/bianshen_0036
+bounds:372,1209,287,239
+offsets:133,394,720,880
+rotate:90
+toc V4/1/bianshen_0036
+bounds:372,1209,287,239
+offsets:133,394,720,880
+rotate:90
+toc V1/1/bianshen_0038
+bounds:732,150,290,232
+offsets:131,394,720,880
+rotate:90
+toc V2/1/bianshen_0038
+bounds:732,150,290,232
+offsets:131,394,720,880
+rotate:90
+toc V3/1/bianshen_0038
+bounds:732,150,290,232
+offsets:131,394,720,880
+rotate:90
+toc V4/1/bianshen_0038
+bounds:732,150,290,232
+offsets:131,394,720,880
+rotate:90
+toc V1/2/baocik_0001
+bounds:536,150,351,194
+offsets:42,90,432,422
+rotate:90
+toc V2/2/baocik_0001
+bounds:536,150,351,194
+offsets:42,90,432,422
+rotate:90
+toc V3/2/baocik_0001
+bounds:536,150,351,194
+offsets:42,90,432,422
+rotate:90
+toc V4/2/baocik_0001
+bounds:536,150,351,194
+offsets:42,90,432,422
+rotate:90
+toc V1/2/baocik_0002
+bounds:2,1059,368,198
+offsets:33,87,432,422
+toc V2/2/baocik_0002
+bounds:2,1059,368,198
+offsets:33,87,432,422
+toc V3/2/baocik_0002
+bounds:2,1059,368,198
+offsets:33,87,432,422
+toc V4/2/baocik_0002
+bounds:2,1059,368,198
+offsets:33,87,432,422
+toc V1/2/baocik_0004
+bounds:295,682,375,183
+offsets:37,85,432,422
+rotate:90
+toc V2/2/baocik_0004
+bounds:295,682,375,183
+offsets:37,85,432,422
+rotate:90
+toc V3/2/baocik_0004
+bounds:295,682,375,183
+offsets:37,85,432,422
+rotate:90
+toc V4/2/baocik_0004
+bounds:295,682,375,183
+offsets:37,85,432,422
+rotate:90
+toc V1/2/baocik_0005
+bounds:911,906,378,177
+offsets:37,85,432,422
+rotate:90
+toc V2/2/baocik_0005
+bounds:911,906,378,177
+offsets:37,85,432,422
+rotate:90
+toc V3/2/baocik_0005
+bounds:911,906,378,177
+offsets:37,85,432,422
+rotate:90
+toc V4/2/baocik_0005
+bounds:911,906,378,177
+offsets:37,85,432,422
+rotate:90
+toc V1/2/shandiana_0003
+bounds:1545,1042,106,106
+toc V2/2/shandiana_0003
+bounds:1545,1042,106,106
+toc V3/2/shandiana_0003
+bounds:1545,1042,106,106
+toc V4/2/shandiana_0003
+bounds:1545,1042,106,106
+toc V1/2/shandiana_0004
+bounds:732,486,106,106
+toc V2/2/shandiana_0004
+bounds:732,486,106,106
+toc V3/2/shandiana_0004
+bounds:732,486,106,106
+toc V4/2/shandiana_0004
+bounds:732,486,106,106
+toc V1/2/shandiana_0007
+bounds:911,798,106,106
+toc V2/2/shandiana_0007
+bounds:911,798,106,106
+toc V3/2/shandiana_0007
+bounds:911,798,106,106
+toc V4/2/shandiana_0007
+bounds:911,798,106,106
+toc V1/2/shandiana_0008
+bounds:1935,1409,94,106
+offsets:2,0,106,106
+toc V2/2/shandiana_0008
+bounds:1935,1409,94,106
+offsets:2,0,106,106
+toc V3/2/shandiana_0008
+bounds:1935,1409,94,106
+offsets:2,0,106,106
+toc V4/2/shandiana_0008
+bounds:1935,1409,94,106
+offsets:2,0,106,106
+toc V1/2/shandiana_0010
+bounds:1263,1717,106,106
+toc V2/2/shandiana_0010
+bounds:1263,1717,106,106
+toc V3/2/shandiana_0010
+bounds:1263,1717,106,106
+toc V4/2/shandiana_0010
+bounds:1263,1717,106,106
+toc V1/2/shandiana_0011
+bounds:1931,1074,106,96
+offsets:0,10,106,106
+rotate:90
+toc V2/2/shandiana_0011
+bounds:1931,1074,106,96
+offsets:0,10,106,106
+rotate:90
+toc V3/2/shandiana_0011
+bounds:1931,1074,106,96
+offsets:0,10,106,106
+rotate:90
+toc V4/2/shandiana_0011
+bounds:1931,1074,106,96
+offsets:0,10,106,106
+rotate:90
+toc V1/2/shandiana_0013
+bounds:372,1101,106,106
+toc V2/2/shandiana_0013
+bounds:372,1101,106,106
+toc V3/2/shandiana_0013
+bounds:372,1101,106,106
+toc V4/2/shandiana_0013
+bounds:372,1101,106,106
+toc V1/2/shandiana_0014
+bounds:110,6,99,106
+offsets:0,0,106,106
+rotate:90
+toc V2/2/shandiana_0014
+bounds:110,6,99,106
+offsets:0,0,106,106
+rotate:90
+toc V3/2/shandiana_0014
+bounds:110,6,99,106
+offsets:0,0,106,106
+rotate:90
+toc V4/2/shandiana_0014
+bounds:110,6,99,106
+offsets:0,0,106,106
+rotate:90
+toc V1/attack/21huozhuzc/huozhuzc_21
+bounds:1090,1015,184,252
+offsets:612,160,1136,640
+rotate:90
+toc V2/attack/21huozhuzc/huozhuzc_21
+bounds:1090,1015,184,252
+offsets:612,160,1136,640
+rotate:90
+toc V3/attack/21huozhuzc/huozhuzc_21
+bounds:1090,1015,184,252
+offsets:612,160,1136,640
+rotate:90
+toc V4/attack/21huozhuzc/huozhuzc_21
+bounds:1090,1015,184,252
+offsets:612,160,1136,640
+rotate:90
+toc V1/dau4
+bounds:2,1710,332,334
+offsets:27,0,405,347
+toc V5/1/bianshen_0010
+bounds:1587,574,224,193
+offsets:164,364,720,880
+rotate:90
+toc V5/1/bianshen_0012
+bounds:1203,21,221,205
+offsets:167,372,720,880
+toc V5/1/bianshen_0014
+bounds:1193,1825,217,219
+offsets:171,377,720,880
+toc V5/1/bianshen_0030
+bounds:2,345,291,236
+offsets:130,394,720,880
+toc V5/1/bianshen_0032
+bounds:966,150,282,235
+offsets:134,394,720,880
+rotate:90
+toc V5/1/bianshen_0034
+bounds:1090,1201,275,237
+offsets:138,394,720,880
+rotate:90
+toc V5/1/bianshen_0036
+bounds:302,1498,287,239
+offsets:133,394,720,880
+rotate:90
+toc V5/1/bianshen_0038
+bounds:676,974,290,232
+offsets:131,394,720,880
+rotate:90
+toc V5/1/huoxing_0001
+bounds:1386,566,199,224
+offsets:239,148,720,720
+toc V5/1/huoxing_0003
+bounds:1470,1598,200,220
+offsets:240,156,720,720
+toc V5/1/huoxing_0005
+bounds:1672,1610,199,216
+offsets:241,165,720,720
+toc V5/1/huoxing_0007
+bounds:1740,1182,201,212
+offsets:242,173,720,720
+toc V5/1/huoxing_0009
+bounds:1829,91,201,207
+offsets:243,182,720,720
+toc V5/1/huoxing_0019
+bounds:743,2,146,205
+offsets:243,222,720,720
+rotate:90
+toc V5/2/baocik_0001
+bounds:536,503,351,194
+offsets:42,90,432,422
+rotate:90
+toc V5/2/baocik_0002
+bounds:2,1259,368,198
+offsets:33,87,432,422
+toc V5/2/baocik_0005
+bounds:847,1286,378,177
+offsets:37,85,432,422
+rotate:90
+toc V5/2/shandiana_0008
+bounds:1935,1517,94,106
+offsets:2,0,106,106
+toc V5/2/shandiana_0011
+bounds:1371,1712,106,96
+offsets:0,10,106,106
+rotate:90
+toc V5/2/shandiana_0014
+bounds:2,6,99,106
+offsets:0,0,106,106
+rotate:90
+toc V6/1/bianshen_0010
+bounds:1545,1150,224,193
+offsets:164,364,720,880
+rotate:90
+toc V6/1/bianshen_0012
+bounds:1263,1478,221,205
+offsets:167,372,720,880
+rotate:90
+toc V6/1/bianshen_0030
+bounds:2,583,291,236
+offsets:130,394,720,880
+toc V6/1/bianshen_0032
+bounds:956,1762,282,235
+offsets:134,394,720,880
+rotate:90
+toc V6/1/bianshen_0034
+bounds:1089,726,275,237
+offsets:138,394,720,880
+rotate:90
+toc V6/1/bianshen_0036
+bounds:295,104,287,239
+offsets:133,394,720,880
+rotate:90
+toc V6/1/bianshen_0038
+bounds:613,1266,290,232
+offsets:131,394,720,880
+rotate:90
+toc V6/1/huoxing_0001
+bounds:1344,1026,199,224
+offsets:239,148,720,720
+toc V6/1/huoxing_0003
+bounds:1426,122,200,220
+offsets:240,156,720,720
+toc V6/1/huoxing_0005
+bounds:1628,130,199,216
+offsets:241,165,720,720
+toc V6/1/huoxing_0007
+bounds:1814,1832,201,212
+offsets:242,173,720,720
+toc V6/1/huoxing_0009
+bounds:1829,300,201,207
+offsets:243,182,720,720
+toc V6/1/huoxing_0019
+bounds:536,2,146,205
+offsets:243,222,720,720
+rotate:90
+toc V6/2/baocik_0001
+bounds:334,1850,351,194
+offsets:42,90,432,422
+toc V6/2/baocik_0005
+bounds:777,1666,378,177
+offsets:37,85,432,422
+rotate:90
+toc V6/2/shandiana_0011
+bounds:326,6,106,96
+offsets:0,10,106,106
+toc V7/1/bianshen_0010
+bounds:1535,800,224,193
+offsets:164,364,720,880
+rotate:90
+toc V7/1/bianshen_0030
+bounds:2,821,291,236
+offsets:130,394,720,880
+toc V7/1/bianshen_0032
+bounds:910,442,282,235
+offsets:134,394,720,880
+rotate:90
+toc V7/1/bianshen_0036
+bounds:295,393,287,239
+offsets:133,394,720,880
+rotate:90
+toc V7/1/bianshen_0038
+bounds:543,1558,290,232
+offsets:131,394,720,880
+rotate:90
+toc V7/1/huoxing_0001
+bounds:1329,1252,199,224
+offsets:239,148,720,720
+toc V7/1/huoxing_0003
+bounds:1422,344,200,220
+offsets:240,156,720,720
+toc V7/1/huoxing_0005
+bounds:1613,1828,199,216
+offsets:241,165,720,720
+toc V7/1/huoxing_0007
+bounds:1732,1396,201,212
+offsets:242,173,720,720
+toc V7/1/huoxing_0009
+bounds:1819,509,201,207
+offsets:243,182,720,720
+toc V7/1/huoxing_0019
+bounds:1873,1625,146,205
+offsets:243,222,720,720
+toc V7/2/baocik_0001
+bounds:480,856,351,194
+offsets:42,90,432,422
+rotate:90
+toc V7/2/baocik_0005
+bounds:732,594,378,177
+offsets:37,85,432,422
+rotate:90
+toc V7/2/shandiana_0011
+bounds:218,6,106,96
+offsets:0,10,106,106
+
+Hero_2_6.png
+size:772,1900
+filter:Linear,Linear
+pma:true
+1/huoxing_0009
+bounds:2,1690,201,207
+offsets:243,182,720,720
+toc V1/1/huoxing_0009
+bounds:2,1690,201,207
+offsets:243,182,720,720
+toc V2/1/huoxing_0009
+bounds:2,1690,201,207
+offsets:243,182,720,720
+toc V3/1/huoxing_0009
+bounds:2,1690,201,207
+offsets:243,182,720,720
+toc V4/1/huoxing_0009
+bounds:2,1690,201,207
+offsets:243,182,720,720
+1/huoxing_0011
+bounds:402,1487,193,204
+offsets:243,190,720,720
+toc V1/1/huoxing_0011
+bounds:402,1487,193,204
+offsets:243,190,720,720
+toc V2/1/huoxing_0011
+bounds:402,1487,193,204
+offsets:243,190,720,720
+toc V3/1/huoxing_0011
+bounds:402,1487,193,204
+offsets:243,190,720,720
+toc V4/1/huoxing_0011
+bounds:402,1487,193,204
+offsets:243,190,720,720
+1/huoxing_0013
+bounds:402,1693,193,204
+offsets:244,198,720,720
+toc V1/1/huoxing_0013
+bounds:402,1693,193,204
+offsets:244,198,720,720
+toc V2/1/huoxing_0013
+bounds:402,1693,193,204
+offsets:244,198,720,720
+toc V3/1/huoxing_0013
+bounds:402,1693,193,204
+offsets:244,198,720,720
+toc V4/1/huoxing_0013
+bounds:402,1693,193,204
+offsets:244,198,720,720
+1/huoxing_0015
+bounds:393,45,193,204
+offsets:244,206,720,720
+toc V1/1/huoxing_0015
+bounds:393,45,193,204
+offsets:244,206,720,720
+toc V2/1/huoxing_0015
+bounds:393,45,193,204
+offsets:244,206,720,720
+toc V3/1/huoxing_0015
+bounds:393,45,193,204
+offsets:244,206,720,720
+toc V4/1/huoxing_0015
+bounds:393,45,193,204
+offsets:244,206,720,720
+1/huoxing_0017
+bounds:194,245,194,205
+offsets:244,214,720,720
+toc V1/1/huoxing_0017
+bounds:194,245,194,205
+offsets:244,214,720,720
+toc V2/1/huoxing_0017
+bounds:194,245,194,205
+offsets:244,214,720,720
+toc V3/1/huoxing_0017
+bounds:194,245,194,205
+offsets:244,214,720,720
+toc V4/1/huoxing_0017
+bounds:194,245,194,205
+offsets:244,214,720,720
+than
+bounds:402,1236,249,201
+offsets:9,24,273,232
+rotate:90
+toc V1/1/bianshen_0008
+bounds:2,209,217,190
+offsets:168,363,720,880
+rotate:90
+toc V2/1/bianshen_0008
+bounds:2,209,217,190
+offsets:168,363,720,880
+rotate:90
+toc V3/1/bianshen_0008
+bounds:2,209,217,190
+offsets:168,363,720,880
+rotate:90
+toc V4/1/bianshen_0008
+bounds:2,209,217,190
+offsets:168,363,720,880
+rotate:90
+toc V1/1/guangyuna_0000
+bounds:2,866,204,203
+offsets:258,258,720,720
+rotate:90
+toc V2/1/guangyuna_0000
+bounds:2,866,204,203
+offsets:258,258,720,720
+rotate:90
+toc V3/1/guangyuna_0000
+bounds:2,866,204,203
+offsets:258,258,720,720
+rotate:90
+toc V4/1/guangyuna_0000
+bounds:2,866,204,203
+offsets:258,258,720,720
+rotate:90
+toc V1/dau2.1
+bounds:588,246,194,141
+offsets:158,3,405,347
+rotate:90
+toc V2/dau2.1
+bounds:588,246,194,141
+offsets:158,3,405,347
+rotate:90
+toc V3/dau2.1
+bounds:588,246,194,141
+offsets:158,3,405,347
+rotate:90
+toc V4/dau2.1
+bounds:588,246,194,141
+offsets:158,3,405,347
+rotate:90
+toc V1/than
+bounds:513,833,250,202
+offsets:9,24,273,232
+toc V2/than
+bounds:513,833,250,202
+offsets:9,24,273,232
+toc V5/than
+bounds:513,833,250,202
+offsets:9,24,273,232
+toc V6/than
+bounds:513,833,250,202
+offsets:9,24,273,232
+toc V7/than
+bounds:513,833,250,202
+offsets:9,24,273,232
+toc V3/than
+bounds:402,985,250,202
+offsets:9,24,273,232
+rotate:90
+toc V4/than
+bounds:565,1113,225,202
+offsets:15,24,273,232
+rotate:90
+toc V5/1/bianshen_0008
+bounds:2,428,217,190
+offsets:168,363,720,880
+rotate:90
+toc V5/1/guangyuna_0000
+bounds:2,1072,204,203
+offsets:258,258,720,720
+rotate:90
+toc V5/1/huoxing_0011
+bounds:390,251,193,204
+offsets:243,190,720,720
+toc V5/1/huoxing_0013
+bounds:390,457,193,204
+offsets:244,198,720,720
+toc V5/1/huoxing_0015
+bounds:390,663,193,204
+offsets:244,206,720,720
+toc V5/1/huoxing_0017
+bounds:194,452,194,205
+offsets:244,214,720,720
+toc V5/dau2.1
+bounds:588,45,194,141
+offsets:158,3,405,347
+rotate:90
+toc V6/1/bianshen_0008
+bounds:2,647,217,190
+offsets:168,363,720,880
+rotate:90
+toc V6/1/guangyuna_0000
+bounds:2,1278,204,203
+offsets:258,258,720,720
+rotate:90
+toc V6/1/huoxing_0011
+bounds:207,869,193,204
+offsets:243,190,720,720
+toc V6/1/huoxing_0013
+bounds:207,1075,193,204
+offsets:244,198,720,720
+toc V6/1/huoxing_0015
+bounds:207,1281,193,204
+offsets:244,206,720,720
+toc V6/1/huoxing_0017
+bounds:194,659,194,205
+offsets:244,214,720,720
+toc V6/dau2.1
+bounds:585,442,194,141
+offsets:158,3,405,347
+rotate:90
+toc V7/1/guangyuna_0000
+bounds:2,1484,204,203
+offsets:258,258,720,720
+rotate:90
+toc V7/1/huoxing_0011
+bounds:207,1487,193,204
+offsets:243,190,720,720
+toc V7/1/huoxing_0013
+bounds:205,1693,193,204
+offsets:244,198,720,720
+toc V7/1/huoxing_0015
+bounds:198,39,193,204
+offsets:244,206,720,720
+toc V7/1/huoxing_0017
+bounds:2,2,194,205
+offsets:244,214,720,720
+toc V7/dau2.1
+bounds:585,638,194,141
+offsets:158,3,405,347
+rotate:90

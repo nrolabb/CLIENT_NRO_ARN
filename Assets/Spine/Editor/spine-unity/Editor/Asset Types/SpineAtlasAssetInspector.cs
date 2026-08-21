@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated July 28, 2023. Replaces all prior versions.
+ * Last updated April 5, 2025. Replaces all prior versions.
  *
- * Copyright (c) 2013-2023, Esoteric Software LLC
+ * Copyright (c) 2013-2025, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software or
- * otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,8 +23,8 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
- * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 //#define BAKE_ALL_BUTTON
@@ -324,11 +324,8 @@ namespace Spine.Unity.Editor {
 			string texturePath = AssetDatabase.GetAssetPath(texture.GetEntityId());
 			TextureImporter t = (TextureImporter)TextureImporter.GetAtPath(texturePath);
 			t.spriteImportMode = SpriteImportMode.Multiple;
-
-#pragma warning disable 0618
 			SpriteMetaData[] spriteSheet = t.spritesheet;
 			List<SpriteMetaData> sprites = new List<SpriteMetaData>(spriteSheet);
-#pragma warning restore 0618
 
 			List<AtlasRegion> regions = SpineAtlasAssetInspector.GetRegions(atlas);
 			int updatedCount = 0;
@@ -338,6 +335,14 @@ namespace Spine.Unity.Editor {
 				string pageName = System.IO.Path.GetFileNameWithoutExtension(r.page.name);
 				string textureName = texture.name;
 				bool pageMatch = string.Equals(pageName, textureName, StringComparison.Ordinal);
+
+				//				if (pageMatch) {
+				//					int pw = r.page.width;
+				//					int ph = r.page.height;
+				//					bool mismatchSize = pw != texture.width || pw > t.maxTextureSize || ph != texture.height || ph > t.maxTextureSize;
+				//					if (mismatchSize)
+				//						Debug.LogWarningFormat("Size mismatch found.\nExpected atlas size is {0}x{1}. Texture Import Max Size of texture '{2}'({4}x{5}) is currently set to {3}.", pw, ph, texture.name, t.maxTextureSize, texture.width, texture.height);
+				//				}
 
 				int spriteIndex = pageMatch ? sprites.FindIndex(
 					(s) => string.Equals(s.name, r.name, StringComparison.Ordinal)
@@ -371,16 +376,15 @@ namespace Spine.Unity.Editor {
 						addedCount++;
 					}
 				}
+
 			}
 
-#pragma warning disable 0618
 			t.spritesheet = sprites.ToArray();
-#pragma warning restore 0618
-
 			EditorUtility.SetDirty(t);
 			AssetDatabase.ImportAsset(texturePath, ImportAssetOptions.ForceUpdate);
 			EditorGUIUtility.PingObject(texture);
 			Debug.Log(string.Format("Applied sprite slices to {2}. {0} added. {1} updated.", addedCount, updatedCount, texture.name));
 		}
 	}
+
 }

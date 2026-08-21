@@ -288,6 +288,7 @@ public static class SpineMessageHandler
         string animation = msg.reader().readUTF();
         short durationMs = msg.reader().readShort();
 
+        Char c = GetChar(playerId);
         Res.outz($"[Spine] SkillEffect: player={playerId}, skeleton={skeletonPath}, anim={animation}, duration={durationMs}");
         SpineSkillEffectController.Play(playerId, skeletonPath, animation, durationMs);
     }

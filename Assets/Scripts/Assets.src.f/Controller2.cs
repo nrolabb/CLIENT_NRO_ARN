@@ -478,6 +478,28 @@ namespace Game1.Assets.src.f
 					case -115:
 						Char.myCharz().setPowerInfo(msg.reader().readUTF(), msg.reader().readShort(), msg.reader().readShort(), msg.reader().readShort());
 						break;
+					case -114:
+						{
+							sbyte action = msg.reader().readByte();
+							if (action == 0)
+							{
+								int count = msg.reader().readByte();
+								Panel.vRecipe.removeAllElements();
+								for (int i = 0; i < count; i++)
+								{
+									ItemRecipe recipe = new ItemRecipe(); recipe.id = msg.reader().readShort();
+									ItemTemplate item = ItemTemplates.get(msg.reader().readShort());
+									recipe.iconID = item == null ? (short)0 : item.iconID; recipe.name = item == null ? "Unknown" : item.name;
+									recipe.time = msg.reader().readInt(); recipe.donGiaId = msg.reader().readShort(); recipe.gia = msg.reader().readInt();
+									int materials = msg.reader().readByte(); recipe.ingredients = new short[materials]; recipe.quantities = new short[materials];
+									for (int j = 0; j < materials; j++) { recipe.ingredients[j] = msg.reader().readShort(); recipe.quantities[j] = msg.reader().readShort(); }
+									Panel.vRecipe.addElement(recipe);
+								}
+							}
+							Panel.serverCookingData = msg.reader().readUTF(); Panel.LoadCookingSlots();
+							if (action == 0 && GameCanvas.panel != null) { GameCanvas.panel.setTypeCheBien(); GameCanvas.panel.show(); }
+							break;
+						}
 					case -113:
 						{
 							sbyte[] array10 = new sbyte[10];

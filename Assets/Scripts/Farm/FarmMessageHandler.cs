@@ -103,15 +103,14 @@ public class FarmMessageHandler
             case FarmConstants.DATA_OPEN_SEED_PANEL: // 2
                 int plotId = msg.reader().readInt();
                 // Mở panel chọn hạt giống, Client tự lọc từ inventory
-                GameScr.info1.addInfo("chieu.lq Nhận lệnh mở kho từ Server!", 0);
                 GameCanvas.panel.setTypeFarmSeed(plotId);
                 GameCanvas.panel.show();
-                Res.outz("FarmMessageHandler: Open seed panel for plot " + plotId);
+                //Res.outz("FarmMessageHandler: Open seed panel for plot " + plotId);
                 break;
 
             case 3: // DATA_CLOSE_DIALOG - Server yêu cầu đóng dialog
                 CloseCurrentDialog();
-                Res.outz("FarmMessageHandler: Server requested close dialog");
+                //Res.outz("FarmMessageHandler: Server requested close dialog");
                 break;
 
             case FarmConstants.DATA_HARVEST_SUCCESS: // 4 - Hiệu ứng thu hoạch
@@ -133,11 +132,11 @@ public class FarmMessageHandler
                 int fPlotId = msg.reader().readInt();
                 GameCanvas.panel.setTypeFarmFertilize(fPlotId);
                 GameCanvas.panel.show();
-                Res.outz("FarmMessageHandler: Open fertilize panel for plot " + fPlotId);
+                //Res.outz("FarmMessageHandler: Open fertilize panel for plot " + fPlotId);
                 break;
 
             default:
-                Res.outz("FarmMessageHandler: Unknown data type " + dataType);
+                //Res.outz("FarmMessageHandler: Unknown data type " + dataType);
                 break;
         }
     }

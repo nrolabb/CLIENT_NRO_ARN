@@ -33,11 +33,11 @@ namespace Game1
 
 		public static bool isMultiSever = true;
 
-		public static string ListIP = "NRO ARN:103.238.234.188:14445:0,0,0";
-		public static string linkDefault = "NRO ARN:103.238.234.188:14445:0,0,0";
+		//public static string ListIP = "NRO ARN:103.238.234.188:14445:0,0,0";
+		//public static string linkDefault = "NRO ARN:103.238.234.188:14445:0,0,0";
 
-		//public static string ListIP = "NRO ARN:127.0.0.1:14445:0,0,0";
-		//public static string linkDefault = "NRO ARN:127.0.0.1:14445:0,0,0";
+		public static string ListIP = "NRO ARN:127.0.0.1:14445:0,0,0";
+		public static string linkDefault = "NRO ARN:127.0.0.1:14445:0,0,0";
 
 		public const sbyte languageVersion = 2;
 

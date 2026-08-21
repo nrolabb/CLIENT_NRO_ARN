@@ -44,10 +44,14 @@ namespace Game1
 			textureWidth = width;
 			textureHeight = height;
 			overlayTexture = new RenderTexture(width, height, 16, RenderTextureFormat.ARGB32);
+			overlayTexture.filterMode = FilterMode.Point;
 			overlayTexture.Create();
 			overlayCamera.targetTexture = overlayTexture;
 			overlayCamera.orthographicSize = height * 0.5f;
+			overlayCamera.allowMSAA = false;
 		}
+
+		private static Material drawMaterial;
 
 		public static void DrawOverlay()
 		{
@@ -55,7 +59,16 @@ namespace Game1
 			EnsureOverlayCamera();
 			EnsureOverlayTexture();
 			overlayCamera.Render();
-			GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), overlayTexture, ScaleMode.StretchToFill, true);
+			if (Event.current.type == EventType.Repaint)
+			{
+				if (drawMaterial == null)
+				{
+					Shader shader = Shader.Find("Spine/Skeleton");
+					if (shader == null) shader = Shader.Find("Sprites/Default");
+					drawMaterial = new Material(shader);
+				}
+				Graphics.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), overlayTexture, new Rect(0, 0, 1, 1), 0, 0, 0, 0, GUI.color, drawMaterial);
+			}
 		}
 
 		private sealed class ActiveEffect
@@ -64,6 +77,7 @@ namespace Game1
 			public GameObject go;
 			public long endTime;
 			public int oldHead;
+			public float scaleMultiplier;
 		}
 
 		private static readonly Dictionary<int, ActiveEffect> activeEffects = new Dictionary<int, ActiveEffect>();
@@ -83,6 +97,8 @@ namespace Game1
 				string animation = message.reader().readUTF();
 				string skin = message.reader().readUTF();
 				int durationMs = message.reader().readShort();
+
+				Char c = GetChar(charId);
 				Play(charId, skeletonPath, animation, skin, durationMs);
 			}
 			catch (System.Exception e)
@@ -112,10 +128,10 @@ namespace Game1
 					continue;
 				}
 
-				float x = (c.cx - GameScr.cmx) * zoom - Screen.width * 0.5f;
-				float y = Screen.height * 0.5f - (c.cy - GameScr.cmy + GameCanvas.transY) * zoom;
+				float x = Mathf.Round((c.cx - GameScr.cmx) * zoom - Screen.width * 0.5f);
+				float y = Mathf.Round(Screen.height * 0.5f - (c.cy - GameScr.cmy + GameCanvas.transY) * zoom);
 				effect.go.transform.position = new Vector3(x, y, 0f);
-				float scale = 8.5f * zoom;
+				float scale = 8.5f * zoom * effect.scaleMultiplier;
 				effect.go.transform.localScale = new Vector3(scale * c.cdir, scale, 1f);
 			}
 
@@ -171,7 +187,8 @@ namespace Game1
 				charId = charId,
 				go = go,
 				endTime = mSystem.currentTimeMillis() + durationMs,
-				oldHead = c != null ? c.head : -1
+				oldHead = c != null ? c.head : -1,
+				scaleMultiplier = serverPath.Contains("Skill_3") ? 1.1f : 1f
 			};
 
 			if (c != null)

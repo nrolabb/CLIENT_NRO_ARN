@@ -176,10 +176,6 @@ namespace Game1
     		indexTo = -1;
     		trans = -1;
     		typeEff = 4;
-    		if (id == 78)
-    		{
-    			typeEff = 5;
-    		}
     	}
     
     	public Effect(int id, int x, int y, int layer, int loop, int loopCount)
@@ -227,14 +223,7 @@ namespace Game1
     		}
     		indexFrom = -1;
     		indexTo = -1;
-    		if (id == 78)
-    		{
-    			typeEff = 5;
-    		}
-    		else
-    		{
-    			typeEff = 1;
-    		}
+    		typeEff = 1;
     		if (!isExistNewEff(effId + string.Empty))
     		{
     			newEff.addElement(effId + string.Empty);
@@ -370,7 +359,7 @@ namespace Game1
     				{
     					return;
     				}
-    				if (typeEff == 5)
+    				if (typeEff == 5 && effId >= 201)
     				{
     					data = getEffDataById(effId).get(c.statusMe);
     				}

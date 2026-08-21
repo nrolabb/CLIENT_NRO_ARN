@@ -234,7 +234,7 @@ namespace Game1
 
 		private static string[][] boxPet = mResources.petMainTab;
 
-		public string[][][] tabName = new string[30][][]
+		public string[][][] tabName = new string[32][][]
 		{
 			null,
 			null,
@@ -265,7 +265,9 @@ namespace Game1
 			boxMod,
 			new string[1][] { new string[1] { string.Empty } },
 			boxPet,
-			new string[1][] { new string[2] { "Kho Hạt", string.Empty } }
+			new string[1][] { new string[2] { "Kho Hạt", string.Empty } },
+			new string[1][] { new string[2] { "Chế", "biến" } },
+			new string[1][] { new string[2] { "Bón phân", string.Empty } }
 		};
 
 		private static readonly string[][] boxMod = new string[4][]
@@ -516,6 +518,14 @@ namespace Game1
 		public const int TYPE_SPEACIALSKILL = 25;
 
 		public const int TYPE_FARM_SEED = 29;
+		public const int TYPE_CHE_BIEN = 30;
+		public static MyVector vRecipe = new MyVector();
+		public static CookingSlot[] cookingSlots;
+		public static string serverCookingData = "";
+		private const int COOKING_CANCEL_CONFIRM = 18000;
+		private const int COOKING_CANCEL = 18001;
+		private const int COOKING_SPEED_UP = 18002;
+		private const int COOKING_UNLOCK = 18003;
 		private const int FARM_SEED_COLS = 5;
 		private const int FARM_SEED_MIN_SLOT_COUNT = 60;
 		private const int FARM_SEED_SLOT_W = 34;
@@ -525,7 +535,7 @@ namespace Game1
 		private const int FARM_SEED_ROW_H = 25;
 
 		// Panel bón phân & thuốc trừ sâu
-		public const int TYPE_FARM_FERTILIZE = 30;
+		public const int TYPE_FARM_FERTILIZE = 31;
 		private const int FARM_FERT_COLS = 3;          // 4 loại phân + 1 thuốc = tối đa 5, xếp 3 cột
 		private const int FARM_FERT_SLOT_W = 50;
 		private const int FARM_FERT_SLOT_H = 50;
@@ -2764,6 +2774,9 @@ private void paintEffectItem(mGraphics g, Item item, int x, int y, int w, int h)
 						break;
 					case TYPE_FARM_SEED:
 						updateKeyFarmSeed();
+						break;
+					case TYPE_CHE_BIEN:
+						updateKeyCheBien();
 						break;
 					case TYPE_FARM_FERTILIZE:
 						updateKeyFarmFertilize();
@@ -5430,6 +5443,9 @@ private void paintEffectItem(mGraphics g, Item item, int x, int y, int w, int h)
 					break;
 				case TYPE_FARM_SEED:
 					paintFarmSeed(g);
+					break;
+				case TYPE_CHE_BIEN:
+					paintCheBien(g);
 					break;
 				case TYPE_FARM_FERTILIZE:
 					paintFarmFertilize(g);
@@ -8984,6 +9000,10 @@ private void paintEffectItem(mGraphics g, Item item, int x, int y, int w, int h)
 					mFont.tahoma_7_yellow.drawString(g, "Ô đất: " + this.currentFarmPlotId, X + 60, 16, mFont.LEFT, mFont.tahoma_7_grey);
 					mFont.tahoma_7_yellow.drawString(g, "Số hạt: " + this.vFarmSeeds.size(), X + 60, 27, mFont.LEFT, mFont.tahoma_7_grey);
 					break;
+				case TYPE_CHE_BIEN:
+					SmallImage.drawSmallImage(g, Char.myCharz().avatarz(), X + 25, 50, 0, 33);
+					paintMyInfo(g);
+					break;
 				case TYPE_FARM_FERTILIZE:
 					SmallImage.drawSmallImage(g, Char.myCharz().avatarz(), X + 25, 50, 0, 33);
 					mFont.tahoma_7b_white.drawString(g, "Bón phân / Thuốc", X + 60, 4, mFont.LEFT, mFont.tahoma_7b_dark);
@@ -11737,6 +11757,20 @@ private void paintEffectItem(mGraphics g, Item item, int x, int y, int w, int h)
 		{
 			switch (idAction)
 			{
+				case COOKING_CANCEL_CONFIRM:
+					GameCanvas.startYesNoDlg("Hủy nấu hoàn lại 50% nguyên liệu?", new Command("Có", this, COOKING_CANCEL, p), new Command("Không", this, 4005, null));
+					return;
+				case COOKING_CANCEL:
+					sendCooking((byte)3, (int)p);
+					GameCanvas.endDlg();
+					return;
+				case COOKING_SPEED_UP:
+					sendCooking((byte)5, (int)p);
+					return;
+				case COOKING_UNLOCK:
+					sendCooking((byte)6, (int)p);
+					GameCanvas.endDlg();
+					return;
 				case 14001:
 					if (p != null && p is Item farmSeedItem)
 					{
@@ -14482,7 +14516,126 @@ private void paintEffectItem(mGraphics g, Item item, int x, int y, int w, int h)
 			setTabInventory(resetSelect);
 		}
 
-		    public void setTypeFarmSeed(int plotId)
+		public static ItemRecipe GetRecipeById(short id)
+		{
+			for (int i = 0; i < vRecipe.size(); i++) { ItemRecipe r = (ItemRecipe)vRecipe.elementAt(i); if (r.id == id) return r; }
+			return null;
+		}
+
+		public static void LoadCookingSlots()
+		{
+			if (cookingSlots == null) cookingSlots = new CookingSlot[5];
+			string[] data = (serverCookingData ?? "").Split('|');
+			for (int i = 0; i < 5; i++)
+			{
+				cookingSlots[i] = new CookingSlot();
+				if (i >= data.Length || string.IsNullOrEmpty(data[i])) { cookingSlots[i].isLocked = i > 0; continue; }
+				string[] v = data[i].Split(',');
+				if (v.Length != 3) { cookingSlots[i].isLocked = i > 0; continue; }
+				cookingSlots[i].isLocked = v[0] == "1"; short id; long time;
+				if (short.TryParse(v[1], out id) && id >= 0) cookingSlots[i].recipe = GetRecipeById(id);
+				if (long.TryParse(v[2], out time)) cookingSlots[i].finishTime = time;
+			}
+		}
+
+		public void setTypeCheBien()
+		{
+			LoadCookingSlots();
+			this.type = TYPE_CHE_BIEN; this.tabName[TYPE_CHE_BIEN] = new string[1][] { new string[2] { "Chế", "biến" } };
+			this.setType(0); this.selected = -1; this.cmy = this.cmtoY = this.cmyLim = 0;
+		}
+
+		private void paintCheBien(mGraphics g)
+		{
+			if (cookingSlots == null) LoadCookingSlots();
+			int gap = 2, size = (wScroll - 4 * gap) / 5, rowH = size + gap, y = yScroll;
+			g.setClip(xScroll, yScroll, wScroll, hScroll);
+			for (int i = 0; i < 5; i++)
+			{
+				int x = xScroll + i * rowH;
+				if (selected == i) { g.setColor(16383818); g.fillRect(x - 1, y - 1, size + 2, size + 2, 5); }
+				g.setColor(6047789, .5f); g.fillRect(x, y, size, size, 5);
+				CookingSlot slot = cookingSlots[i];
+				if (slot.isLocked) mFont.tahoma_7_red.drawString(g, "X", x + size / 2, y + 12, 2);
+				else if (slot.recipe != null)
+				{
+					SmallImage.drawSmallImage(g, slot.recipe.iconID, x + size / 2, y + size / 2 - 4, 0, 3);
+					long left = slot.finishTime - mSystem.currentTimeMillis();
+					mFont.tahoma_7_white.drawString(g, left <= 0 ? "Xong" : (left / 60000) + ":" + ((left / 1000) % 60).ToString("00"), x + size / 2, y + size - 11, 2);
+				}
+			}
+			y += size + 12;
+			for (int i = 0; i < 15; i++)
+			{
+				int x = xScroll + (i % 5) * rowH, ry = y + (i / 5) * rowH;
+				if (selected == i + 5) { g.setColor(16383818); g.fillRect(x - 1, ry - 1, size + 2, size + 2, 5); }
+				g.setColor(6047789, .3f); g.fillRect(x, ry, size, size, 5);
+				if (i < vRecipe.size()) { ItemRecipe recipe = (ItemRecipe)vRecipe.elementAt(i); SmallImage.drawSmallImage(g, recipe.iconID, x + size / 2, ry + size / 2, 0, 3); }
+			}
+			y += 3 * rowH + 4;
+			ItemRecipe selectedRecipe = selected >= 5 && selected < 5 + vRecipe.size() ? (ItemRecipe)vRecipe.elementAt(selected - 5) : null;
+			if (selectedRecipe == null) { mFont.tahoma_7b_dark.drawString(g, "Chọn món để xem nguyên liệu", xScroll + 3, y, 0); return; }
+			int buttonW = 2 * size + gap;
+			int buttonH = size;
+			int buttonX = xScroll + 3 * rowH;
+			int buttonY = y;
+			bool isButtonPressed = GameCanvas.px >= buttonX && GameCanvas.px <= buttonX + buttonW && GameCanvas.py >= buttonY && GameCanvas.py <= buttonY + buttonH;
+			g.setColor(isButtonPressed && GameCanvas.isPointerDown ? 16776960 : 3329332);
+			g.fillRect(buttonX, buttonY, buttonW, buttonH, 5);
+			mFont.tahoma_7b_white.drawString(g, "Nấu ăn", buttonX + buttonW / 2, buttonY + buttonH / 2 - 5, 2);
+			ItemTemplate currency = ItemTemplates.get(selectedRecipe.donGiaId);
+			mFont.tahoma_7b_dark.drawString(g, selectedRecipe.name, xScroll + 3, y, 0);
+			mFont.tahoma_7.drawString(g, "Thời gian: " + selectedRecipe.time + " giây", xScroll + 3, y + 12, 0);
+			mFont.tahoma_7.drawString(g, "Giá: " + selectedRecipe.gia + " " + (currency == null ? "vật phẩm" : currency.name), xScroll + 3, y + 24, 0);
+			mFont.tahoma_7b_dark.drawString(g, "Nguyên liệu:", xScroll + 3, y + 38, 0);
+			y += 50;
+			for (int i = 0; i < selectedRecipe.ingredients.Length; i++)
+			{
+				int x = xScroll + (i % 5) * rowH, ry = y + (i / 5) * rowH;
+				g.setColor(6047789, .3f); g.fillRect(x, ry, size, size, 5);
+				ItemTemplate material = ItemTemplates.get(selectedRecipe.ingredients[i]);
+				if (material != null) SmallImage.drawSmallImage(g, material.iconID, x + size / 2, ry + size / 2, 0, 3);
+				int owned = getCookingItemQuantity(selectedRecipe.ingredients[i]);
+				if (owned >= selectedRecipe.quantities[i]) mFont.tahoma_7b_white.drawString(g, "x" + selectedRecipe.quantities[i], x + size - 1, ry + size - 10, 1);
+				else mFont.tahoma_7b_red.drawString(g, "x" + selectedRecipe.quantities[i], x + size - 1, ry + size - 10, 1);
+			}
+		}
+
+		private void updateKeyCheBien()
+		{
+			if (!GameCanvas.isPointerJustRelease) return;
+			int gap = 2, size = (wScroll - 4 * gap) / 5, rowH = size + gap, px = GameCanvas.pxLast, py = GameCanvas.pyLast;
+			if (py >= yScroll && py <= yScroll + size)
+			{
+				int slotIndex = (px - xScroll) / rowH;
+				if (slotIndex >= 0 && slotIndex < 5 && px <= xScroll + slotIndex * rowH + size) { selected = slotIndex; handleCookingSlot(slotIndex); GameCanvas.clearAllPointerEvent(); return; }
+			}
+			int recipesY = yScroll + size + 12;
+			ItemRecipe selectedRecipe = selected >= 5 && selected < 5 + vRecipe.size() ? (ItemRecipe)vRecipe.elementAt(selected - 5) : null;
+			if (selectedRecipe != null)
+			{
+				int buttonX = xScroll + 3 * rowH;
+				int buttonY = recipesY + 3 * rowH + 4;
+				int buttonW = 2 * size + gap;
+				if (px >= buttonX && px <= buttonX + buttonW && py >= buttonY && py <= buttonY + size)
+				{
+					sendCooking((byte)4, selectedRecipe.id);
+					GameCanvas.clearAllPointerEvent();
+					return;
+				}
+			}
+			if (py >= recipesY && py < recipesY + 3 * rowH)
+			{
+				int col = (px - xScroll) / rowH, row = (py - recipesY) / rowH, recipeIndex = row * 5 + col;
+				if (col >= 0 && col < 5 && recipeIndex < vRecipe.size()) { selected = recipeIndex + 5; GameCanvas.clearAllPointerEvent(); }
+			}
+		}
+
+		private int getCookingItemQuantity(short itemId) { int quantity = 0; foreach (Item item in Char.myCharz().arrItemBag) if (item != null && item.template.id == itemId) quantity += item.quantity; return quantity; }
+		private void handleCookingSlot(int index) { CookingSlot slot = cookingSlots[index]; if (slot.isLocked) { if (index > 0 && cookingSlots[index - 1].isLocked) { GameScr.info1.addInfo("Hãy mở khóa ô phía trước trước!", 0); return; } int[] costs = { 0, 1000, 2000, 4000, 8000 }; GameCanvas.startYesNoDlg("Mở ô này với " + costs[index] + " thỏi vàng?", new Command("Mở khóa", this, COOKING_UNLOCK, index), new Command("Hủy", this, 4005, null)); } else if (slot.recipe == null) GameScr.info1.addInfo("Ô chế biến trống!", 0); else if (slot.finishTime <= mSystem.currentTimeMillis()) sendCooking((byte)2, index); else { MyVector menu = new MyVector(); menu.addElement(new Command("Hủy nấu", this, COOKING_CANCEL_CONFIRM, index)); menu.addElement(new Command("Nấu nhanh\n(10 thỏi vàng/5p)", this, COOKING_SPEED_UP, index)); GameCanvas.menu.startAt(menu, X, yScroll + (wScroll - 8) / 5); } }
+		private void sendCooking(byte action, int value) { try { Message m = new Message(-114); m.writer().writeByte(action); if (action == 4) m.writer().writeShort(value); else m.writer().writeByte(value); Session_ME.gI().sendMessage(m); m.cleanup(); } catch (Exception) { } }
+
+		public void setTypeFarmSeed(int plotId)
     {
         this.type = TYPE_FARM_SEED;
         this.setType(0);
