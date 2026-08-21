@@ -339,8 +339,19 @@ namespace Game1.Assets.src.g
 					GameCanvas.startOKDlg("Vui lòng điền đầy đủ thông tin");
 					break;
 				}
-				GameCanvas.startOKDlg(mResources.PLEASEWAIT);
-				Service.gI().charInfo("1", "1", "1", "1", "1", "1", (tfMaGioiThieu.getText().Length > 0) ? tfMaGioiThieu.getText() : "-1", tfUsername.getText(), tfPassword.getText());
+				if (tfUsername.getText().Length < 5 || tfUsername.getText().Length > 20)
+				{
+					GameCanvas.startOKDlg("Tên tài khoản phải từ 5 đến 20 ký tự");
+					break;
+				}
+				if (tfPassword.getText().Length < 6)
+				{
+					GameCanvas.startOKDlg("Mật khẩu phải có ít nhất 6 ký tự");
+					break;
+				}
+				GameCanvas.startWaitDlg(mResources.REGISTERING);
+				GameCanvas.connect();
+				Service.gI().registerAccount(tfUsername.getText(), tfPassword.getText(), tfMaGioiThieu.getText());
 				break;
 			}
 		}

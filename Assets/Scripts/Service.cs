@@ -2049,6 +2049,30 @@ namespace Game1
 			}
 		}
 
+		public void registerAccount(string username, string password, string referralCode)
+		{
+			Message message = null;
+			try
+			{
+				message = new Message((sbyte)(-101));
+				message.writer().writeUTF(username);
+				message.writer().writeUTF(password);
+				message.writer().writeUTF(referralCode ?? string.Empty);
+				session.sendMessage(message);
+			}
+			catch (Exception ex)
+			{
+				ex.StackTrace.ToString();
+			}
+			finally
+			{
+				if (message != null)
+				{
+					message.cleanup();
+				}
+			}
+		}
+
 		public void getMagicTree(sbyte action)
 		{
 			Message message = null;

@@ -141,6 +141,33 @@ namespace Game1
 					case 0:
 						readLogin(msg);
 						break;
+					case 120:
+						{
+							bool isSuccess = msg.reader().readBool();
+							string text = msg.reader().readStringUTF();
+							GameCanvas.endDlg();
+							GameCanvas.startOKDlg(text);
+							if (isSuccess)
+							{
+								string username = msg.reader().readStringUTF();
+								string password = string.Empty;
+								if (GameCanvas.registerScr != null && GameCanvas.registerScr.tfPassword != null)
+								{
+									password = GameCanvas.registerScr.tfPassword.getText();
+								}
+								Rms.saveRMSString("acc", username);
+								Rms.saveRMSString("pass", password);
+								Rms.saveRMSInt("check", 1);
+								if (GameCanvas.loginScr == null)
+								{
+									GameCanvas.loginScr = new LoginScr();
+								}
+								GameCanvas.loginScr.tfUser.setText(username);
+								GameCanvas.loginScr.tfPass.setText(password);
+								GameCanvas.serverScreen.switchToMe();
+							}
+							break;
+						}
 					case 24:
 						read_opt(msg);
 						break;
