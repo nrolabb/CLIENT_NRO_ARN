@@ -928,7 +928,8 @@ public class SpineCharacterManager : MonoBehaviour
             case 13: // Biến Khỉ
                 return "ZSkill7";
 
-            case 28: // Biến hình Super
+            case 27: // Biến hình Super
+            case 28: // Biến hình Super (dự phòng)
                 return "ZSkill7";
 
             case 14: // Tự phát nổ

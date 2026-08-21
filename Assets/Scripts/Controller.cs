@@ -3149,14 +3149,16 @@ namespace Game1
 								ModFunc.autoPointForPet = false;
 								GameScr.info1.addInfo("Chỉ số đã đạt tối đa", 0);
 							}
-							GameCanvas.startOKDlg(msgDlg);
 							InfoDlg.hide();
 							LoginScr.isContinueToLogin = false;
+							LoginScr.isLoggingIn = false;
+							ServerListScreen.waitToLogin = false;
+							ServerListScreen.isWait = false;
+							GameCanvas.timeLoading = 0;
+							LoginScr.timeLogin = 0;
 							Char.isLoadingMap = false;
-							if (GameCanvas.currentScreen == GameCanvas.loginScr)
-							{
-								GameCanvas.serverScreen.switchToMe();
-							}
+							GameCanvas.endDlg();
+							GameCanvas.startOKDlg(msgDlg);
 							if (ModFunc.autoLogin != null)
 							{
 								ModFunc.autoLogin.waitToNextLogin = false;
