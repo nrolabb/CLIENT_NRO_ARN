@@ -3608,6 +3608,12 @@ namespace Game1
 	{
 		Res.outz("VE RONG THAN O VI TRI x= " + x + " y=" + y);
 		doiMauTroi();
+		
+		if (TileMap.mapID == 7)
+		{
+			isRongNamek = true;
+		}
+
 		if (RongThanSpineController.IsAvailable(isRongNamek))
 		{
 			EffecMn.removeEff(isRongNamek ? 25 : 17);
