@@ -946,9 +946,12 @@ namespace Game1
     	public void actRegister()
     	{
     		GameCanvas.endDlg();
-    		isRes = true;
-    		tfPass.isFocus = false;
-    		tfUser.isFocus = true;
+    		if (GameCanvas.registerScr == null)
+    		{
+    			GameCanvas.registerScr = new Assets.src.g.RegisterScreen();
+    		}
+    		Assets.src.g.RegisterScreen.serverName = ServerListScreen.nameServer[ServerListScreen.ipSelect];
+    		GameCanvas.registerScr.switchToMe();
     	}
     
     	public void backToRegister()

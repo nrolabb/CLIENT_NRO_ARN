@@ -866,28 +866,29 @@ namespace Game1
 					return;
 				case 3:
 					{
-						if (GameCanvas.loginScr == null)
-						{
-							GameCanvas.loginScr = new LoginScr();
-						}
-						GameCanvas.loginScr.switchToMe();
 						bool num = Rms.loadRMSString("acc") != null && !Rms.loadRMSString("acc").Equals(string.Empty);
 						bool flag2 = Rms.loadRMSString("userAo" + ipSelect) != null && !Rms.loadRMSString("userAo" + ipSelect).Equals(string.Empty);
-						if (!num && !flag2)
+						if (num)
 						{
-							GameCanvas.connect();
+							if (GameCanvas.loginScr == null)
+							{
+								GameCanvas.loginScr = new LoginScr();
+							}
+							GameCanvas.loginScr.switchToMe();
+							GameCanvas.loginScr.doLogin();
+						}
+						else if (flag2)
+						{
+							if (GameCanvas.loginScr == null)
+							{
+								GameCanvas.loginScr = new LoginScr();
+							}
+							GameCanvas.loginScr.switchToMe();
 							string text3 = Rms.loadRMSString("userAo" + ipSelect);
-							if (text3 == null || text3.Equals(string.Empty))
-							{
-								Service.gI().login2(string.Empty);
-							}
-							else
-							{
-								GameCanvas.loginScr.isLogin2 = true;
-								GameCanvas.connect();
-								Service.gI().setClientType();
-								Service.gI().login(text3, string.Empty, GameMidlet.VERSION, 1);
-							}
+							GameCanvas.loginScr.isLogin2 = true;
+							GameCanvas.connect();
+							Service.gI().setClientType();
+							Service.gI().login(text3, string.Empty, GameMidlet.VERSION, 1);
 							if (Session_ME.connected)
 							{
 								GameCanvas.startWaitDlg();
@@ -899,21 +900,23 @@ namespace Game1
 						}
 						else
 						{
-							GameCanvas.loginScr.doLogin();
+							if (GameCanvas.registerScr == null)
+							{
+								GameCanvas.registerScr = new Assets.src.g.RegisterScreen();
+							}
+							Assets.src.g.RegisterScreen.serverName = nameServer[ipSelect];
+							GameCanvas.registerScr.switchToMe();
 						}
 						LoginScr.serverName = nameServer[ipSelect];
 						return;
 					}
 				case 10100:
-					if (GameCanvas.loginScr == null)
+					if (GameCanvas.registerScr == null)
 					{
-						GameCanvas.loginScr = new LoginScr();
+						GameCanvas.registerScr = new Assets.src.g.RegisterScreen();
 					}
-					GameCanvas.loginScr.switchToMe();
-					GameCanvas.connect();
-					Service.gI().login2(string.Empty);
-					GameCanvas.startWaitDlg();
-					LoginScr.serverName = nameServer[ipSelect];
+					Assets.src.g.RegisterScreen.serverName = nameServer[ipSelect];
+					GameCanvas.registerScr.switchToMe();
 					return;
 				case 5:
 					doUpdateServer();
