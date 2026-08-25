@@ -142,7 +142,7 @@ namespace Game1
     
     	public sbyte levelBoss;
     
-    	public sbyte level;
+    	public int level;
     
     	public bool isBoss;
     
@@ -254,7 +254,7 @@ namespace Game1
     	{
     	}
     
-    	public Mob(int mobId, bool isDisable, bool isDontMove, bool isFire, bool isIce, bool isWind, int templateId, int sys, double hp, sbyte level, double maxp, short pointx, short pointy, sbyte status, sbyte levelBoss)
+    	public Mob(int mobId, bool isDisable, bool isDontMove, bool isFire, bool isIce, bool isWind, int templateId, int sys, double hp, int level, double maxp, short pointx, short pointy, sbyte status, sbyte levelBoss)
     	{
     		this.isDisable = isDisable;
     		this.isDontMove = isDontMove;

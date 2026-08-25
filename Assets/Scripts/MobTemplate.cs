@@ -3,7 +3,7 @@ namespace Game1
 {
     public class MobTemplate
     {
-    	public sbyte mobTemplateId;
+    	public int mobTemplateId;
     
     	public sbyte rangeMove;
     

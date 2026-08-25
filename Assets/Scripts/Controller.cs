@@ -2978,7 +2978,7 @@ namespace Game1
 					case 11:
 						{
 							GameCanvas.debug("SA9", 2);
-							int num273 = msg.reader().readByte();
+							int num273 = msg.reader().readUnsignedByte();
 							sbyte b76 = msg.reader().readByte();
 							if (b76 != 0)
 							{
@@ -4921,7 +4921,7 @@ namespace Game1
 				}
 			}
 			Mob.arrMobTemplate = new MobTemplate[d.readUnsignedByte()];
-			for (sbyte b2 = 0; b2 < Mob.arrMobTemplate.Length; b2++)
+			for (int b2 = 0; b2 < Mob.arrMobTemplate.Length; b2++)
 			{
 				Mob.arrMobTemplate[b2] = new MobTemplate();
 				Mob.arrMobTemplate[b2].mobTemplateId = b2;
@@ -5258,7 +5258,7 @@ namespace Game1
 				Mob.newMob.removeAllElements();
 				for (sbyte b = 0; b < num; b++)
 				{
-					Mob mob = new Mob(b, msg.reader().readBoolean(), msg.reader().readBoolean(), msg.reader().readBoolean(), msg.reader().readBoolean(), msg.reader().readBoolean(), msg.reader().readByte(), msg.reader().readByte(), msg.reader().readIntToLongDQT(), msg.reader().readByte(), msg.reader().readIntToLongDQT(), msg.reader().readShort(), msg.reader().readShort(), msg.reader().readByte(), msg.reader().readByte());
+					Mob mob = new Mob(b, msg.reader().readBoolean(), msg.reader().readBoolean(), msg.reader().readBoolean(), msg.reader().readBoolean(), msg.reader().readBoolean(), msg.reader().readUnsignedByte(), msg.reader().readByte(), msg.reader().readIntToLongDQT(), msg.reader().readUnsignedByte(), msg.reader().readIntToLongDQT(), msg.reader().readShort(), msg.reader().readShort(), msg.reader().readByte(), msg.reader().readByte());
 					mob.xSd = mob.x;
 					mob.ySd = mob.y;
 					mob.isBoss = msg.reader().readBoolean();

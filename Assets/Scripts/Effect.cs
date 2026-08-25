@@ -134,6 +134,19 @@ namespace Game1
     	public int cLastStatusMe;
     
     	public long cur_time_cLastStatusMe;
+
+    	private int delayTick;
+
+    	public int getSpeedDelay()
+    	{
+    		if (effId == 79 || effId == 80)
+    		{
+    			return 8;
+    		} else if (effId == 81){
+				return 5;
+			}
+    		return 1;
+    	}
     
     	public Effect(int id, Char c, int layer, int loop, int loopCount, sbyte isStand)
     	{
@@ -349,6 +362,21 @@ namespace Game1
     	{
     		try
     		{
+    			int delay = getSpeedDelay();
+    			if (delay > 1)
+    			{
+    				delayTick++;
+    				if (delayTick < delay)
+    				{
+    					if (c != null)
+    					{
+    						x = c.cx;
+    						y = c.cy;
+    					}
+    					return;
+    				}
+    				delayTick = 0;
+    			}
     			if (effId >= 42 && effId <= 46)
     			{
     				getFrameKhangia();

@@ -188,7 +188,7 @@ namespace Game1
 				go = go,
 				endTime = mSystem.currentTimeMillis() + durationMs,
 				oldHead = c != null ? c.head : -1,
-				scaleMultiplier = serverPath.Contains("Skill_3") ? 1.1f : (serverPath.Contains("Skill_1") ? 0.95f : 1.1f)
+				scaleMultiplier = serverPath.Contains("Skill_3") ? 1.1f : (serverPath.Contains("Skill_1") ? 0.95f : 1.05f)
 			};
 
 			if (c != null)
