@@ -5,6 +5,7 @@
 *.meta
 /Assets/Scripts/Game2
 /Assets/Scripts/Game3
+/Assets/Resources/res/*
 *.csproj
 *.sln
 *.user

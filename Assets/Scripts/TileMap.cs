@@ -526,15 +526,31 @@ namespace Game1
     	public static void loadMapFromResource(int mapID)
     	{
     		DataInputStream dataInputStream = null;
-    		dataInputStream = MyStream.readFile("/mymap/" + mapID);
-    		tmw = (ushort)dataInputStream.read();
-    		tmh = (ushort)dataInputStream.read();
-    		maps = new int[dataInputStream.available()];
-    		for (int i = 0; i < tmw * tmh; i++)
+    		try
     		{
-    			maps[i] = (ushort)dataInputStream.read();
+    			dataInputStream = MyStream.readFile("/mymap/" + mapID);
+    			if (dataInputStream != null)
+    			{
+    				tmw = (ushort)dataInputStream.read();
+    				tmh = (ushort)dataInputStream.read();
+    				int totalTiles = tmw * tmh;
+    				maps = new int[totalTiles];
+    				for (int i = 0; i < totalTiles; i++)
+    				{
+    					maps[i] = (ushort)dataInputStream.read();
+    				}
+    				types = new int[totalTiles];
+    				dataInputStream.close();
+    			}
     		}
-    		types = new int[maps.Length];
+    		catch (Exception)
+    		{
+    			if (dataInputStream != null)
+    			{
+    				try { dataInputStream.close(); } catch {}
+    			}
+    			throw;
+    		}
     	}
     
     	public static int tileTypeAt(int x, int y)
