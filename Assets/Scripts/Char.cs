@@ -7478,12 +7478,31 @@ namespace Game1
 			return idHead;
 		}
 
+		public static readonly short[] AURABIENHINH = { 7, 86, 88, 84, 87, 90, 95 };
+
+		private bool isAuraBienHinhNhapThe()
+		{
+			if (!isNhapThe)
+			{
+				return false;
+			}
+			for (int i = 0; i < AURABIENHINH.Length; i++)
+			{
+				if (idAuraEff == AURABIENHINH[i])
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
 		public void paintAuraBehind(mGraphics g)
 		{
-			if (!ModFunc.GiamDungLuong && (!me || !isPaintAura) && idAuraEff > -1 && (statusMe == 1 || statusMe == 6) && !GameCanvas.panel.isShow && mSystem.currentTimeMillis() - timeBlue > 0)
+			if (!ModFunc.GiamDungLuong && (!me || isPaintAura) && idAuraEff > -1 && (statusMe == 1 || statusMe == 6) && !GameCanvas.panel.isShow && mSystem.currentTimeMillis() - timeBlue > 0)
 			{
 				FrameImage fraImage = mSystem.getFraImage(strEffAura + idAuraEff + "_0");
-				fraImage?.drawFrame(GameCanvas.gameTick / 4 % fraImage.nFrame, cx, cy, (cdir != 1) ? 2 : 0, mGraphics.BOTTOM | mGraphics.HCENTER, g);
+				int drawX = isAuraBienHinhNhapThe() ? (cx + ((cdir == 1) ? -3 : 3)) : cx;
+				fraImage?.drawFrame(GameCanvas.gameTick / 4 % fraImage.nFrame, drawX, cy, (cdir != 1) ? 2 : 0, mGraphics.BOTTOM | mGraphics.HCENTER, g);
 			}
 		}
 
@@ -7517,7 +7536,8 @@ namespace Game1
 					if (mSystem.currentTimeMillis() - timeBlue > 0)
 					{
 						FrameImage fraImage = mSystem.getFraImage(strEffAura + idAuraEff + "_1");
-						fraImage?.drawFrame(GameCanvas.gameTick / 4 % fraImage.nFrame, cx, cy + 2, (cdir != 1) ? 2 : 0, mGraphics.BOTTOM | mGraphics.HCENTER, g);
+						int drawX = isAuraBienHinhNhapThe() ? (cx + ((cdir == 1) ? -3 : 3)) : cx;
+						fraImage?.drawFrame(GameCanvas.gameTick / 4 % fraImage.nFrame, drawX, cy + 2, (cdir != 1) ? 2 : 0, mGraphics.BOTTOM | mGraphics.HCENTER, g);
 					}
 				}
 			}
