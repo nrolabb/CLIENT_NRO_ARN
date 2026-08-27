@@ -5252,8 +5252,8 @@ namespace Game1
 						_ = 24;
 					}
 				}
-				// Resources.UnloadUnusedAssets();
-				// GC.Collect();
+				Resources.UnloadUnusedAssets();
+				GC.Collect();
 				num = msg.reader().readByte();
 				Mob.newMob.removeAllElements();
 				for (sbyte b = 0; b < num; b++)
@@ -5418,13 +5418,54 @@ namespace Game1
 							Image image = null;
 							if (!BgItem.imgNew.containsKey(bgItem.idImage + string.Empty))
 							{
-								image = BgItemMn.loadBgImage(bgItem.idImage);
-								if (image == null)
+								if (mGraphics.zoomLevel == 1)
 								{
-									image = Image.createRGBImage(new int[1], 1, 1, bl: true);
-									Service.gI().getBgTemplate(bgItem.idImage);
+									image = GameCanvas.loadImage("/mapBackGround/" + bgItem.idImage + ".png");
+									if (image == null)
+									{
+										image = Image.createRGBImage(new int[1], 1, 1, bl: true);
+										Service.gI().getBgTemplate(bgItem.idImage);
+									}
+									BgItem.imgNew.put(bgItem.idImage + string.Empty, image);
 								}
-								BgItem.imgNew.put(bgItem.idImage + string.Empty, image);
+								else
+								{
+									bool flag2 = false;
+									sbyte[] array = Rms.loadRMS(mGraphics.zoomLevel + "bgItem" + bgItem.idImage);
+									if (array != null)
+									{
+										if (BgItem.newSmallVersion != null && array.Length % 127 != BgItem.newSmallVersion[bgItem.idImage])
+										{
+											flag2 = true;
+										}
+										if (!flag2)
+										{
+											image = Image.createImage(array, 0, array.Length);
+											if (image != null)
+											{
+												BgItem.imgNew.put(bgItem.idImage + string.Empty, image);
+											}
+											else
+											{
+												flag2 = true;
+											}
+										}
+									}
+									else
+									{
+										flag2 = true;
+									}
+									if (flag2)
+									{
+										image = GameCanvas.loadImage("/mapBackGround/" + bgItem.idImage + ".png");
+										if (image == null)
+										{
+											image = Image.createRGBImage(new int[1], 1, 1, bl: true);
+											Service.gI().getBgTemplate(bgItem.idImage);
+										}
+										BgItem.imgNew.put(bgItem.idImage + string.Empty, image);
+									}
+								}
 								BgItem.vKeysLast.addElement(bgItem.idImage + string.Empty);
 							}
 							if (!BgItem.isExistKeyNews(bgItem.idImage + string.Empty))

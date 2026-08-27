@@ -170,13 +170,29 @@ namespace Game1
     					MapTemplate.vCurrItem[i].addElement(bgItem);
     					if (!BgItem.imgNew.containsKey(bgItem.idImage + string.Empty))
     					{
-    						Image image = BgItemMn.loadBgImage(bgItem.idImage);
-    						if (image == null)
+    						try
     						{
-    							image = Image.createRGBImage(new int[1], 1, 1, bl: true);
-    							Service.gI().getBgTemplate(bgItem.idImage);
+    							Image image = GameCanvas.loadImage("/mapBackGround/" + bgItem.idImage + ".png");
+    							if (image == null)
+    							{
+    								BgItem.imgNew.put(bgItem.idImage + string.Empty, Image.createRGBImage(new int[1], 1, 1, bl: true));
+    								Service.gI().getBgTemplate(bgItem.idImage);
+    							}
+    							else
+    							{
+    								BgItem.imgNew.put(bgItem.idImage + string.Empty, image);
+    							}
     						}
-    						BgItem.imgNew.put(bgItem.idImage + string.Empty, image);
+    						catch (Exception)
+    						{
+    							Image image2 = GameCanvas.loadImage("/mapBackGround/" + bgItem.idImage + ".png");
+    							if (image2 == null)
+    							{
+    								image2 = Image.createRGBImage(new int[1], 1, 1, bl: true);
+    								Service.gI().getBgTemplate(bgItem.idImage);
+    							}
+    							BgItem.imgNew.put(bgItem.idImage + string.Empty, image2);
+    						}
     						BgItem.vKeysLast.addElement(bgItem.idImage + string.Empty);
     					}
     					if (!BgItem.isExistKeyNews(bgItem.idImage + string.Empty))

@@ -153,38 +153,5 @@ namespace Game1
     			}
     		}
     	}
-
-    	public static Image loadBgImage(short idImage)
-    	{
-    		sbyte[] array = Rms.loadRMS(mGraphics.zoomLevel + "bgItem" + idImage);
-    		if (array != null)
-    		{
-    			Image img = Image.createImage(array, 0, array.Length);
-    			if (img != null)
-    			{
-    				return img;
-    			}
-    		}
-    		try
-    		{
-    			TextAsset textAsset = Resources.Load("res/x" + mGraphics.zoomLevel + "/mapBackGround/" + idImage) as TextAsset;
-    			if (textAsset == null && mGraphics.zoomLevel != 4)
-    			{
-    				textAsset = Resources.Load("res/x4/mapBackGround/" + idImage) as TextAsset;
-    			}
-    			if (textAsset != null && textAsset.bytes != null && textAsset.bytes.Length > 0)
-    			{
-    				Image img = Image.createImage(textAsset.bytes);
-    				if (img != null)
-    				{
-    					return img;
-    				}
-    			}
-    		}
-    		catch (Exception)
-    		{
-    		}
-    		return null;
-    	}
     }
 }
