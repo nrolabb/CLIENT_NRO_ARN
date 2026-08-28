@@ -2089,7 +2089,28 @@ namespace Game1
     			{
     				num7 = 0;
     			}
-    			Char.myCharz().currentMovePoint = new MovePoint(Char.myCharz().mobFocus.getX() + num7, Char.myCharz().mobFocus.getY());
+    			int targetMobX = Char.myCharz().mobFocus.getX() + num7;
+    			int targetMobY = Char.myCharz().mobFocus.getY();
+    			if (targetMobY > Char.myCharz().cy + 30 && (TileMap.tileTypeAt(Char.myCharz().cx, Char.myCharz().cy, 2) || (TileMap.tileTypeAtPixel(Char.myCharz().cx, Char.myCharz().cy + 3) & 2) == 2))
+    			{
+    				if (TileMap.tileTypeAt(targetMobX, Char.myCharz().cy, 2) || (TileMap.tileTypeAtPixel(targetMobX, Char.myCharz().cy + 3) & 2) == 2)
+    				{
+    					int ledgeX = TileMap.findNearestLedgeX(Char.myCharz().cx, Char.myCharz().cy, targetMobX);
+    					if (ledgeX != -1)
+    					{
+    						targetMobX = ledgeX;
+    					}
+    					else
+    					{
+    						GameCanvas.clearKeyHold();
+    						GameCanvas.clearKeyPressed();
+    						isAutoPlay = false;
+    						auto = 0;
+    						return false;
+    					}
+    				}
+    			}
+    			Char.myCharz().currentMovePoint = new MovePoint(targetMobX, targetMobY);
     			Char.myCharz().endMovePointCommand = new Command(null, null, 8002, null);
     			GameCanvas.clearKeyHold();
     			GameCanvas.clearKeyPressed();
@@ -2237,7 +2258,28 @@ namespace Game1
     				{
     					num15 = 0;
     				}
-    				Char.myCharz().currentMovePoint = new MovePoint(Char.myCharz().charFocus.cx + num15, Char.myCharz().charFocus.cy);
+    				int targetCharX = Char.myCharz().charFocus.cx + num15;
+    				int targetCharY = Char.myCharz().charFocus.cy;
+    				if (targetCharY > Char.myCharz().cy + 30 && (TileMap.tileTypeAt(Char.myCharz().cx, Char.myCharz().cy, 2) || (TileMap.tileTypeAtPixel(Char.myCharz().cx, Char.myCharz().cy + 3) & 2) == 2))
+    				{
+    					if (TileMap.tileTypeAt(targetCharX, Char.myCharz().cy, 2) || (TileMap.tileTypeAtPixel(targetCharX, Char.myCharz().cy + 3) & 2) == 2)
+    					{
+    						int ledgeX2 = TileMap.findNearestLedgeX(Char.myCharz().cx, Char.myCharz().cy, targetCharX);
+    						if (ledgeX2 != -1)
+    						{
+    							targetCharX = ledgeX2;
+    						}
+    						else
+    						{
+    							GameCanvas.clearKeyHold();
+    							GameCanvas.clearKeyPressed();
+    							isAutoPlay = false;
+    							auto = 0;
+    							return false;
+    						}
+    					}
+    				}
+    				Char.myCharz().currentMovePoint = new MovePoint(targetCharX, targetCharY);
     				Char.myCharz().endMovePointCommand = new Command(null, null, 8002, null);
     				GameCanvas.clearKeyHold();
     				GameCanvas.clearKeyPressed();

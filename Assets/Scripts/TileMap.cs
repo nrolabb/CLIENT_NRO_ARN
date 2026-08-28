@@ -593,6 +593,55 @@ namespace Game1
     		return px / size * size;
     	}
     
+    	public static int findNearestLedgeX(int startX, int startY, int targetX)
+    	{
+    		int leftEdge = -1;
+    		for (int x = startX; x >= 12; x -= 12)
+    		{
+    			if (tileTypeAt(x - 12, startY - 12, 8))
+    			{
+    				break;
+    			}
+    			bool hasGround = tileTypeAt(x, startY, 2) || (tileTypeAtPixel(x, startY + 3) & 2) == 2;
+    			if (!hasGround)
+    			{
+    				leftEdge = x - 12;
+    				break;
+    			}
+    		}
+
+    		int rightEdge = -1;
+    		for (int x = startX; x <= pxw - 12; x += 12)
+    		{
+    			if (tileTypeAt(x + 12, startY - 12, 4))
+    			{
+    				break;
+    			}
+    			bool hasGround = tileTypeAt(x, startY, 2) || (tileTypeAtPixel(x, startY + 3) & 2) == 2;
+    			if (!hasGround)
+    			{
+    				rightEdge = x + 12;
+    				break;
+    			}
+    		}
+
+    		if (leftEdge != -1 && rightEdge != -1)
+    		{
+    			int distLeft = Res.abs(leftEdge - targetX) + Res.abs(leftEdge - startX);
+    			int distRight = Res.abs(rightEdge - targetX) + Res.abs(rightEdge - startX);
+    			return (distLeft <= distRight) ? leftEdge : rightEdge;
+    		}
+    		if (leftEdge != -1)
+    		{
+    			return leftEdge;
+    		}
+    		if (rightEdge != -1)
+    		{
+    			return rightEdge;
+    		}
+    		return -1;
+    	}
+
     	public static void loadMainTile()
     	{
     		if (lastTileID != tileID)

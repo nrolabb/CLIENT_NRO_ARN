@@ -2392,11 +2392,26 @@ namespace Game1
 											}
 											if (flag3)
 											{
-												currentMovePoint = null;
-												GameScr.instance.clickMoving = false;
-												statusMe = 1;
-												cvx = (cvy = 0);
-												checkPerformEndMovePointAction();
+												int ledgeX = TileMap.findNearestLedgeX(cx, cy, currentMovePoint.xEnd);
+												if (ledgeX != -1 && abs(cx - ledgeX) > 10)
+												{
+													currentMovePoint = new MovePoint(ledgeX, currentMovePoint.yEnd);
+													cdir = ((currentMovePoint.xEnd > cx) ? 1 : (-1));
+													cvx = cspeed * cdir;
+												}
+												else
+												{
+													currentMovePoint = null;
+													endMovePointCommand = null;
+													GameScr.instance.clickMoving = false;
+													statusMe = 1;
+													cvx = (cvy = 0);
+													GameScr.isAutoPlay = false;
+													if (GameScr.gI() != null)
+													{
+														GameScr.gI().auto = 0;
+													}
+												}
 											}
 											else
 											{
