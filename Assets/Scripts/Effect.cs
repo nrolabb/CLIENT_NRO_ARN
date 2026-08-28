@@ -142,7 +142,7 @@ namespace Game1
     		if (effId == 79 || effId == 80)
     		{
     			return 8;
-    		} else if (effId == 81){
+    		} else if (effId == 81 || effId == 83){
 				return 5;
 			}
     		return 1;

@@ -1910,7 +1910,7 @@ namespace Game1
 				{
 					tFusion++;
 				}
-				if (isNhapThe && GameCanvas.gameTick % 25 == 0)
+				if (isNhapThe && !isAuraBienHinh() && GameCanvas.gameTick % 25 == 0)
 				{
 					ServerEffect.addServerEffect(114, this, 1);
 				}
@@ -3483,18 +3483,7 @@ namespace Game1
 
 		public void updateSuperEff()
 		{
-			if (ModFunc.GiamDungLuong || GameCanvas.panel.isShow || isCopy || isFusion || isSetPos || isPet || isMiniPet || isMonkey == 1)
-			{
-				return;
-			}
-			if (me)
-			{
-				if (!isPaintAura && idAuraEff > -1)
-				{
-					return;
-				}
-			}
-			else if (idAuraEff > -1)
+			if (ModFunc.GiamDungLuong || GameCanvas.panel.isShow || isCopy || isFusion || isSetPos || isPet || isMiniPet || isMonkey == 1 || idAuraEff > -1)
 			{
 				return;
 			}
@@ -5404,14 +5393,7 @@ namespace Game1
 
 		private void paintSuperEffBehind(mGraphics g)
 		{
-			if (me)
-			{
-				if (!isPaintAura && idAuraEff > -1)
-				{
-					return;
-				}
-			}
-			else if (idAuraEff > -1)
+			if (idAuraEff > -1)
 			{
 				return;
 			}
@@ -5448,14 +5430,7 @@ namespace Game1
 
 		private void paintSuperEffFront(mGraphics g)
 		{
-			if (me)
-			{
-				if (!isPaintAura && idAuraEff > -1)
-				{
-					return;
-				}
-			}
-			else if (idAuraEff > -1)
+			if (idAuraEff > -1)
 			{
 				return;
 			}
@@ -7091,7 +7066,7 @@ namespace Game1
 					}
 					break;
 				case 2:
-					if ((!me || isMonkey != 1) && isNhapThe && GameCanvas.gameTick % 5 == 0)
+					if ((!me || isMonkey != 1) && isNhapThe && !isAuraBienHinh() && GameCanvas.gameTick % 5 == 0)
 					{
 						EffecMn.addEff(new Effect(22, cx - 5, cy + 35, 2, 1, -1));
 					}
@@ -7478,17 +7453,37 @@ namespace Game1
 			return idHead;
 		}
 
-		public static readonly short[] AURABIENHINH = { 7, 86, 88, 84, 87, 90, 95 };
+		public static readonly short[][] AURABIENHINH = {
+			new short[] { 7, 7, 88, 86, 84, 89, 95 }, // Trái Đất
+			new short[] { 64, 65, 82, 83, 94, 93, 95 }, // Namec
+			new short[] { 7, 86, 88, 84, 87, 90, 95 } // Xayda
+		};
+
+		public bool isAuraBienHinh()
+		{
+			for (int i = 0; i < AURABIENHINH.Length; i++)
+			{
+				for (int j = 0; j < AURABIENHINH[i].Length; j++)
+				{
+					if (idAuraEff == AURABIENHINH[i][j])
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+		}
 
 		private bool isAuraBienHinhNhapThe()
 		{
-			if (!isNhapThe)
+			if (!isNhapThe || cgender != 2)
 			{
 				return false;
 			}
-			for (int i = 0; i < AURABIENHINH.Length; i++)
+			short[] xaydaAuras = AURABIENHINH[2];
+			for (int i = 0; i < xaydaAuras.Length; i++)
 			{
-				if (idAuraEff == AURABIENHINH[i])
+				if (idAuraEff == xaydaAuras[i])
 				{
 					return true;
 				}
@@ -7551,6 +7546,10 @@ namespace Game1
 
 		public void paintEff_Lvup_behind(mGraphics g)
 		{
+			if (isAuraBienHinh())
+			{
+				return;
+			}
 			if (idEff_Set_Item != -1)
 			{
 				if (fraEff != null)
@@ -7566,6 +7565,10 @@ namespace Game1
 
 		public void paintEff_Lvup_front(mGraphics g)
 		{
+			if (isAuraBienHinh())
+			{
+				return;
+			}
 			if (idEff_Set_Item != -1)
 			{
 				if (fraEffSub != null)

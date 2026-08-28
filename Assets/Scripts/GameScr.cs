@@ -2308,11 +2308,20 @@ namespace Game1
     
     	private bool checkSkillValid()
     	{
-    		if (Char.myCharz().myskill != null && ((Char.myCharz().myskill.template.manaUseType != 1 && Char.myCharz().cMP < (double)Char.myCharz().myskill.manaUse) || (Char.myCharz().myskill.template.manaUseType == 1 && Char.myCharz().cMP < Char.myCharz().cMPFull * (double)Char.myCharz().myskill.manaUse / 100.0)))
+    		if (Char.myCharz().myskill != null)
     		{
-    			info1.addInfo(mResources.NOT_ENOUGH_MP, 0);
-    			auto = 0;
-    			return false;
+    			long num = mSystem.currentTimeMillis();
+    			if (num - Char.myCharz().myskill.lastTimeUseThisSkill < Char.myCharz().myskill.coolDown)
+    			{
+    				Char.myCharz().myskill.paintCanNotUseSkill = true;
+    				return false;
+    			}
+    			if ((Char.myCharz().myskill.template.manaUseType != 1 && Char.myCharz().cMP < (double)Char.myCharz().myskill.manaUse) || (Char.myCharz().myskill.template.manaUseType == 1 && Char.myCharz().cMP < Char.myCharz().cMPFull * (double)Char.myCharz().myskill.manaUse / 100.0))
+    			{
+    				info1.addInfo(mResources.NOT_ENOUGH_MP, 0);
+    				auto = 0;
+    				return false;
+    			}
     		}
     		if (Char.myCharz().myskill == null || (Char.myCharz().myskill.template.maxPoint > 0 && Char.myCharz().myskill.point == 0))
     		{
@@ -2324,9 +2333,17 @@ namespace Game1
     
     	private bool checkSkillValid2()
     	{
-    		if (Char.myCharz().myskill != null && ((Char.myCharz().myskill.template.manaUseType != 1 && Char.myCharz().cMP < (double)Char.myCharz().myskill.manaUse) || (Char.myCharz().myskill.template.manaUseType == 1 && Char.myCharz().cMP < Char.myCharz().cMPFull * (double)Char.myCharz().myskill.manaUse / 100.0)))
+    		if (Char.myCharz().myskill != null)
     		{
-    			return false;
+    			long num = mSystem.currentTimeMillis();
+    			if (num - Char.myCharz().myskill.lastTimeUseThisSkill < Char.myCharz().myskill.coolDown)
+    			{
+    				return false;
+    			}
+    			if ((Char.myCharz().myskill.template.manaUseType != 1 && Char.myCharz().cMP < (double)Char.myCharz().myskill.manaUse) || (Char.myCharz().myskill.template.manaUseType == 1 && Char.myCharz().cMP < Char.myCharz().cMPFull * (double)Char.myCharz().myskill.manaUse / 100.0))
+    			{
+    				return false;
+    			}
     		}
     		if (Char.myCharz().myskill == null || (Char.myCharz().myskill.template.maxPoint > 0 && Char.myCharz().myskill.point == 0))
     		{
@@ -3883,6 +3900,15 @@ namespace Game1
     		{
     			return;
     		}
+    		if (skill == null)
+    		{
+    			return;
+    		}
+    		if (mSystem.currentTimeMillis() - skill.lastTimeUseThisSkill < skill.coolDown)
+    		{
+    			skill.paintCanNotUseSkill = true;
+    			return;
+    		}
     		Char.myCharz().myskill = skill;
     		if (lastSkill != skill && lastSkill != null)
     		{
@@ -3909,10 +3935,6 @@ namespace Game1
     			return;
     		}
     		selectedIndexSkill = -1;
-    		if (skill == null)
-    		{
-    			return;
-    		}
     		if (lastSkill != skill)
     		{
     			Service.gI().selectSkill(skill.template.id);
@@ -3928,11 +3950,20 @@ namespace Game1
     			lastSkill = skill;
     		}
     	}
-    
+
     	public void doUseSkill(Skill skill, bool isShortcut)
     	{
     		if ((TileMap.mapID == 112 || TileMap.mapID == 113) && Char.myCharz().cTypePk == 0)
     		{
+    			return;
+    		}
+    		if (skill == null)
+    		{
+    			return;
+    		}
+    		if (mSystem.currentTimeMillis() - skill.lastTimeUseThisSkill < skill.coolDown)
+    		{
+    			skill.paintCanNotUseSkill = true;
     			return;
     		}
     		if (Char.myCharz().isSelectingSkillUseAlone())
@@ -3941,31 +3972,34 @@ namespace Game1
     			return;
     		}
     		selectedIndexSkill = -1;
-    		if (skill != null)
-    		{
-    			Service.gI().selectSkill(skill.template.id);
-    			saveRMSCurrentSkill(skill.template.id);
-    			resetButton();
-    			Char.myCharz().myskill = skill;
-    			doFire(isShortcut, skipWaypoint: true);
-    		}
+    		Service.gI().selectSkill(skill.template.id);
+    		saveRMSCurrentSkill(skill.template.id);
+    		resetButton();
+    		Char.myCharz().myskill = skill;
+    		doFire(isShortcut, skipWaypoint: true);
     	}
-    
+
     	public void doUseSkillNotFocus(Skill skill)
     	{
+    		if (skill == null)
+    		{
+    			return;
+    		}
+    		if (mSystem.currentTimeMillis() - skill.lastTimeUseThisSkill < skill.coolDown)
+    		{
+    			skill.paintCanNotUseSkill = true;
+    			return;
+    		}
+    		Char.myCharz().myskill = skill;
     		if (((TileMap.mapID != 112 && TileMap.mapID != 113) || Char.myCharz().cTypePk != 0) && checkSkillValid())
     		{
     			selectedIndexSkill = -1;
-    			if (skill != null)
-    			{
-    				Service.gI().selectSkill(skill.template.id);
-    				saveRMSCurrentSkill(skill.template.id);
-    				resetButton();
-    				Char.myCharz().myskill = skill;
-    				Char.myCharz().useSkillNotFocus();
-    				Char.myCharz().currentFireByShortcut = true;
-    				auto = 0;
-    			}
+    			Service.gI().selectSkill(skill.template.id);
+    			saveRMSCurrentSkill(skill.template.id);
+    			resetButton();
+    			Char.myCharz().useSkillNotFocus();
+    			Char.myCharz().currentFireByShortcut = true;
+    			auto = 0;
     		}
     	}
     
