@@ -7469,8 +7469,8 @@ namespace Game1
 		}
 
 		public static readonly short[][] AURABIENHINH = {
-			new short[] { 7, 7, 88, 86, 84, 89, 95 }, // Trái Đất
-			new short[] { 64, 65, 82, 83, 94, 93, 95 }, // Namec
+			new short[] { 7, 93, 88, 86, 84, 6, 95 }, // Trái Đất
+			new short[] { 7, 88, 86, 91, 12, 90, 64 }, // Namec
 			new short[] { 7, 86, 88, 84, 87, 90, 95 } // Xayda
 		};
 
@@ -7489,21 +7489,35 @@ namespace Game1
 			return false;
 		}
 
-		private bool isAuraBienHinhNhapThe()
+		private int getAuraOffsetX()
 		{
-			if (!isNhapThe || cgender != 2)
+			if (!isNhapThe)
 			{
-				return false;
+				return 0;
 			}
-			short[] xaydaAuras = AURABIENHINH[2];
-			for (int i = 0; i < xaydaAuras.Length; i++)
+			if (cgender == 2) // Xayda
 			{
-				if (idAuraEff == xaydaAuras[i])
+				short[] xaydaAuras = AURABIENHINH[2];
+				for (int i = 0; i < xaydaAuras.Length; i++)
 				{
-					return true;
+					if (idAuraEff == xaydaAuras[i])
+					{
+						return (cdir == 1) ? -3 : 3;
+					}
 				}
 			}
-			return false;
+			else if (cgender == 0) // Trái Đất
+			{
+				short[] traiDatAuras = AURABIENHINH[0];
+				for (int i = 0; i < traiDatAuras.Length; i++)
+				{
+					if (idAuraEff == traiDatAuras[i])
+					{
+						return (cdir == 1) ? -2 : 2;
+					}
+				}
+			}
+			return 0;
 		}
 
 		public void paintAuraBehind(mGraphics g)
@@ -7511,7 +7525,7 @@ namespace Game1
 			if (!ModFunc.GiamDungLuong && (!me || isPaintAura) && idAuraEff > -1 && (statusMe == 1 || statusMe == 6) && !GameCanvas.panel.isShow && mSystem.currentTimeMillis() - timeBlue > 0)
 			{
 				FrameImage fraImage = mSystem.getFraImage(strEffAura + idAuraEff + "_0");
-				int drawX = isAuraBienHinhNhapThe() ? (cx + ((cdir == 1) ? -3 : 3)) : cx;
+				int drawX = cx + getAuraOffsetX();
 				fraImage?.drawFrame(GameCanvas.gameTick / 4 % fraImage.nFrame, drawX, cy, (cdir != 1) ? 2 : 0, mGraphics.BOTTOM | mGraphics.HCENTER, g);
 			}
 		}
@@ -7546,7 +7560,7 @@ namespace Game1
 					if (mSystem.currentTimeMillis() - timeBlue > 0)
 					{
 						FrameImage fraImage = mSystem.getFraImage(strEffAura + idAuraEff + "_1");
-						int drawX = isAuraBienHinhNhapThe() ? (cx + ((cdir == 1) ? -3 : 3)) : cx;
+						int drawX = cx + getAuraOffsetX();
 						fraImage?.drawFrame(GameCanvas.gameTick / 4 % fraImage.nFrame, drawX, cy + 2, (cdir != 1) ? 2 : 0, mGraphics.BOTTOM | mGraphics.HCENTER, g);
 					}
 				}
