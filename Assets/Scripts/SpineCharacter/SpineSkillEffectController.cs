@@ -15,6 +15,7 @@ public static class SpineSkillEffectController
         public GameObject go;
         public long endTime;
         public int oldHead;
+        public float offsetY;
     }
 
     public static readonly Dictionary<int, ActiveEffect> activeEffects = new Dictionary<int, ActiveEffect>();
@@ -62,6 +63,12 @@ public static class SpineSkillEffectController
             meshRenderer.sortingOrder = 32766;
         }
 
+        float offsetY = 0f;
+        if (serverPath.Contains("Skill_1") || serverPath.Contains("Skill_2") || serverPath.Contains("Hero_1") || serverPath.Contains("Hero_2"))
+        {
+            offsetY = 2f;
+        }
+
         Char c = GetChar(charId);
 
         activeEffects[charId] = new ActiveEffect
@@ -69,7 +76,8 @@ public static class SpineSkillEffectController
             charId = charId,
             go = go,
             endTime = mSystem.currentTimeMillis() + durationMs + 2000, // Thêm 2 giây chờ server phản hồi skin mới
-            oldHead = c != null ? c.head : -1
+            oldHead = c != null ? c.head : -1,
+            offsetY = offsetY
         };
 
         if (c != null)
@@ -109,7 +117,7 @@ public static class SpineSkillEffectController
             }
 
             float screenX = (c.cx - GameScr.cmx - 3) * zoom;
-            float screenY = Screen.height - (c.cy - GameScr.cmy + GameCanvas.transY) * zoom;
+            float screenY = Screen.height - (c.cy + effect.offsetY - GameScr.cmy + GameCanvas.transY) * zoom;
             effect.go.transform.position = new Vector3(screenX, screenY, 0f);
             // kích thước spine skill
             float scale = 8.5f * zoom; // Cập nhật lại kích thước (trước đây là 22f)

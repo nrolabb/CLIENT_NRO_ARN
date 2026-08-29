@@ -78,6 +78,7 @@ namespace Game1
 			public long endTime;
 			public int oldHead;
 			public float scaleMultiplier;
+			public float offsetY;
 		}
 
 		private static readonly Dictionary<int, ActiveEffect> activeEffects = new Dictionary<int, ActiveEffect>();
@@ -134,7 +135,7 @@ namespace Game1
 				}
 
 				float x = Mathf.Round((c.cx - GameScr.cmx) * zoom - Screen.width * 0.5f);
-				float y = Mathf.Round(Screen.height * 0.5f - (c.cy - GameScr.cmy + GameCanvas.transY) * zoom);
+				float y = Mathf.Round(Screen.height * 0.5f - (c.cy + effect.offsetY - GameScr.cmy + GameCanvas.transY) * zoom);
 				effect.go.transform.position = new Vector3(x, y, 0f);
 				float scale = 8.5f * zoom * effect.scaleMultiplier;
 				effect.go.transform.localScale = new Vector3(scale * c.cdir, scale, 1f);
@@ -186,6 +187,12 @@ namespace Game1
 				meshRenderer.sortingOrder = 32766;
 			}
 
+			float offsetY = 0f;
+			if (serverPath.Contains("Skill_1") || serverPath.Contains("Skill_2") || serverPath.Contains("Hero_1") || serverPath.Contains("Hero_2"))
+			{
+				offsetY = 2f;
+			}
+
 			Char c = GetChar(charId);
 			activeEffects[charId] = new ActiveEffect
 			{
@@ -193,7 +200,8 @@ namespace Game1
 				go = go,
 				endTime = mSystem.currentTimeMillis() + durationMs,
 				oldHead = c != null ? c.head : -1,
-				scaleMultiplier = serverPath.Contains("Skill_3") ? 1.1f : (serverPath.Contains("Skill_1") ? 0.95f : 1.05f)
+				scaleMultiplier = serverPath.Contains("Skill_3") ? 1.1f : (serverPath.Contains("Skill_1") ? 0.95f : 1.05f),
+				offsetY = offsetY
 			};
 
 			if (c != null)
