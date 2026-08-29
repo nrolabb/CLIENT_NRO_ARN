@@ -122,10 +122,15 @@ namespace Game1
 			{
 				ActiveEffect effect = kvp.Value;
 				Char c = GetChar(effect.charId);
-				if (c == null || effect.go == null || now >= effect.endTime)
+				if (c == null || effect.go == null || now >= effect.endTime || c.statusMe == 14 || c.statusMe == 5 || (c.cHPFull > 0 && c.cHP <= c.cHPFull * 20.0 / 100.0))
 				{
 					toRemove.Add(kvp.Key);
 					continue;
+				}
+
+				if (c.isHide && now >= effect.endTime - 100)
+				{
+					c.isHide = false;
 				}
 
 				float x = Mathf.Round((c.cx - GameScr.cmx) * zoom - Screen.width * 0.5f);
@@ -222,6 +227,7 @@ namespace Game1
 					c.isLockMove = false;
 				}
 				c.isHide = false;
+				c.skillPaint = null;
 			}
 		}
 

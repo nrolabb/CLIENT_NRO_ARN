@@ -4873,6 +4873,10 @@ namespace Game1
 					Service.gI().skill_not_focus(9);
 					return;
 				}
+				if (myskill.template.id == 27)
+				{
+					return;
+				}
 			}
 			if ((isMonkey == 1 && skillPaint.id >= 35 && skillPaint.id <= 41) || skillPaint.id == 165)
 			{
