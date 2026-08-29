@@ -776,6 +776,10 @@ namespace Game1
 
 		public void onDisconnected()
 		{
+			if (ServerListScreen.isTesting && ServerListScreen.FallbackToRealServer())
+			{
+				return;
+			}
 			if (Controller.isConnectionFail)
 			{
 				Controller.isConnectionFail = false;
@@ -812,6 +816,10 @@ namespace Game1
 
 		public void onConnectionFail()
 		{
+			if (ServerListScreen.isTesting && ServerListScreen.FallbackToRealServer())
+			{
+				return;
+			}
 			if (currentScreen.Equals(SplashScr.instance))
 			{
 				if (ServerListScreen.hasConnected != null)

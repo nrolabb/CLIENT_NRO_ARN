@@ -7475,7 +7475,7 @@ namespace Game1
 		public static readonly short[][] AURABIENHINH = {
 			new short[] { 7, 93, 88, 86, 84, 6, 95 }, // Trái Đất
 			new short[] { 7, 88, 86, 91, 12, 90, 64 }, // Namec
-			new short[] { 7, 86, 88, 84, 87, 90, 95 } // Xayda
+			new short[] { 7, 92, 88, 84, 87, 90, 95 } // Xayda
 		};
 
 		public bool isAuraBienHinh()

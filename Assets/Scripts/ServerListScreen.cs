@@ -33,11 +33,16 @@ namespace Game1
 
 		public static bool isMultiSever = true;
 
-		public static string ListIP = "NRO ARN:103.238.234.188:14445:0,0,0";
-		public static string linkDefault = "NRO ARN:103.238.234.188:14445:0,0,0";
+		// Biến điều khiển chế độ test: true = ưu tiên kết nối localhost trước (nếu lỗi tự chuyển ip thật), false = chỉ kết nối ip thật
+		public static bool isTesting = true;
 
-		//public static string ListIP = "NRO ARN:127.0.0.1:14445:0,0,0";
-		//public static string linkDefault = "NRO ARN:127.0.0.1:14445:0,0,0";
+		public const string SERVER_REAL = "NRO ARN:103.238.234.188:14445:0,0,0";
+		public const string SERVER_LOCAL = "NRO ARN:127.0.0.1:14445:0,0,0";
+
+		public static string ListIP = SERVER_REAL;
+		public static string linkDefault = SERVER_REAL;
+
+		public static bool isTriedLocalhost = false;
 
 		public const sbyte languageVersion = 2;
 
@@ -621,10 +626,56 @@ namespace Game1
 			}
 		}
 
+		public static bool FallbackToRealServer()
+		{
+			if (!isTesting || isTriedLocalhost)
+			{
+				return false;
+			}
+			string currentIp = (address != null && ipSelect >= 0 && ipSelect < address.Length) ? address[ipSelect] : GameMidlet.IP;
+			if (currentIp != "127.0.0.1" && currentIp != "localhost")
+			{
+				return false;
+			}
+			isTriedLocalhost = true;
+			UnityEngine.Debug.Log("Không thể kết nối IP localhost (" + currentIp + "), tự động chuyển sang IP Server thật...");
+			ListIP = SERVER_REAL;
+			linkDefault = SERVER_REAL;
+			GetServerList(SERVER_REAL);
+			ipSelect = 0;
+			serverPriority = 0;
+			if (address != null && address.Length > 0)
+			{
+				GameMidlet.IP = address[0];
+				GameMidlet.PORT = port[0];
+				LoginScr.serverName = nameServer[0];
+			}
+			countDieConnect = 0;
+			testConnect = -1;
+			isAutoConect = true;
+			Session_ME.gI().close();
+			Session_ME2.gI().close();
+			Session_ME.gI().clearSendingMessage();
+			Session_ME2.gI().clearSendingMessage();
+			GameCanvas.connect();
+			return true;
+		}
+
 		public static void LoadIP()
 		{
 			try
 			{
+				isTriedLocalhost = false;
+				if (isTesting)
+				{
+					ListIP = SERVER_LOCAL;
+					linkDefault = SERVER_LOCAL;
+				}
+				else
+				{
+					ListIP = SERVER_REAL;
+					linkDefault = SERVER_REAL;
+				}
 				if (isMultiSever)
 				{
 					if (string.IsNullOrEmpty(ListIP))
