@@ -862,7 +862,31 @@ namespace Game1
     			}
     		}
     	}
-    
+
+    	public static void loadDataVersions()
+    	{
+    		sbyte[] array = Rms.loadRMS("NRdataVersion");
+    		sbyte[] array2 = Rms.loadRMS("NRmapVersion");
+    		sbyte[] array3 = Rms.loadRMS("NRskillVersion");
+    		sbyte[] array4 = Rms.loadRMS("NRitemVersion");
+    		if (array != null && array.Length > 0)
+    		{
+    			vcData = array[0];
+    		}
+    		if (array2 != null && array2.Length > 0)
+    		{
+    			vcMap = array2[0];
+    		}
+    		if (array3 != null && array3.Length > 0)
+    		{
+    			vcSkill = array3[0];
+    		}
+    		if (array4 != null && array4.Length > 0)
+    		{
+    			vcItem = array4[0];
+    		}
+    	}
+
     	public static void loadBg()
     	{
     		QuayTamBao.loadImage();
@@ -926,26 +950,7 @@ namespace Game1
     		{
     			flyTextState[i] = -1;
     		}
-    		sbyte[] array = Rms.loadRMS("NRdataVersion");
-    		sbyte[] array2 = Rms.loadRMS("NRmapVersion");
-    		sbyte[] array3 = Rms.loadRMS("NRskillVersion");
-    		sbyte[] array4 = Rms.loadRMS("NRitemVersion");
-    		if (array != null)
-    		{
-    			vcData = array[0];
-    		}
-    		if (array2 != null)
-    		{
-    			vcMap = array2[0];
-    		}
-    		if (array3 != null)
-    		{
-    			vcSkill = array3[0];
-    		}
-    		if (array4 != null)
-    		{
-    			vcItem = array4[0];
-    		}
+    		loadDataVersions();
     		imgNut = GameCanvas.loadImage("/mainImage/myTexture2dnut.png");
     		imgNutF = GameCanvas.loadImage("/mainImage/myTexture2dnutF.png");
     		imgCapsule = GameCanvas.loadImage("/mainImage/capsule.png");

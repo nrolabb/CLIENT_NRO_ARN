@@ -234,7 +234,7 @@ namespace Game1
 
 		public static int indexAutoPoint = -1;
 
-		public static int pointIncrease = 0;
+		public static long pointIncrease = 0;
 
 		public bool showInfoMe;
 
@@ -1306,6 +1306,7 @@ namespace Game1
 				DoBoss();
 				currDoBoss = mSystem.currentTimeMillis();
 			}
+			UpdateAutoIncreasePoint();
 		}
 
 		public void PaintButton(mGraphics g, int xAnchor, int yAnchor)
@@ -2023,9 +2024,11 @@ namespace Game1
 			chatTField.tfChat.isFocus = true;
 			chatTField.tfChat.setIputType(TField.INPUT_TYPE_NUMERIC);
 			chatTField.tfChat.setMaxTextLenght(10);
+			IChatable targetScreen = (chatTField == ChatTextField.gI()) ? (IChatable)GameScr.gI() : (chatTField.parentScreen ?? GameCanvas.panel);
+			chatTField.parentScreen = targetScreen;
 			if (!Main.isPC)
 			{
-				chatTField.startChat(GameCanvas.panel, string.Empty);
+				chatTField.startChat(targetScreen, string.Empty);
 			}
 			else if (GameCanvas.isTouch)
 			{
@@ -2173,12 +2176,14 @@ namespace Game1
 			}
 		}
 
+		public static long lastAutoPointTime;
+
 		public void SetIncreasePoint(string strPoint)
 		{
-			if (int.TryParse(strPoint, out var point) && indexAutoPoint != -1 && point > 0)
+			if (long.TryParse(strPoint, out var point) && indexAutoPoint != -1 && point > 0)
 			{
 				pointIncrease = point;
-				new Thread(DoAutoIncreasePoint).Start();
+				lastAutoPointTime = 0;
 				GameScr.info1.addInfo("Tự động tăng " + strPointTypes[indexAutoPoint] + " đến " + point, 0);
 			}
 			else
@@ -2187,12 +2192,28 @@ namespace Game1
 			}
 		}
 
-		private void DoAutoIncreasePoint()
+		private void UpdateAutoIncreasePoint()
 		{
-			while (indexAutoPoint != -1 && pointIncrease > 0)
+			if (indexAutoPoint == -1 || pointIncrease <= 0)
+			{
+				return;
+			}
+			long currentTime = mSystem.currentTimeMillis();
+			if (currentTime - lastAutoPointTime < 500)
+			{
+				return;
+			}
+			lastAutoPointTime = currentTime;
+			try
 			{
 				Char @char = (autoPointForPet ? Char.myPetz() : Char.myCharz());
-				if (indexAutoPoint switch
+				if (@char == null)
+				{
+					indexAutoPoint = -1;
+					pointIncrease = 0;
+					return;
+				}
+				double currentVal = indexAutoPoint switch
 				{
 					0 => @char.cHPGoc,
 					1 => @char.cMPGoc,
@@ -2200,15 +2221,21 @@ namespace Game1
 					3 => @char.cDefGoc,
 					4 => @char.cCriticalGoc,
 					_ => 0.0,
-				} >= (double)pointIncrease)
+				};
+				if (currentVal >= (double)pointIncrease)
 				{
 					indexAutoPoint = -1;
 					pointIncrease = 0;
 					GameScr.info1.addInfo("Đã đạt chỉ số yêu cầu", 0);
-					break;
+					return;
 				}
 				Service.gI().upPotential(autoPointForPet, indexAutoPoint, 100);
-				Thread.Sleep(500);
+			}
+			catch (Exception ex)
+			{
+				indexAutoPoint = -1;
+				pointIncrease = 0;
+				Debug.LogException(ex);
 			}
 		}
 

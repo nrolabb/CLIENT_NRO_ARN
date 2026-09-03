@@ -34,7 +34,7 @@ namespace Game1
 		public static bool isMultiSever = true;
 
 		// Biến điều khiển chế độ test: true = ưu tiên kết nối localhost trước (nếu lỗi tự chuyển ip thật), false = chỉ kết nối ip thật
-		public static bool isTesting = true;
+		public static bool isTesting = false;
 
 		public const string SERVER_REAL = "NRO ARN:103.238.234.188:14445:0,0,0";
 		public const string SERVER_LOCAL = "NRO ARN:127.0.0.1:14445:0,0,0";

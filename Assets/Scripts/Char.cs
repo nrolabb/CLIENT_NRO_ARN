@@ -2063,18 +2063,27 @@ namespace Game1
 							GameScr.gI().auto = 0;
 							if (cgender == 2)
 							{
-								myCharz().setAutoSkillPaint(GameScr.sks[myCharz().myskill.skillId], flag ? 1 : 0);
+								if (myCharz().myskill != null && myCharz().myskill.skillId >= 0 && GameScr.sks != null && myCharz().myskill.skillId < GameScr.sks.Length)
+								{
+									myCharz().setAutoSkillPaint(GameScr.sks[myCharz().myskill.skillId], flag ? 1 : 0);
+								}
 								Service.gI().skill_not_focus(8);
 							}
 							if (cgender == 1)
 							{
 								isCreateDark = true;
-								myCharz().setSkillPaint(GameScr.sks[myCharz().myskill.skillId], flag ? 1 : 0);
+								if (myCharz().myskill != null && myCharz().myskill.skillId >= 0 && GameScr.sks != null && myCharz().myskill.skillId < GameScr.sks.Length)
+								{
+									myCharz().setSkillPaint(GameScr.sks[myCharz().myskill.skillId], flag ? 1 : 0);
+								}
 							}
 						}
 						else if (cgender == 2)
 						{
-							setAutoSkillPaint(GameScr.sks[skillTemplateId], flag ? 1 : 0);
+							if (skillTemplateId >= 0 && GameScr.sks != null && skillTemplateId < GameScr.sks.Length)
+							{
+								setAutoSkillPaint(GameScr.sks[skillTemplateId], flag ? 1 : 0);
+							}
 						}
 						if (cgender == 2 && statusMe != 14 && statusMe != 5)
 						{
@@ -2115,7 +2124,10 @@ namespace Game1
 								isCreateDark = true;
 								bool flag2 = TileMap.tileTypeAt(myCharz().cx, myCharz().cy, 2);
 								isUseSkillAfterCharge = true;
-								myCharz().setSkillPaint(GameScr.sks[myCharz().myskill.skillId], (!flag2) ? 1 : 0);
+								if (myCharz().myskill != null && myCharz().myskill.skillId >= 0 && GameScr.sks != null && myCharz().myskill.skillId < GameScr.sks.Length)
+								{
+									myCharz().setSkillPaint(GameScr.sks[myCharz().myskill.skillId], (!flag2) ? 1 : 0);
+								}
 							}
 							return;
 						}
@@ -4911,7 +4923,10 @@ namespace Game1
 		public void useSkillNotFocus()
 		{
 			GameScr.gI().auto = 0;
-			myCharz().setSkillPaint(GameScr.sks[myCharz().myskill.skillId], (!TileMap.tileTypeAt(myCharz().cx, myCharz().cy, 2)) ? 1 : 0);
+			if (myCharz().myskill != null && myCharz().myskill.skillId >= 0 && GameScr.sks != null && myCharz().myskill.skillId < GameScr.sks.Length)
+			{
+				myCharz().setSkillPaint(GameScr.sks[myCharz().myskill.skillId], (!TileMap.tileTypeAt(myCharz().cx, myCharz().cy, 2)) ? 1 : 0);
+			}
 		}
 
 		public void sendUseChargeSkill()
@@ -5978,21 +5993,29 @@ namespace Game1
 
 		public void paintHead(mGraphics g, int cx, int cy, int look)
 		{
-			Part part = GameScr.parts[head];
-			SmallImage.drawSmallImage(g, part.pi[CharInfo[0][0][0]].id, cx, cy, (look != 0) ? 2 : 0, mGraphics.RIGHT | mGraphics.VCENTER);
+			if (head >= 0 && GameScr.parts != null && head < GameScr.parts.Length && GameScr.parts[head] != null)
+			{
+				Part part = GameScr.parts[head];
+				SmallImage.drawSmallImage(g, part.pi[CharInfo[0][0][0]].id, cx, cy, (look != 0) ? 2 : 0, mGraphics.RIGHT | mGraphics.VCENTER);
+			}
 		}
 
 		public void paintHeadWithXY(mGraphics g, int x, int y, int look)
 		{
-			Part part = GameScr.parts[head];
-			SmallImage.drawSmallImage(g, part.pi[CharInfo[0][0][0]].id, x + CharInfo[0][0][1] + part.pi[CharInfo[0][0][0]].dx - 3, y + 3, look, mGraphics.LEFT | mGraphics.BOTTOM);
+			if (head >= 0 && GameScr.parts != null && head < GameScr.parts.Length && GameScr.parts[head] != null)
+			{
+				Part part = GameScr.parts[head];
+				SmallImage.drawSmallImage(g, part.pi[CharInfo[0][0][0]].id, x + CharInfo[0][0][1] + part.pi[CharInfo[0][0][0]].dx - 3, y + 3, look, mGraphics.LEFT | mGraphics.BOTTOM);
+			}
 		}
 
 		public void paintCharBody(mGraphics g, int cx, int cy, int cdir, int cf, bool isPaintBag)
 		{
-			ph = GameScr.parts[head];
-			pl = GameScr.parts[leg];
-			pb = GameScr.parts[body];
+			if (GameScr.parts == null) return;
+			if (head >= 0 && head < GameScr.parts.Length) ph = GameScr.parts[head];
+			if (leg >= 0 && leg < GameScr.parts.Length) pl = GameScr.parts[leg];
+			if (body >= 0 && body < GameScr.parts.Length) pb = GameScr.parts[body];
+			if (ph == null || pl == null || pb == null) return;
 			if (bag >= 0 && statusMe != 14)
 			{
 				if (!ClanImage.idImages.containsKey(bag + string.Empty))

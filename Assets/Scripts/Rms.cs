@@ -14,32 +14,49 @@ namespace Game1
     
     	public static string filename;
 
+        private static string cachedPath = null;
+        private static readonly object rmsLock = new object();
+
         private static bool IsMainThread()
         {
             return Main.mainThreadId != 0 && Thread.CurrentThread.ManagedThreadId == Main.mainThreadId;
         }
-    
+
     	public static void saveRMS(string filename, sbyte[] data)
     	{
-    		if (IsMainThread())
+    		if (data == null)
     		{
-    			__saveRMS(filename, data);
+    			return;
     		}
-    		else
+    		lock (rmsLock)
     		{
-    			_saveRMS(filename, data);
+    			try
+    			{
+    				__saveRMS(filename, data);
+    			}
+    			catch (Exception ex)
+    			{
+    				Debug.LogError("Error saveRMS " + filename + ": " + ex.Message);
+    			}
     		}
     	}
-    
+
     	public static sbyte[] loadRMS(string filename)
     	{
-    		if (IsMainThread())
+    		lock (rmsLock)
     		{
-    			return __loadRMS(filename);
+    			try
+    			{
+    				return __loadRMS(filename);
+    			}
+    			catch (Exception ex)
+    			{
+    				Debug.LogError("Error loadRMS " + filename + ": " + ex.Message);
+    				return null;
+    			}
     		}
-    		return _loadRMS(filename);
     	}
-    
+
     	public static string loadRMSString(string fileName)
     	{
     		sbyte[] array = loadRMS(fileName);
@@ -60,7 +77,7 @@ namespace Game1
     		}
     		return null;
     	}
-    
+
     	public static void saveRMSString(string filename, string data)
     	{
     		DataOutputStream dataOutputStream = new DataOutputStream();
@@ -75,72 +92,19 @@ namespace Game1
     			Cout.println(ex.StackTrace);
     		}
     	}
-    
+
     	private static void _saveRMS(string filename, sbyte[] data)
     	{
-    		if (status != 0)
-    		{
-    			Debug.LogError("Cannot save RMS " + filename + " because current is saving " + Rms.filename);
-    			return;
-    		}
-    		Rms.filename = filename;
-    		Rms.data = data;
-    		status = 2;
-    		int i;
-    		for (i = 0; i < 500; i++)
-    		{
-    			Thread.Sleep(5);
-    			if (status == 0)
-    			{
-    				break;
-    			}
-    		}
-    		if (i == 500)
-    		{
-    			Debug.LogError("TOO LONG TO SAVE RMS " + filename);
-    		}
+    		saveRMS(filename, data);
     	}
-    
+
     	private static sbyte[] _loadRMS(string filename)
     	{
-    		if (status != 0)
-    		{
-    			Debug.LogError("Cannot load RMS " + filename + " because current is loading " + Rms.filename);
-    			return null;
-    		}
-    		Rms.filename = filename;
-    		data = null;
-    		status = 3;
-    		int i;
-    		for (i = 0; i < 500; i++)
-    		{
-    			Thread.Sleep(5);
-    			if (status == 0)
-    			{
-    				break;
-    			}
-    		}
-    		if (i == 500)
-    		{
-    			Debug.LogError("TOO LONG TO LOAD RMS " + filename);
-    		}
-    		return data;
+    		return loadRMS(filename);
     	}
-    
+
     	public static void update()
     	{
-    		if (status == 2)
-    		{
-    			status = 1;
-    			__saveRMS(filename, data);
-    			status = 0;
-    		}
-    		else if (status == 3)
-    		{
-    			status = 1;
-    			data = __loadRMS(filename);
-    			status = 0;
-    		}
     	}
     
     	public static int loadRMSInt(string file)
@@ -166,28 +130,44 @@ namespace Game1
     
     	public static string GetiPhoneDocumentsPath()
     	{
-    		return Application.persistentDataPath;
+    		if (string.IsNullOrEmpty(cachedPath))
+    		{
+    			try
+    			{
+    				cachedPath = Application.persistentDataPath;
+    			}
+    			catch (Exception)
+    			{
+    				cachedPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RMS");
+    				if (!Directory.Exists(cachedPath))
+    				{
+    					Directory.CreateDirectory(cachedPath);
+    				}
+    			}
+    		}
+    		return cachedPath;
     	}
     
     	private static void __saveRMS(string filename, sbyte[] data)
     	{
+    		if (data == null)
+    		{
+    			return;
+    		}
     		string text = GetiPhoneDocumentsPath() + "/" + filename;
-    		FileStream fileStream = new FileStream(text, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
-    		fileStream.Write(ArrayCast.cast(data), 0, data.Length);
-    		fileStream.Flush();
-    		fileStream.Close();
-    		Main.setBackupIcloud(text);
+    		File.WriteAllBytes(text, ArrayCast.cast(data));
     	}
     
     	private static sbyte[] __loadRMS(string filename)
     	{
     		try
     		{
-    			FileStream fileStream = new FileStream(GetiPhoneDocumentsPath() + "/" + filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-    			byte[] array = new byte[fileStream.Length];
-    			fileStream.Read(array, 0, array.Length);
-    			fileStream.Close();
-    			ArrayCast.cast(array);
+    			string text = GetiPhoneDocumentsPath() + "/" + filename;
+    			if (!File.Exists(text))
+    			{
+    				return null;
+    			}
+    			byte[] array = File.ReadAllBytes(text);
     			return ArrayCast.cast(array);
     		}
     		catch (Exception)

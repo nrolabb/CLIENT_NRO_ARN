@@ -39,7 +39,7 @@ namespace Game1
     
     	public static void loadBigRMS()
     	{
-    		if (imgbig == null)
+    		if (imgbig == null || imgbig.Length < 5 || imgbig[0] == null)
     		{
     			imgbig = new Image[5]
     			{
@@ -55,12 +55,14 @@ namespace Game1
     	public static void loadBigImage()
     	{
     		imgEmpty = Image.createRGBImage(new int[1], 1, 1, bl: true);
+    		loadBigRMS();
     	}
     
     	public static void init()
     	{
     		instance = null;
     		instance = new SmallImage();
+    		loadBigRMS();
     	}
     
     	public void readImage()
@@ -126,6 +128,10 @@ namespace Game1
 	public static void ensureImageSlot(int id)
 	{
 		ensureImageCapacity(id);
+		if (imgEmpty == null)
+		{
+			loadBigImage();
+		}
 		if (id >= 0 && imgNew[id] == null)
 		{
 			imgNew[id] = new Small(imgEmpty, id);
@@ -142,45 +148,45 @@ namespace Game1
 		if (mGraphics.zoomLevel == 1)
 		{
 			Image image = GameCanvas.loadImage("/SmallImage/Small" + id + ".png");
-    			if (image != null)
-    			{
-    				imgNew[id] = new Small(image, id);
-    				return;
-    			}
-    			imgNew[id] = new Small(imgEmpty, id);
-    			requestIconIfNeeded(id);
-    			return;
-    		}
-    		Image image2 = GameCanvas.loadImage("/SmallImage/Small" + id + ".png");
-    		if (image2 != null)
-    		{
-    			imgNew[id] = new Small(image2, id);
-    			return;
-    		}
-    		bool flag = false;
-    		if (imageRaw.ContainsKey(id))
-    		{
-    			Image img = null;
-    			imageRaw.TryGetValue(id, out img);
-    			if (img != null)
-    			{
-    				imgNew[id] = new Small(img, id);
-    			}
-    			else
-    			{
-    				flag = true;
-    			}
-    		}
-    		else
-    		{
-    			flag = true;
-    		}
-    		if (flag)
-    		{
-    			imgNew[id] = new Small(imgEmpty, id);
-    			requestIconIfNeeded(id);
-    		}
-    	}
+			if (image != null)
+			{
+				imgNew[id] = new Small(image, id);
+				return;
+			}
+			if (imgNew[id] == null)
+			{
+				imgNew[id] = new Small(imgEmpty, id);
+			}
+			requestIconIfNeeded(id);
+			return;
+		}
+		Image image2 = GameCanvas.loadImage("/SmallImage/Small" + id + ".png");
+		if (image2 != null)
+		{
+			imgNew[id] = new Small(image2, id);
+			return;
+		}
+		bool flag = false;
+		lock (imageRaw)
+		{
+			if (imageRaw.TryGetValue(id, out Image img) && img != null)
+			{
+				imgNew[id] = new Small(img, id);
+			}
+			else
+			{
+				flag = true;
+			}
+		}
+		if (flag)
+		{
+			if (imgNew[id] == null)
+			{
+				imgNew[id] = new Small(imgEmpty, id);
+			}
+			requestIconIfNeeded(id);
+		}
+	}
 
 	public static bool isRealImageLoaded(int id)
 	{
@@ -197,18 +203,24 @@ namespace Game1
 		{
 			return;
 		}
-		if (lastRequestTimeById.ContainsKey(id))
+		long now = mSystem.currentTimeMillis();
+		lock (lastRequestTimeById)
 		{
-			return;
+			if (lastRequestTimeById.TryGetValue(id, out long lastTime))
+			{
+				if (now - lastTime < 3000)
+				{
+					return;
+				}
+			}
+			lastRequestTimeById[id] = now;
 		}
-		lastRequestTimeById[id] = mSystem.currentTimeMillis();
-		//Debug.Log("SMALL_IMAGE_REQUEST id=" + id);
 		Service.gI().requestIcon(id);
 	}
 
 	public static void markIconResponse(int id)
 	{
-		if (lastRequestTimeById.ContainsKey(id))
+		lock (lastRequestTimeById)
 		{
 			lastRequestTimeById.Remove(id);
 		}
@@ -221,50 +233,35 @@ namespace Game1
 			return;
 		}
 		ensureImageCapacity(id);
-		if (imgbig == null)
+		if (imgbig == null || imgbig.Length < 5 || imgbig[0] == null)
 		{
-			Small small = imgNew[id];
-    			if (small == null)
-    			{
-    				createImage(id);
-    			}
-    			else
-    			{
-    				g.drawRegion(small, 0, 0, mGraphics.getImageWidth(small.img), mGraphics.getImageHeight(small.img), transform, x, y, anchor);
-    			}
-    		}
-    		else if (smallImg != null)
-    		{
-    			if (id >= smallImg.Length || smallImg[id][1] >= 256 || smallImg[id][3] >= 256 || smallImg[id][2] >= 256 || smallImg[id][4] >= 256)
-    			{
-    				Small small2 = imgNew[id];
-    				if (small2 == null)
-    				{
-    					createImage(id);
-    				}
-    				else
-    				{
-    					small2.paint(g, transform, x, y, anchor);
-    				}
-    			}
-    			else if (imgbig[smallImg[id][0]] != null)
-    			{
-    				g.drawRegion(imgbig[smallImg[id][0]], smallImg[id][1], smallImg[id][2], smallImg[id][3], smallImg[id][4], transform, x, y, anchor);
-    			}
-    		}
-    		else if (GameCanvas.currentScreen != GameScr.gI())
-    		{
-    			Small small3 = imgNew[id];
-    			if (small3 == null)
-    			{
-    				createImage(id);
-    			}
-    			else
-    			{
-    				small3.paint(g, transform, x, y, anchor);
-    			}
-    		}
-    	}
+			loadBigRMS();
+		}
+		if (smallImg == null && instance != null)
+		{
+			instance.readImage();
+		}
+		if (smallImg != null && id < smallImg.Length && smallImg[id] != null)
+		{
+			int bigIdx = smallImg[id][0];
+			if (smallImg[id][1] < 256 && smallImg[id][3] < 256 && smallImg[id][2] < 256 && smallImg[id][4] < 256 &&
+			    imgbig != null && bigIdx >= 0 && bigIdx < imgbig.Length && imgbig[bigIdx] != null)
+			{
+				g.drawRegion(imgbig[bigIdx], smallImg[id][1], smallImg[id][2], smallImg[id][3], smallImg[id][4], transform, x, y, anchor);
+				return;
+			}
+		}
+		Small small = imgNew[id];
+		if (small == null || !isRealImageLoaded(id))
+		{
+			createImage(id);
+			small = imgNew[id];
+		}
+		if (small != null)
+		{
+			small.paint(g, transform, x, y, anchor);
+		}
+	}
 
 	public static void drawSmallImageScale(mGraphics g, int id, int x, int y, int w, int h)
 	{
@@ -273,48 +270,33 @@ namespace Game1
 			return;
 		}
 		ensureImageCapacity(id);
-		if (imgbig == null)
+		if (imgbig == null || imgbig.Length < 5 || imgbig[0] == null)
 		{
-			Small small = imgNew[id];
-			if (small == null)
+			loadBigRMS();
+		}
+		if (smallImg == null && instance != null)
+		{
+			instance.readImage();
+		}
+		if (smallImg != null && id < smallImg.Length && smallImg[id] != null)
+		{
+			int bigIdx = smallImg[id][0];
+			if (smallImg[id][1] < 256 && smallImg[id][3] < 256 && smallImg[id][2] < 256 && smallImg[id][4] < 256 &&
+			    imgbig != null && bigIdx >= 0 && bigIdx < imgbig.Length && imgbig[bigIdx] != null)
 			{
-				createImage(id);
-			}
-			else
-			{
-				g.drawRegionScale(small.img, 0, 0, mGraphics.getImageWidth(small.img), mGraphics.getImageHeight(small.img), x, y, w, h);
+				g.drawRegionScale(imgbig[bigIdx], smallImg[id][1], smallImg[id][2], smallImg[id][3], smallImg[id][4], x, y, w, h);
+				return;
 			}
 		}
-		else if (smallImg != null)
+		Small small = imgNew[id];
+		if (small == null || !isRealImageLoaded(id))
 		{
-			if (id >= smallImg.Length || smallImg[id] == null || smallImg[id][1] >= 256 || smallImg[id][3] >= 256 || smallImg[id][2] >= 256 || smallImg[id][4] >= 256)
-			{
-				Small small2 = imgNew[id];
-				if (small2 == null)
-				{
-					createImage(id);
-				}
-				else
-				{
-					g.drawRegionScale(small2.img, 0, 0, mGraphics.getImageWidth(small2.img), mGraphics.getImageHeight(small2.img), x, y, w, h);
-				}
-			}
-			else if (imgbig[smallImg[id][0]] != null)
-			{
-				g.drawRegionScale(imgbig[smallImg[id][0]], smallImg[id][1], smallImg[id][2], smallImg[id][3], smallImg[id][4], x, y, w, h);
-			}
+			createImage(id);
+			small = imgNew[id];
 		}
-		else if (GameCanvas.currentScreen != GameScr.gI())
+		if (small != null)
 		{
-			Small small3 = imgNew[id];
-			if (small3 == null)
-			{
-				createImage(id);
-			}
-			else
-			{
-				g.drawRegionScale(small3.img, 0, 0, mGraphics.getImageWidth(small3.img), mGraphics.getImageHeight(small3.img), x, y, w, h);
-			}
+			g.drawRegionScale(small.img, 0, 0, mGraphics.getImageWidth(small.img), mGraphics.getImageHeight(small.img), x, y, w, h);
 		}
 	}
     
@@ -325,62 +307,35 @@ namespace Game1
 			return;
 		}
 		ensureImageCapacity(id);
-		if (imgbig == null)
+		if (imgbig == null || imgbig.Length < 5 || imgbig[0] == null)
 		{
-    			Small small = imgNew[id];
-    			if (small == null)
-    			{
-    				createImage(id);
-    			}
-    			else
-    			{
-    				g.drawRegion(small.img, 0, f * w, w, h, transform, x, y, anchor);
-    			}
-    		}
-    		else if (smallImg != null)
-    		{
-    			if (id >= smallImg.Length || smallImg[id] == null || smallImg[id][1] >= 256 || smallImg[id][3] >= 256 || smallImg[id][2] >= 256 || smallImg[id][4] >= 256)
-    			{
-    				Small small2 = imgNew[id];
-    				if (small2 == null)
-    				{
-    					createImage(id);
-    				}
-    				else
-    				{
-    					small2.paint(g, transform, f, x, y, w, h, anchor);
-    				}
-    			}
-    			else if (smallImg[id][0] != 4 && imgbig[smallImg[id][0]] != null)
-    			{
-    				g.drawRegion(imgbig[smallImg[id][0]], 0, f * w, w, h, transform, x, y, anchor);
-    			}
-    			else
-    			{
-    				Small small3 = imgNew[id];
-    				if (small3 == null)
-    				{
-    					createImage(id);
-    				}
-    				else
-    				{
-    					small3.paint(g, transform, f, x, y, w, h, anchor);
-    				}
-    			}
-    		}
-    		else if (GameCanvas.currentScreen != GameScr.gI())
-    		{
-    			Small small4 = imgNew[id];
-    			if (small4 == null)
-    			{
-    				createImage(id);
-    			}
-    			else
-    			{
-    				small4.paint(g, transform, f, x, y, w, h, anchor);
-    			}
-    		}
-    	}
+			loadBigRMS();
+		}
+		if (smallImg == null && instance != null)
+		{
+			instance.readImage();
+		}
+		if (smallImg != null && id < smallImg.Length && smallImg[id] != null)
+		{
+			int bigIdx = smallImg[id][0];
+			if (bigIdx != 4 && bigIdx >= 0 && bigIdx < imgbig.Length && imgbig[bigIdx] != null &&
+			    smallImg[id][1] < 256 && smallImg[id][3] < 256 && smallImg[id][2] < 256 && smallImg[id][4] < 256)
+			{
+				g.drawRegion(imgbig[bigIdx], 0, f * w, w, h, transform, x, y, anchor);
+				return;
+			}
+		}
+		Small small = imgNew[id];
+		if (small == null || !isRealImageLoaded(id))
+		{
+			createImage(id);
+			small = imgNew[id];
+		}
+		if (small != null)
+		{
+			small.paint(g, transform, f, x, y, w, h, anchor);
+		}
+	}
     
     	public static void update()
     	{

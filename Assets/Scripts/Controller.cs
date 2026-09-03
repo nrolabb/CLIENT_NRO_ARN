@@ -2557,13 +2557,20 @@ namespace Game1
 								if (Char.myCharz().charID != playerId)
 								{
 									@char = GameScr.findCharInMap(playerId);
+									SkillPaint sp = (skillId >= 0 && GameScr.sks != null && skillId < GameScr.sks.Length) ? GameScr.sks[skillId] : null;
 									if ((TileMap.tileTypeAtPixel(@char.cx, @char.cy) & 2) == 2)
 									{
-										@char.setSkillPaint(GameScr.sks[skillId], 0);
+										if (sp != null)
+										{
+											@char.setSkillPaint(sp, 0);
+										}
 									}
 									else
 									{
-										@char.setSkillPaint(GameScr.sks[skillId], 1);
+										if (sp != null)
+										{
+											@char.setSkillPaint(sp, 1);
+										}
 										@char.delayFall = 20;
 									}
 								}
@@ -3027,18 +3034,22 @@ namespace Game1
 							{
 								data7 = NinjaUtil.readByteArray(msg);
 								Image img = ((!ModFunc.isEncryptIcon) ? createImage(data7) : createImage(data7, key));
-								SmallImage.ensureImageSlot(iconId);
-								SmallImage.imgNew[iconId].img = img;
-								SmallImage.markIconResponse(iconId);
-								if (mGraphics.zoomLevel > 1)
+								if (img != null)
 								{
-									SmallImage.imageRaw.Add(iconId, img);
+									SmallImage.ensureImageSlot(iconId);
+									SmallImage.imgNew[iconId].img = img;
+									if (mGraphics.zoomLevel > 1)
+									{
+										lock (SmallImage.imageRaw)
+										{
+											SmallImage.imageRaw[iconId] = img;
+										}
+									}
 								}
+								SmallImage.markIconResponse(iconId);
 							}
 							catch (Exception)
 							{
-								SmallImage.ensureImageSlot(iconId);
-								SmallImage.imgNew[iconId].img = Image.createRGBImage(new int[1], 1, 1, bl: true);
 								SmallImage.markIconResponse(iconId);
 							}
 							break;
@@ -3142,12 +3153,12 @@ namespace Game1
 						{
 							ServerListScreen.testConnect = 2;
 							string msgDlg = msg.reader().readUTF();
-							if (msgDlg == "Vui lòng mở giới hạn sức mạnh" || msgDlg == "")
+							if (msgDlg == "Vui lòng mở giới hạn sức mạnh" || msgDlg == "" || msgDlg.ToLower().Contains("tiềm năng") || msgDlg.ToLower().Contains("giới hạn"))
 							{
 								ModFunc.indexAutoPoint = -1;
 								ModFunc.pointIncrease = 0;
 								ModFunc.autoPointForPet = false;
-								GameScr.info1.addInfo("Chỉ số đã đạt tối đa", 0);
+								GameScr.info1.addInfo("Chỉ số đã đạt tối đa hoặc hết tiềm năng", 0);
 							}
 							InfoDlg.hide();
 							LoginScr.isContinueToLogin = false;
@@ -5642,6 +5653,7 @@ namespace Game1
 							LoginScr.isUpdateMap = true;
 							LoginScr.isUpdateSkill = true;
 							LoginScr.isUpdateItem = true;
+							GameScr.loadDataVersions();
 							GameScr.vsData = msg.reader().readByte();
 							GameScr.vsMap = msg.reader().readByte();
 							GameScr.vsSkill = msg.reader().readByte();
@@ -5665,7 +5677,15 @@ namespace Game1
 							{
 								try
 								{
-									LoginScr.isUpdateData = false;
+									if (Rms.loadRMS("NR_dart") == null)
+									{
+										GameScr.vcData = -1;
+										Service.gI().updateData();
+									}
+									else
+									{
+										LoginScr.isUpdateData = false;
+									}
 								}
 								catch (Exception)
 								{
@@ -6011,9 +6031,12 @@ namespace Game1
 						{
 							RadarScr.list = new MyVector();
 							Teleport.vTeleport.removeAllElements();
-							GameScr.vCharInMap.removeAllElements();
-							GameScr.vItemMap.removeAllElements();
-							Char.vItemTime.removeAllElements();
+							if (Char.myCharz().charID <= 0)
+							{
+								GameScr.vCharInMap.removeAllElements();
+								GameScr.vItemMap.removeAllElements();
+								Char.vItemTime.removeAllElements();
+							}
 							GameScr.loadImg();
 							GameScr.currentCharViewInfo = Char.myCharz();
 							Char.myCharz().charID = msg.reader().readInt();

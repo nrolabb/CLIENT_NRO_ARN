@@ -228,7 +228,7 @@ namespace Game1
             fps++;
             if (TabMn.tab == TabE.Tab1)
                 checkInput();
-            if (!isInBackground && TabMn.tab == TabE.Tab1 && Event.current.type.Equals(EventType.Repaint) && paintCount <= updateCount)
+            if (!isInBackground && TabMn.tab == TabE.Tab1 && Event.current.type.Equals(EventType.Repaint))
             {
                 if (GameMidlet.gameCanvas != null)
                 {
@@ -341,7 +341,7 @@ namespace Game1
     
         public static void closeKeyBoard()
         {
-            if (TouchScreenKeyboard.visible)
+            if (TouchScreenKeyboard.visible && TField.kb != null)
             {
                 TField.kb.active = false;
                 TField.kb = null;
@@ -482,11 +482,6 @@ namespace Game1
             {
                 isResume = true;
                 ApplyFramePacing(highFpsEnabled);
-            }
-            if (paused && TouchScreenKeyboard.visible)
-            {
-                TField.kb.active = false;
-                TField.kb = null;
             }
         }
     

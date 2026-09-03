@@ -29,6 +29,7 @@ namespace Game1
     		if (splashScrStat == 30 && !isCheckConnect)
     		{
     			isCheckConnect = true;
+    			GameScr.loadDataVersions();
     			if (Rms.loadRMSInt("serverchat") != -1)
     			{
     				GameScr.isPaintChatVip = Rms.loadRMSInt("serverchat") == 0;
@@ -43,20 +44,17 @@ namespace Game1
     			}
     			SoundMn.gI().getStrOption();
 				ServerListScreen.LoadIP();
-				if (Rms.loadRMSString("ResVersion") == null)
-				{
-					GameCanvas.serverScreen.show2();
-				}
     		}
     		splashScrStat++;
-    		if (splashScrStat >= 150)
+    		if (splashScrStat >= 30)
     		{
     			if (Session_ME.gI().isConnected())
     			{
     				ServerListScreen.loadScreen = true;
     				GameCanvas.serverScreen.switchToMe();
+    				return;
     			}
-    			else
+    			if (splashScrStat >= 150)
     			{
     				mSystem.onDisconnected();
     			}

@@ -74,6 +74,7 @@ namespace Game1
     	{
     		left = new Command(mResources.OK, this, 8000, null, 1, GameCanvas.h - mScreen.cmdH + 1);
     		right = new Command(mResources.DELETE, this, 8001, null, GameCanvas.w - 70, GameCanvas.h - mScreen.cmdH + 1);
+    		tfChat.cmdDoneAction = left;
     		center = null;
     		w = tfChat.width + 20;
     		h = tfChat.height + 26;
@@ -200,7 +201,6 @@ namespace Game1
     			tfChat.isFocus = true;
     			if (!Main.isPC)
     			{
-    				ipKeyboard.openKeyBoard(strChat, ipKeyboard.TEXT, string.Empty, cmdChat);
     				tfChat.setFocusWithKb(isFocus: true);
     			}
     		}
@@ -254,6 +254,7 @@ namespace Game1
     	public void close()
     	{
     		tfChat.setText(string.Empty);
+    		tfChat.clearKb();
     		isShow = false;
     	}
     
@@ -265,11 +266,8 @@ namespace Game1
     			int num2 = ((!Main.isWindowsPhone) ? x : 0);
     			int num3 = ((!Main.isWindowsPhone) ? w : GameCanvas.w);
     			PopUp.paintPopUp(g, num2, num, num3, h, -1, isButton: true);
-    			if (Main.isPC)
-    			{
-    				mFont.tahoma_7b_green2.drawString(g, strChat + to, tfChat.x, tfChat.y - ((!GameCanvas.isTouch) ? 12 : 17), 0);
-    				GameCanvas.paintz.paintCmdBar(g, left, center, right);
-    			}
+    			mFont.tahoma_7b_green2.drawString(g, strChat + to, tfChat.x, tfChat.y - ((!GameCanvas.isTouch) ? 12 : 17), 0);
+    			GameCanvas.paintz.paintCmdBar(g, left, center, right);
     			tfChat.paint(g);
     		}
     	}

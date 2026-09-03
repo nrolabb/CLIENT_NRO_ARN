@@ -151,72 +151,89 @@ namespace Game1
     			}
     		}
     
-    		private Message readMessage2(sbyte cmd)
-    		{
-    			int num = readKey(dis.ReadSByte()) + 128;
-    			int num2 = readKey(dis.ReadSByte()) + 128;
-    			int num4 = ((readKey(dis.ReadSByte()) + 128) * 256 + num2) * 256 + num;
+		private static byte[] readFully(BinaryReader reader, int size)
+		{
+			byte[] data = new byte[size];
+			int totalRead = 0;
+			while (totalRead < size)
+			{
+				int read = reader.Read(data, totalRead, size - totalRead);
+				if (read <= 0)
+				{
+					throw new EndOfStreamException("Socket closed before reading full payload (" + totalRead + "/" + size + ")");
+				}
+				totalRead += read;
+			}
+			return data;
+		}
+
+		private Message readMessage2(sbyte cmd)
+		{
+			int num = readKey(dis.ReadSByte()) + 128;
+			int num2 = readKey(dis.ReadSByte()) + 128;
+			int num4 = ((readKey(dis.ReadSByte()) + 128) * 256 + num2) * 256 + num;
 			sbyte[] array = new sbyte[num4];
-    			Buffer.BlockCopy(dis.ReadBytes(num4), 0, array, 0, num4);
-    			recvByteCount += 5 + num4;
-    			int num6 = recvByteCount + sendByteCount;
-    			strRecvByteCount = num6 / 1024 + "." + num6 % 1024 / 102 + "Kb";
-    			if (getKeyComplete)
-    			{
-    				for (int i = 0; i < array.Length; i++)
-    				{
-    					array[i] = readKey(array[i]);
-    				}
-    			}
-    			return new Message(cmd, array);
-    		}
-    
-    		private Message readMessage()
-    		{
-    			try
-    			{
-    				sbyte b = dis.ReadSByte();
-    				if (getKeyComplete)
-    				{
-    					b = readKey(b);
-    				}
+			Buffer.BlockCopy(readFully(dis, num4), 0, array, 0, num4);
+			recvByteCount += 5 + num4;
+			int num6 = recvByteCount + sendByteCount;
+			strRecvByteCount = num6 / 1024 + "." + num6 % 1024 / 102 + "Kb";
+			if (getKeyComplete)
+			{
+				for (int i = 0; i < array.Length; i++)
+				{
+					array[i] = readKey(array[i]);
+				}
+			}
+			return new Message(cmd, array);
+		}
+
+		private Message readMessage()
+		{
+			try
+			{
+				sbyte b = dis.ReadSByte();
+				if (getKeyComplete)
+				{
+					b = readKey(b);
+				}
 				if (b == -32 || b == -66 || b == 11 || b == -67 || b == -74 || b == -87 || b == -28 || b == 66)
 				{
 					return readMessage2(b);
 				}
-    				int num;
-    				if (getKeyComplete)
-    				{
-    					sbyte b2 = dis.ReadSByte();
-    					sbyte b3 = dis.ReadSByte();
-    					num = ((readKey(b2) & 0xFF) << 8) | (readKey(b3) & 0xFF);
-    				}
-    				else
-    				{
-    					sbyte num2 = dis.ReadSByte();
-    					sbyte b5 = dis.ReadSByte();
-    					num = (num2 & 0xFF00) | (b5 & 0xFF);
-    				}
-    				sbyte[] array = new sbyte[num];
-    				Buffer.BlockCopy(dis.ReadBytes(num), 0, array, 0, num);
-    				recvByteCount += 5 + num;
-    				int num4 = recvByteCount + sendByteCount;
-    				strRecvByteCount = num4 / 1024 + "." + num4 % 1024 / 102 + "Kb";
-    				if (getKeyComplete)
-    				{
-    					for (int i = 0; i < array.Length; i++)
-    					{
-    						array[i] = readKey(array[i]);
-    					}
-    				}
-    				return new Message(b, array);
-    			}
-    			catch (Exception)
-    			{
-    			}
-    			return null;
-    		}
-    	}
+				int num;
+				if (getKeyComplete)
+				{
+					sbyte b2 = dis.ReadSByte();
+					sbyte b3 = dis.ReadSByte();
+					num = ((readKey(b2) & 0xFF) << 8) | (readKey(b3) & 0xFF);
+				}
+				else
+				{
+					sbyte num2 = dis.ReadSByte();
+					sbyte b5 = dis.ReadSByte();
+					num = (num2 & 0xFF00) | (b5 & 0xFF);
+				}
+				sbyte[] array = new sbyte[num];
+				Buffer.BlockCopy(readFully(dis, num), 0, array, 0, num);
+				recvByteCount += 5 + num;
+				int num4 = recvByteCount + sendByteCount;
+				strRecvByteCount = num4 / 1024 + "." + num4 % 1024 / 102 + "Kb";
+				if (getKeyComplete)
+				{
+					for (int i = 0; i < array.Length; i++)
+					{
+						array[i] = readKey(array[i]);
+					}
+				}
+				return new Message(b, array);
+			}
+			catch (Exception ex)
+			{
+				Cout.LogError("[Session_ME] readMessage exception: " + ex.Message);
+			}
+			return null;
+		}
+	}
     
     	protected static Session_ME instance = new Session_ME();
     

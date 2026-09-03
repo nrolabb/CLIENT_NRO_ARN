@@ -134,12 +134,12 @@ namespace Game1
     
     	private static Image __createImage(string filename)
     	{
-    		Image image = new Image();
     		Texture2D texture2D = Resources.Load(filename) as Texture2D;
     		if (texture2D == null)
     		{
-    			throw new Exception("NULL POINTER EXCEPTION AT Image __createImage " + filename);
+    			return null;
     		}
+    		Image image = new Image();
     		image.texture = texture2D;
     		image.w = image.texture.width;
     		image.h = image.texture.height;

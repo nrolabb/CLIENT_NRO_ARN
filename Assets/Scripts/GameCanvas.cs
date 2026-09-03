@@ -2500,7 +2500,10 @@ namespace Game1
 			{
 				result = Image.createImage(path);
 			}
-			catch (Exception ex)
+			catch (Exception)
+			{
+			}
+			if (result == null)
 			{
 				try
 				{
@@ -2514,7 +2517,6 @@ namespace Game1
 				}
 				catch (Exception)
 				{
-					Cout.LogError("Loi ham khong tim thay a: " + ex.ToString());
 				}
 			}
 			return result;
@@ -2525,15 +2527,18 @@ namespace Game1
 			string pathOrigin = path;
 			path = Main.res + "/x" + mGraphics.zoomLevel + path;
 			path = cutPng(path);
-			Image result = null;
 			try
 			{
-				return Image.createImage(path);
+				Image result = Image.createImage(path);
+				if (result != null)
+				{
+					return result;
+				}
 			}
 			catch (Exception)
 			{
-				return loadImageResize(pathOrigin);
 			}
+			return loadImageResize(pathOrigin);
 		}
 
 		public static Image loadImageResize(string path)
@@ -2544,7 +2549,7 @@ namespace Game1
 			try
 			{
 				result = Image.createImage(path);
-				if (mGraphics.zoomLevel != 4)
+				if (result != null && mGraphics.zoomLevel != 4)
 				{
 					resizeImage(result);
 				}
