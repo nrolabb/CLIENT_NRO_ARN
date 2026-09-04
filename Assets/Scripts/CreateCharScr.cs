@@ -16,26 +16,31 @@ namespace Game1
     
     	public static int indexHair;
     
+    	public static string[] genderNames = new string[3] { "Goku", "Picolo", "Vegita" };
+    
     	public static int selected;
     
-    	public static int[][] hairID = new int[3][]
+    	public static int[][] hairIDOld = new int[3][]
     	{
     		new int[3] { 106, 108, 127 },
     		new int[3] { 111, 112, 128 },
     		new int[3] { 105, 107, 126 }
     	};
     
-    	public static int[][] hairIDOld = new int[3][]
+    	public static int[][] hairID = new int[3][]
     	{
-    		new int[3] { 64, 30, 31 },
+    		new int[3] { 0, 30, 31 },
     		new int[3] { 9, 29, 32 },
     		new int[3] { 6, 27, 28 }
     	};
     
-    	public static int[] defaultLeg = new int[3] { 158, 150, 152 };
+    	//public static int[] defaultLeg = new int[3] { 158, 150, 152 };
+    	//public static int[] defaultBody = new int[3] { 157, 149, 151 };
     
-    	public static int[] defaultBody = new int[3] { 157, 149, 151 };
-    
+		public static int[] defaultHair = new int[3] { 0, 9, 6 };
+		public static int[] defaultBody = new int[3] { 14, 10, 16 };
+		public static int[] defaultLeg = new int[3] { 15, 11, 17 };
+
     	private int yButton;
     
     	private int disY;
@@ -216,7 +221,7 @@ namespace Game1
     		GameCanvas.loadBG(1);
     		base.switchToMe();
     		indexGender = Res.random(0, 3);
-    		indexHair = Res.random(0, 3);
+    		indexHair = 0;
     		Char.isLoadingMap = false;
     		ServerListScreen.countDieConnect = 0;
     	}
@@ -252,13 +257,13 @@ namespace Game1
     			selected--;
     			if (selected < 0)
     			{
-    				selected = 2;
+    				selected = 1;
     			}
     		}
     		else if (GameCanvas.keyPressed[(!Main.isPC) ? 8 : 22] || GameCanvas.keyPressed[16])
     		{
     			selected++;
-    			if (selected > 2)
+    			if (selected > 1)
     			{
     				selected = 0;
     			}
@@ -279,13 +284,13 @@ namespace Game1
     				indexGender--;
     				if (indexGender < 0)
     				{
-    					indexGender = mResources.MENUGENDER.Length - 1;
+    					indexGender = genderNames.Length - 1;
     				}
     			}
     			if (GameCanvas.keyPressed[(!Main.isPC) ? 6 : 24])
     			{
     				indexGender++;
-    				if (indexGender > mResources.MENUGENDER.Length - 1)
+    				if (indexGender > genderNames.Length - 1)
     				{
     					indexGender = 0;
     				}
@@ -293,30 +298,9 @@ namespace Game1
     			right = null;
     			mFontGender = mFont.tahoma_7b_blue;
     		}
-    		else if (selected == 2)
-    		{
-    			if (GameCanvas.keyPressed[(!Main.isPC) ? 4 : 23])
-    			{
-    				indexHair--;
-    				if (indexHair < 0)
-    				{
-    					indexHair = mResources.hairStyleName[0].Length - 1;
-    				}
-    			}
-    			if (GameCanvas.keyPressed[(!Main.isPC) ? 6 : 24])
-    			{
-    				indexHair++;
-    				if (indexHair > mResources.hairStyleName[0].Length - 1)
-    				{
-    					indexHair = 0;
-    				}
-    			}
-    			right = null;
-    			mFontGender = mFont.tahoma_7b_dark;
-    		}
     		if (GameCanvas.isPointerJustRelease)
     		{
-    			int textWidth = mFont.tahoma_7b_dark.getWidth(mResources.MENUGENDER[indexGender]);
+    			int textWidth = mFont.tahoma_7b_dark.getWidth(genderNames[indexGender]);
     			int textHeight = mFont.tahoma_7b_dark.getHeight();
     			if (GameCanvas.isPointerHoldIn(tAddName.x, tAddName.y, tAddName.width, tAddName.height))
     			{
@@ -328,45 +312,22 @@ namespace Game1
     				mFontGender = mFont.tahoma_7b_blue;
     				selected = 1;
     			}
-    			else if (GameCanvas.isPointerHoldIn(xPopup + 40, yPopup + 80, 80, 80))
-    			{
-    				selected = 2;
-    				mFontGender = mFont.tahoma_7b_dark;
-    			}
     			else if (GameCanvas.isPointerHoldIn(xPopup + 10, yPopup + 25, 23, 26))
     			{
     				selected = 1;
     				indexGender--;
     				if (indexGender < 0)
     				{
-    					indexGender = 2;
+    					indexGender = genderNames.Length - 1;
     				}
     			}
     			else if (GameCanvas.isPointerHoldIn(xPopup + 130, yPopup + 25, 23, 26))
     			{
     				selected = 1;
     				indexGender++;
-    				if (indexGender > 2)
+    				if (indexGender > genderNames.Length - 1)
     				{
     					indexGender = 0;
-    				}
-    			}
-    			else if (GameCanvas.isPointerHoldIn(xPopup + 10, cy + 20, 23, 26))
-    			{
-    				selected = 2;
-    				indexHair--;
-    				if (indexHair < 0)
-    				{
-    					indexHair = 2;
-    				}
-    			}
-    			else if (GameCanvas.isPointerHoldIn(xPopup + 130, cy + 20, 23, 26))
-    			{
-    				selected = 2;
-    				indexHair++;
-    				if (indexHair > 2)
-    				{
-    					indexHair = 0;
     				}
     			}
     		}
@@ -394,10 +355,10 @@ namespace Game1
     		if (GameCanvas.currentDialog == null)
     		{
     			PopUp.paintPopUp(g, xPopup - 20, yPopup - 60, 200, 220, -1, isButton: true);
-    			mFontGender.drawString(g, mResources.MENUGENDER[indexGender], GameCanvas.w / 2, yPopup + 30, mFont.CENTER);
+    			mFontGender.drawString(g, genderNames[indexGender], GameCanvas.w / 2, yPopup + 30, mFont.CENTER);
     			g.drawRegion(GameScr.arrow, 0, 0, 13, 16, 3, xPopup + 20, yPopup + 35, StaticObj.VCENTER_HCENTER);
     			g.drawRegion(GameScr.arrow, 0, 0, 13, 16, 0, xPopup + 140, yPopup + 35, StaticObj.VCENTER_HCENTER);
-    			int num2 = hairID[indexGender][indexHair];
+    			int num2 = defaultHair[indexGender];
     			int num3 = defaultLeg[indexGender];
     			int num4 = defaultBody[indexGender];
     			g.drawImage(TileMap.bong, cx, cy + dy, 3);
@@ -415,8 +376,6 @@ namespace Game1
     			{
     				ModFunc.WriteLog("Error at paint CreateChar: " + ex.Message + " --- " + ex.StackTrace);
     			}
-    			g.drawRegion(GameScr.arrow, 0, 0, 13, 16, 3, xPopup + 20, cy + 30, StaticObj.VCENTER_HCENTER);
-    			g.drawRegion(GameScr.arrow, 0, 0, 13, 16, 0, xPopup + 140, cy + 30, StaticObj.VCENTER_HCENTER);
     			if (!GameCanvas.lowGraphic)
     			{
     				for (int j = 0; j < MapTemplate.vCurrItem[indexGender].size(); j++)
@@ -493,7 +452,7 @@ namespace Game1
     				break;
     			}
     			InfoDlg.showWait();
-    			Service.gI().createChar(tAddName.getText(), indexGender, hairIDOld[indexGender][indexHair]);
+    			Service.gI().createChar(tAddName.getText(), indexGender, defaultHair[indexGender]);
     			break;
     		case 8001:
     			if (GameCanvas.loginScr.isLogin2)
