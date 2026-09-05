@@ -41,6 +41,72 @@ namespace Game1
 		public static int[] defaultBody = new int[3] { 14, 10, 16 };
 		public static int[] defaultLeg = new int[3] { 15, 11, 17 };
 
+		public static Image imgRandom;
+		public static Image imgRandom2;
+		public static Image imgHaoQuang;
+		public static int countClickRandom = 0;
+		public static int lastZoomLevel = -1;
+
+		public static void checkLoadImages()
+		{
+			if (lastZoomLevel != mGraphics.zoomLevel || imgRandom == null || imgRandom2 == null || imgHaoQuang == null)
+			{
+				lastZoomLevel = mGraphics.zoomLevel;
+				imgRandom = GameCanvas.loadImage("/mainimage/random.png");
+				imgRandom2 = GameCanvas.loadImage("/mainimage/random2.png");
+				imgHaoQuang = GameCanvas.loadImage("/mainimage/haoquang.png");
+			}
+		}
+
+		private static readonly string[] samplePrefixes = new string[]
+		{
+			"super", "dark", "hyper", "ultra", "kid", "king", "god", "black", "lord", "iron",
+			"dragon", "shadow", "mega", "neo", "pro", "master", "vip", "star", "fire", "ice"
+		};
+
+		private static readonly string[] sampleBaseNames = new string[]
+		{
+			"goku", "vegeta", "gohan", "trunks", "broly", "namek", "saiyan", "frieza",
+			"vegito", "gogeta", "raditz", "goten", "beerus", "whis", "picolo", "bardock",
+			"zamasu", "cell", "buu", "champa", "videl", "cooler", "jiren", "hit"
+		};
+
+		public static string getRandomName()
+		{
+			int type = Res.random(0, 3);
+			string result = string.Empty;
+			if (type == 0)
+			{
+				result = samplePrefixes[Res.random(0, samplePrefixes.Length)] + sampleBaseNames[Res.random(0, sampleBaseNames.Length)];
+			}
+			else if (type == 1)
+			{
+				string baseName = sampleBaseNames[Res.random(0, sampleBaseNames.Length)];
+				int minNum = (baseName.Length <= 3) ? 100 : 10;
+				result = baseName + Res.random(minNum, 9999);
+			}
+			else
+			{
+				string p = samplePrefixes[Res.random(0, samplePrefixes.Length)];
+				string b = sampleBaseNames[Res.random(0, sampleBaseNames.Length)];
+				result = p + b;
+				if (result.Length <= 13)
+				{
+					result += Res.random(1, 99);
+				}
+			}
+
+			if (result.Length > 15)
+			{
+				result = result.Substring(0, 15);
+			}
+			if (result.Length < 5)
+			{
+				result += Res.random(10, 99);
+			}
+			return result;
+		}
+
     	private int yButton;
     
     	private int disY;
@@ -90,7 +156,7 @@ namespace Game1
     		}
     		tAddName = new TField
     		{
-    			width = ((GameCanvas.w < 200) ? 60 : 160),
+    			width = ((GameCanvas.w < 200) ? 40 : 130),
     			height = mScreen.ITEM_HEIGHT + 2,
     			strInfo = mResources.char_name,
     			showSubTextField = true,
@@ -99,6 +165,13 @@ namespace Game1
     			y = yPopup - 30,
     			isFocus = !GameCanvas.isTouch
     		};
+    		try
+    		{
+    			checkLoadImages();
+    		}
+    		catch (Exception)
+    		{
+    		}
     		tAddName.setIputType(TField.INPUT_TYPE_ANY);
     		if (tAddName.getText().Equals("@"))
     		{
@@ -218,6 +291,9 @@ namespace Game1
     		LoginScr.isContinueToLogin = false;
     		GameCanvas.menu.showMenu = false;
     		GameCanvas.endDlg();
+    		GameScr.loadCamera(fullmScreen: true, -1, -1);
+    		GameScr.cmy = 0;
+    		GameScr.cmx = 0;
     		GameCanvas.loadBG(1);
     		base.switchToMe();
     		indexGender = Res.random(0, 3);
@@ -233,6 +309,16 @@ namespace Game1
     
     	public override void update()
     	{
+    		GameScr.cmy = 0;
+    		GameScr.cmx++;
+    		if (GameScr.cmx > GameCanvas.w * 3)
+    		{
+    			GameScr.cmx = 0;
+    		}
+    		if (countClickRandom > 0)
+    		{
+    			countClickRandom--;
+    		}
     		cp1++;
     		if (cp1 > 30)
     		{
@@ -330,6 +416,15 @@ namespace Game1
     					indexGender = 0;
     				}
     			}
+    			else if (GameCanvas.isPointerHoldIn(tAddName.x + tAddName.width + 2, tAddName.y - 2, tAddName.height + 4, tAddName.height + 4))
+    			{
+    				selected = 0;
+    				mFontGender = mFont.tahoma_7b_dark;
+    				tAddName.setText(getRandomName());
+    				countClickRandom = 8;
+    				SoundMn.gI().buttonClick();
+    				GameCanvas.clearAllPointerEvent();
+    			}
     		}
     		if (!TouchScreenKeyboard.visible)
     		{
@@ -361,6 +456,11 @@ namespace Game1
     			int num2 = defaultHair[indexGender];
     			int num3 = defaultLeg[indexGender];
     			int num4 = defaultBody[indexGender];
+    			checkLoadImages();
+    			if (imgHaoQuang != null)
+    			{
+    				g.drawImage(imgHaoQuang, cx, cy + dy - 5, StaticObj.VCENTER_HCENTER);
+    			}
     			g.drawImage(TileMap.bong, cx, cy + dy, 3);
     			Part part3 = null;
     			try
@@ -423,6 +523,14 @@ namespace Game1
     				tAddName.y = yBegin;
     			}
     			tAddName.paint(g);
+    			g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
+    			int btnRandomX = tAddName.x + tAddName.width + 4;
+    			Image imgBtn = (countClickRandom > 0 || GameCanvas.isPointerHoldIn(btnRandomX, tAddName.y, tAddName.height, tAddName.height)) ? imgRandom2 : imgRandom;
+    			if (imgBtn != null)
+    			{
+    				int imgH = mGraphics.getImageHeight(imgBtn);
+    				g.drawImage(imgBtn, btnRandomX, tAddName.y + (tAddName.height - imgH) / 2, 0);
+    			}
     			g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
     		}
     		if (!TouchScreenKeyboard.visible)
