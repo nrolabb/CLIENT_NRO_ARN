@@ -11272,9 +11272,9 @@ private void paintEffectItem(mGraphics g, Item item, int x, int y, int w, int h)
 				}
 				if (selected == 3)
 				{
-					if (Char.myCharz().cTiemNang < (50000 + Char.myCharz().cDefGoc * 1000))
+					if (Char.myCharz().cTiemNang < (500000 + Char.myCharz().cDefGoc * 100000))
 					{
-						GameCanvas.startOKDlg(mResources.not_enough_potential_point1 + NinjaUtil.getMoneys(Char.myCharz().cTiemNang) + mResources.not_enough_potential_point2 + NinjaUtil.getMoneys(50000 + Char.myCharz().cDefGoc * 1000));
+						GameCanvas.startOKDlg(mResources.not_enough_potential_point1 + NinjaUtil.getMoneys(Char.myCharz().cTiemNang) + mResources.not_enough_potential_point2 + NinjaUtil.getMoneys(500000 + Char.myCharz().cDefGoc * 100000));
 						return;
 					}
 					double number = 2.0 * (cDefGoc + 5.0) / 2.0 * 100000.0;

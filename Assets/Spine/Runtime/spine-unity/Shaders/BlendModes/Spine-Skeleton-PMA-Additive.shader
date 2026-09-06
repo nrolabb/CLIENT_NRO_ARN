@@ -1,4 +1,4 @@
-﻿// Spine/Skeleton PMA Screen
+// Spine/Skeleton PMA Screen
 // - single color multiply tint
 // - unlit
 // - Premultiplied alpha Multiply blending
@@ -34,7 +34,7 @@ Shader "Spine/Blend Modes/Skeleton PMA Additive" {
 		Fog { Mode Off }
 		Cull Off
 		ZWrite Off
-		Blend One One
+		Blend One One, Zero One
 		Lighting Off
 
 		Stencil {
